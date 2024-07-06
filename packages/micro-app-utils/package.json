@@ -1,0 +1,16 @@
+{
+  "name": "micro-app-utils",
+  "version": "1.0.0",
+  "description": "基于micro-app封装的工具函数",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@micro-zoe/micro-app": "^1.0.0-rc.5"
+  },
+  "keywords": [],
+  "author": "lammu",
+  "license": "ISC"
+}

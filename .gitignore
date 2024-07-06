@@ -1,4 +1,3 @@
-```sh
 # 缓存文件
 .cache
 # serveless缓存
@@ -49,12 +48,3 @@ src/assets/iconfont/iconfont.json
 # element自动导入生成的文件
 auto-imports.d.ts
 components.d.ts
-```
-
-## 其它
-
-- 软链接目录
-
-  > 软链接一般不上传到仓库
-
-- 通过脚本生成的文件/目录

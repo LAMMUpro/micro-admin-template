@@ -7,15 +7,40 @@
     "dev": "vite",
     "tsc": "vue-tsc -b",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "lint": "eslint src",
+    "prepare": "husky"
   },
   "dependencies": {
-    "vue": "^3.4.29"
+    "@micro-zoe/micro-app": "1.0.0-rc.6",
+    "element-plus": "2.7.8",
+    "js-cookie": "^3.0.5",
+    "micro-app-utils": "workspace:*",
+    "vue": "^3.4.29",
+    "vue-router": "^4.4.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@types/js-cookie": "^3.0.5",
+    "@types/node": "^20.14.10",
     "@vitejs/plugin-vue": "^5.0.5",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "^9.6.0",
+    "eslint-plugin-vue": "^9.27.0",
+    "happy-dom": "^14.12.3",
+    "husky": "^9.1.2",
+    "sass": "^1.56.0",
     "typescript": "^5.2.2",
+    "typescript-eslint": "^7.15.0",
     "vite": "^5.3.1",
+    "vitest": "^1.6.0",
     "vue-tsc": "^2.0.21"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }

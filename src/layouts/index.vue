@@ -1,0 +1,82 @@
+<template>
+  <div class="__layout">
+    <Head class="__head"></Head>
+    <div class="menu-content">
+      <Menu class="__menu"></Menu>
+      <!-- 右边容器，包括面包屑 -->
+      <div class="__right-container">
+        <div class="__bread-crumb">首页 > 个人中心</div>
+        <el-scrollbar class="__sub-app-container">
+          <div class="__inner-container">
+            <router-view></router-view>
+          </div>
+        </el-scrollbar>
+        <div class="__footer">2024 © MicroAdmin By Lammu.</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import Menu from './components/Menu.vue';
+import Head from './components/Head.vue';
+import { ElScrollbar } from 'element-plus';
+import 'element-plus/es/components/scrollbar/style/index';
+</script>
+
+<style lang="scss" scoped>
+.__layout {
+  --sub-app-container-height: calc(100vh - 20px - 24px - 25px - 50px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .__head {
+    flex-shrink: 0;
+  }
+
+  .menu-content {
+    flex: 1;
+    .__menu {
+      height: calc(100vh - 50px);
+      float: left;
+      width: 180px;
+      background-color: white;
+    }
+    .__right-container {
+      height: calc(100vh - 50px);
+      float: left;
+      width: calc(100% - 180px);
+      display: flex;
+      flex-direction: column;
+      .__bread-crumb {
+        flex-shrink: 0;
+        height: 25px;
+        background-color: white;
+        font-size: 15px;
+        color: gray;
+        display: flex;
+        align-items: center;
+        padding-left: 6px;
+      }
+
+      .__sub-app-container {
+        flex: 1;
+        background-color: #f5f5f5;
+        .__inner-container {
+          padding: 10px;
+        }
+      }
+      .__footer {
+        flex-shrink: 0;
+        height: 24px;
+        font-size: 12px;
+        color: gray;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+}
+</style>

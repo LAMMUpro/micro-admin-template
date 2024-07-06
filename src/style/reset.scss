@@ -1,0 +1,43 @@
+/** 重置样式表 */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: '微软雅黑';
+}
+
+a,
+a:visited,
+a:focus,
+a:hover,
+a:link,
+a:active {
+  color: inherit;
+  outline: none;
+  text-decoration: none;
+}
+
+button,
+input {
+  border: none;
+  background-color: transparent;
+  outline: none;
+  border-radius: 0;
+  font-size: inherit;
+}
+
+a,
+button {
+  cursor: pointer;
+}
+
+ul,
+li,
+ol {
+  list-style: none;
+}

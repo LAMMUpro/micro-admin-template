@@ -1,0 +1,16 @@
+:root {
+  /** 防止子应用导致的高度溢出 */
+  overflow: hidden;
+}
+#__micro-app-main {
+  width: 100vw;
+}
+
+/** 重置样式表 */
+@import '@/style/reset.scss';
+
+/** 在这导入团队用的样式 */
+@import '@/style/common.scss';
+
+/** 覆盖子应用样式 */
+@import '@/style/overflow.scss';
