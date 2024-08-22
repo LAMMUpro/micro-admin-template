@@ -8,8 +8,6 @@
 npm i pnpm -g
 # 安装依赖
 pnpm i
-# husky初始化
-pnpm husky init
 # 运行
 pnpm dev
 ```
