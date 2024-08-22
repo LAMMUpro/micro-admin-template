@@ -1,5 +1,16 @@
 # 后台模版
 
+## 下载项目模板
+
+```sh
+# 主应用
+git clone https://github.com/LAMMUpro/micro-admin-template.git
+# 子应用需要放在主应用的/apps/目录下
+cd ./micro-admin-template/apps
+# react18子应用
+git clone https://github.com/LAMMUpro/subapp-react18-template.git
+```
+
 ## 运行步骤
 
 ```sh
