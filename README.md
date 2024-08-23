@@ -1,4 +1,12 @@
-# 后台模版
+# 微后台主应用模版
+
+[在线预览](https://micro-admin-template.lammu.cn/micromain/)
+
+## 相关仓库
+
+- [vue3 子应用模板](https://github.com/LAMMUpro/subapp-vue3-template.git)
+- [vue2 子应用模板](https://github.com/LAMMUpro/subapp-vue2-template.git)
+- [react18 子应用模板](https://github.com/LAMMUpro/subapp-react18-template.git)
 
 ## 下载项目模板
 
