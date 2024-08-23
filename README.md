@@ -1,6 +1,6 @@
 # 微后台主应用模版
 
-[在线预览](https://micro-admin-template.lammu.cn/micromain/)
+[在线预览](https://micro-admin-template.lammu.cn/micromain/) | [使用文档](https://micro-admin-docs.lammu.cn) | [加入社区](https://micro-admin-docs.lammu.cn/About/discussion.html)
 
 ## 相关仓库
 
@@ -55,7 +55,3 @@ pnpm dev
 - vue2 子应用
 - MicroApp 封装
   - init 显式初始化 ✔
-
-## 开发须知
-
-- 子应用容器不滚动最大高度为 var(--sub-app-container-height)
