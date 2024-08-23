@@ -57,7 +57,9 @@ import 'element-plus/es/components/dropdown-item/style/index';
 function onLogout() {}
 
 /** //TODO: 清除缓存 用户信息/菜单 */
-function clearCache() {}
+function clearCache() {
+  localStorage.clear();
+}
 
 /** //TODO: 跳转用户中心页面 */
 function toUserCenterPage() {}
