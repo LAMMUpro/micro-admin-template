@@ -85,3 +85,10 @@ function getMenusNamePathCounter(menus: MenuOriginType[]) {
     [{}, {}] as [BaseObj<number>, BaseObj<number>]
   );
 }
+
+/**
+ * 从path中提取子应用前缀
+ */
+export function getSubAppPrefixFromRouteUrl(url: string) {
+  return url?.match?.(/(?<=^\/).*?(?=\/)/)?.[0];
+}

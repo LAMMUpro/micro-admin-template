@@ -33,18 +33,18 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
   tagName: CONSTS.microAppTagName,
   subAppSettingList: [
     {
-      name: 'react18',
-      prefix: 'react18',
-      routerMode: 'hash',
+      name: 'micromain',
+      prefix: 'micromain',
+      routerMode: 'history',
       urlMap: {
-        localhost: '//127.0.0.1:1340/react18/',
-        test: '//xxx.cn/react18/',
-        pre: '//xxx.cn/react18/',
-        master: '//xxx.cn/react18/',
+        localhost: '//127.0.0.1:1314/micromain/',
+        test: '//xxx.cn/micromain/',
+        pre: '//xxx.cn/micromain/',
+        master: '//xxx.cn/micromain/',
       },
       builder: 'vite',
       iframe: true,
-      framework: 'react18',
+      framework: 'vue3',
     },
     {
       name: 'vue3',
@@ -73,6 +73,20 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
       builder: 'webpack',
       iframe: false,
       framework: 'vue2',
+    },
+    {
+      name: 'react18',
+      prefix: 'react18',
+      routerMode: 'hash',
+      urlMap: {
+        localhost: '//127.0.0.1:1340/react18/',
+        test: '//xxx.cn/react18/',
+        pre: '//xxx.cn/react18/',
+        master: '//xxx.cn/react18/',
+      },
+      builder: 'vite',
+      iframe: true,
+      framework: 'react18',
     },
   ],
   MicroComponentImportMap: {

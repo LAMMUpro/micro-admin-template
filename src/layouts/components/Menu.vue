@@ -18,8 +18,12 @@ import 'element-plus/es/components/menu/style/index';
 import Global from '@/Global';
 import MenuItem from './MenuItem.vue';
 import { MenuItemType } from '@/types/common';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { getSubAppPrefixFromRouteUrl } from '@/router/helper';
+import { MicroAppConfig } from 'micro-app-utils/data';
+import { subAppPath } from '@/pages/SubMicroApp.vue';
 
+const route = useRoute();
 const router = useRouter();
 
 /**
@@ -35,8 +39,36 @@ function handleMenuChange(key: string) {
       menuInfo = Global.menu.info.menus[+index];
     }
   });
-  if (menuInfo?.path) {
-    router.push(menuInfo.path);
+  if (!menuInfo?.path) return;
+
+  /** 子应用前缀(目标) */
+  const subAppPrefix_target = getSubAppPrefixFromRouteUrl(menuInfo.path);
+
+  /** 子应用名称(目标) */
+  const subAppName_target = MicroAppConfig.subAppSettingList.find(
+    (item) => item.prefix === subAppPrefix_target
+  )?.name;
+
+  if (!subAppName_target) return console.error(`未配置${subAppPrefix_target}`);
+
+  /** 子应用名称(当前) */
+  const subAppName_current = getSubAppPrefixFromRouteUrl(`${route.path}/`);
+
+  if (subAppName_target === subAppName_current) {
+    /**
+     * 当前子应用路由切换,只需要改subAppPath
+     */
+    subAppPath.value = menuInfo.path;
+  } else {
+    /**
+     * 目标路由是其他子应用
+     */
+    router.push({
+      path: `/${subAppName_target}`,
+      query: {
+        [subAppName_target]: menuInfo.path,
+      },
+    });
   }
 }
 </script>
