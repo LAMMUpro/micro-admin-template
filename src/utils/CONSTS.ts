@@ -10,4 +10,6 @@ export default {
   PREFIX_DOCUMENT_TITLE: '管理后台',
   /** 启动端口号 */
   PORT: 1314,
+  /** 子应用路由name前缀, 子应用路由name统一为`${前缀}${子应用name}` */
+  subAppRouteNamePrefix: 'subApp_',
 };

@@ -95,7 +95,7 @@ function generateUserRoutes(): Array<RouteRecordRaw> {
           .filter((item) => item.name !== 'micromain')
           .map((item) => ({
             path: `/${item.name}`,
-            name: `subApp_${item.name}`,
+            name: `${CONSTS.subAppRouteNamePrefix}${item.name}`,
             component: () => import('@/pages/SubMicroApp.vue'),
             meta: { hidden: true },
           })),

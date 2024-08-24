@@ -22,6 +22,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { getSubAppPrefixFromRouteUrl } from '@/router/helper';
 import { MicroAppConfig } from 'micro-app-utils/data';
 import { subAppPath } from '@/pages/SubMicroApp.vue';
+import CONSTS from '@/utils/CONSTS';
 
 const route = useRoute();
 const router = useRouter();
@@ -51,8 +52,12 @@ function handleMenuChange(key: string) {
 
   if (!subAppName_target) return console.error(`未配置${subAppPrefix_target}`);
 
-  /** 子应用名称(当前) */
-  const subAppName_current = getSubAppPrefixFromRouteUrl(`${route.path}/`);
+  /** 子应用名称(当前), 从route.path取不准确(兜底路由情况)需要从route.name取 */
+  const subAppName_current = route.name
+    ?.toString()
+    .startsWith(CONSTS.subAppRouteNamePrefix)
+    ? route.name?.toString().replace(CONSTS.subAppRouteNamePrefix, '')
+    : '';
 
   if (subAppName_target === subAppName_current) {
     /**
