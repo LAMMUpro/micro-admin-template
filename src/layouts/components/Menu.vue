@@ -1,6 +1,9 @@
 <template>
   <el-scrollbar class="__menu">
-    <el-menu @select="handleMenuChange">
+    <el-menu
+      :default-active="menuActiveIndex"
+      @select="handleMenuChange"
+    >
       <MenuItem
         v-for="(menuInfo, index) in Global.menu.info.menus"
         :key="menuInfo.id"
@@ -11,7 +14,16 @@
   </el-scrollbar>
 </template>
 
+<script lang="ts">
+/**
+ * 当前激活的菜单下标, -分隔, 例：0-1-0
+ * 设置这个值可以回显激活菜单(第一次加载页面回显激活菜单)
+ */
+export const menuActiveIndex = ref('');
+</script>
+
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { ElScrollbar, ElMenu } from 'element-plus';
 import 'element-plus/es/components/scrollbar/style/index';
 import 'element-plus/es/components/menu/style/index';
@@ -32,6 +44,7 @@ const router = useRouter();
  * @param key 菜单唯一标识, 例如: 0-2-1
  */
 function handleMenuChange(key: string) {
+  menuActiveIndex.value = key;
   /**
    * 提取菜单信息
    */
