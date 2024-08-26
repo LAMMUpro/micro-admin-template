@@ -5,7 +5,7 @@
       <Menu class="__menu"></Menu>
       <!-- 右边容器，包括面包屑 -->
       <div class="__right-container">
-        <div class="__bread-crumb">首页 > 个人中心</div>
+        <RouteInfoBar class="__route-info-bar"></RouteInfoBar>
         <el-scrollbar class="__sub-app-container">
           <div class="__inner-container">
             <router-view></router-view>
@@ -20,6 +20,7 @@
 <script lang="ts" setup>
 import Menu from './components/Menu.vue';
 import Head from './components/Head.vue';
+import RouteInfoBar from './components/RouteInfoBar.vue';
 import { ElScrollbar } from 'element-plus';
 import 'element-plus/es/components/scrollbar/style/index';
 </script>
@@ -48,7 +49,7 @@ import 'element-plus/es/components/scrollbar/style/index';
       width: calc(100% - 180px);
       display: flex;
       flex-direction: column;
-      .__bread-crumb {
+      .__route-info-bar {
         flex-shrink: 0;
         height: 25px;
         background-color: white;
