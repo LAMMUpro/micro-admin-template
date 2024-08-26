@@ -39,7 +39,6 @@ export async function getUserMenus() {
         {
           id: '666',
           parentId: '111',
-
           prefixName: '/主应用页面调试',
           name: '无菜单页面',
           componentStr: '/noMenu.vue',
@@ -49,7 +48,7 @@ export async function getUserMenus() {
           targetType: 0,
         },
         {
-          id: '666',
+          id: '667',
           parentId: '111',
           prefixName: '/主应用页面调试',
           name: '404页面',
