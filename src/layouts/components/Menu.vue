@@ -106,21 +106,9 @@ function handleMenuChange(key: string) {
   if (!menuInfo) return;
 
   if (menuInfo.targetType === 0) {
-    /** 子应用前缀(目标) */
-    const subAppPrefix_target = getSubAppPrefixFromRouteUrl(menuInfo.path);
-
-    /** 子应用名称(目标) */
-    const subAppName_target = MicroAppConfig.subAppSettingList.find(
-      (item) => item.prefix === subAppPrefix_target
-    )?.name;
-
-    if (subAppName_target)
-      router.push({
-        path: subAppName_target,
-        query: {
-          [subAppName_target]: menuInfo?.path,
-        },
-      });
+    router.push({
+      path: menuInfo?.path,
+    });
   } else if (menuInfo.targetType === 1) {
     /** 子应用前缀(目标) */
     const subAppPrefix_target = getSubAppPrefixFromRouteUrl(menuInfo.path);
