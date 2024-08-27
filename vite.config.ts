@@ -38,6 +38,7 @@ export default defineConfig({
     cors: true,
   },
   build: {
+    outDir: 'build',
     /** 配置资源打包目录 */
     assetsDir: './js',
     /** 分包后警告大小（未压缩大小） */
@@ -51,7 +52,7 @@ export default defineConfig({
     rollupOptions: {
       plugins: [],
       /** 打包排除这些依赖，保持import { xxx } from 'vue';这种导入 */
-      external: ['vue', 'vue-router', 'element-plus', '@micro-zoe/micro-app'],
+      external: ['vue', 'vue-router', '@micro-zoe/micro-app'],
       output: {
         format: 'esm', // 打包模式
         /**
