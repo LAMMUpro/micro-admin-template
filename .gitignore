@@ -48,3 +48,6 @@ src/assets/iconfont/iconfont.json
 # element自动导入生成的文件
 auto-imports.d.ts
 components.d.ts
+
+# ws 自动生成文件
+.idea
