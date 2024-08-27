@@ -17,6 +17,10 @@ git clone https://github.com/LAMMUpro/micro-admin-template.git
 cd ./micro-admin-template/apps
 # react18子应用
 git clone https://github.com/LAMMUpro/subapp-react18-template.git
+# vue3子应用
+git clone https://github.com/LAMMUpro/subapp-vue3-template.git
+# vue2子应用
+git clone https://github.com/LAMMUpro/subapp-vue2-template.git
 ```
 
 ## 运行步骤
@@ -27,7 +31,10 @@ git clone https://github.com/LAMMUpro/subapp-react18-template.git
 npm i pnpm -g
 # 安装依赖
 pnpm i
-# 运行
+# 手动tsc编译micro-app-utils库（后续会优化此步骤）
+cd ./micro-admin-template/packages/micro-app-utils
+npm run tsc # 如果提示tsc不存在则运行npm install -g typescript
+# 运行各个项目
 pnpm dev
 ```
 
