@@ -20,6 +20,7 @@ import { MicroComponentPropsMap } from 'micro-app-utils/data';
 import { renderComponent } from 'micro-app-utils/vue3/renderComponent';
 import { initGlobalStore } from './Global';
 import { initRouteInterceptor } from './router/interceptor';
+import setupElementPlus from '@/components/base-element-plus';
 
 /** 初始化全局数据 */
 initGlobalStore();
@@ -92,6 +93,7 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
   MicroComponentImportMap: {
     SvgIcon: () => import('@/components/svg-icon/index.vue'),
     BaseDialog: () => import('@/components/base-dialog/index.vue'),
+    ElementPlus: () => import('element-plus'),
   },
 });
 
@@ -115,6 +117,7 @@ microApp.start({
 });
 
 const app: App<Element> = createApp(AppVue);
+setupElementPlus(app)
 app.use(router);
 // 注册全局组件: `svg-icon`
 app.component('svg-icon', svgIcon);

@@ -78,6 +78,19 @@ export const baseRoutes: Array<RouteRecordRaw> = isSubApp
           },
         ],
       },
+    {
+      path: '/',
+      name: 'Layout_test',
+      component: () => import('@/layouts/index.vue'),
+      children: [
+        {
+          path: '/element-plus-example',
+          name: 'test',
+          component: () => import('@/pages/elementPlusExample.vue'),
+          meta: { title: '例子',firstRedirect: adminWorkbenchRoute, },
+        },
+      ],
+    }
     ];
 
 /**

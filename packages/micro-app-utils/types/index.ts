@@ -8,7 +8,7 @@ export type BaseObj<T = any> = { [key: string]: T };
 /**
  * 派发组件列表
  */
-export type MicroComponents = 'SvgIcon' | 'BaseDialog';
+export type MicroComponents = 'SvgIcon' | 'BaseDialog' | 'ElementPlus';
 
 export interface SubAppSetting<Envs extends string = string> {
   /** 唯一应用名 */

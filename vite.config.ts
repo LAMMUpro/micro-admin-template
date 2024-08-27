@@ -1,6 +1,10 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
+
 import CONSTS from './src/utils/CONSTS';
 import { svgBuilder } from './src/components/svg-icon/loader';
 
@@ -17,6 +21,14 @@ export default defineConfig({
     }),
     /** svg处理 */
     svgBuilder('./src/assets/svg/'),
+
+    // 按需引入组件的样式
+    AutoImport({
+      resolvers: [ElementPlusResolver()],
+    }),
+    Components({
+      resolvers: [ElementPlusResolver()],
+    }),
   ],
   css: {
     preprocessorOptions: {
