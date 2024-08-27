@@ -3,7 +3,7 @@ import AppVue from './App.vue';
 import router from './router';
 import microApp from '@micro-zoe/micro-app';
 import { isSubApp } from 'micro-app-utils';
-import svgIcon from '@/components/svg-icon/index.vue';
+import SvgIcon from '@/components/svg-icon/index.vue';
 import CONSTS from './utils/CONSTS';
 /** 样式 */
 import '@/style/index.scss';
@@ -116,7 +116,7 @@ microApp.start({
 const app: App<Element> = createApp(AppVue);
 app.use(router);
 // 注册全局组件: `svg-icon`
-app.component('svg-icon', svgIcon);
+app.component('svg-icon', SvgIcon);
 app.mount('#__micro-app-main');
 
 /** microApp全局数据监听回调 */
