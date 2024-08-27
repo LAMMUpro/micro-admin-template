@@ -1,0 +1,117 @@
+edition: 2.0.0 # 命令行YAML规范版本
+access: aliyun # 密钥别名, 不同电脑尽量配置一样的名称，不然部署时需要手动选
+
+# 常用
+# 1. 变量
+#   1.1 yaml内定义config, 使用${xxx.name}, 注：不能在一级属性使用变量
+#   1.2 .env定义name, 使用${env.name}，注：env还可能来自于命令行临时设置的变量
+#   1.3 yaml模块下使用 ${this.props.name} 获取模块下props.name
+#   1.4 获取s xxx get中的变量, ${xxx(AccountID)}
+#   1.5 获取其他模块的变量, ${projectName.props.*}
+#   1.6 获取其他模块的结果变量, ${projectName.output.*}
+# 2. 继承
+#   顶部使用extend: s.yaml, 变量继承时, 数组为空会删除父级变量!!!
+
+# 部署说明
+# 1. 需要将环境变量补齐，一般是.env文件
+#   1.1 需要配置的变量：DomainName / CertId /
+# 2. 第一次部署把customDomains注释掉, 部署后再手动配置一次FC域名管理 及 申请ssl)(https://fcnext.console.aliyun.com/cn-shenzhen/domains
+
+## 项目配置
+projectConfig:
+  serviceName: micro-admin-template # 服务名
+  serviceDescription: micro-admin-template主应用 # 服务描述
+  codeUri: ./build # 上传到serveless的代码
+  preDeployCmd:
+    - run: tsx ./scripts/build_for_serveless.ts # 用node脚本代替shell脚本可以解决平台兼容性问题，用tsx代替ts-node运行更快
+      path: ./ # 路径
+
+## 运行配置
+runConfig:
+  instanceType: e1 # 函数实例类型，可选值为：e1（弹性实例）、c1（性能实例）、g1（GPU实例）
+  cpu: 0.35
+  instanceConcurrency: 20 # 单实例多并发
+  memorySize: 512
+  timeout: 10 # 超时时间（单位：秒）
+  diskSize: 512 # 硬盘大小（单位：MB）
+  caPort: 9000 # CustomContainer/Runtime指定端口
+
+## 公共配置（基本不用改）
+commonConfig:
+  region: cn-shenzhen # 地区
+  runCodeCmd: # 代码启动命令(前端nginx)
+    - nginx
+    - '-c'
+    - /code/nginx.conf
+    - '-g'
+    - daemon off;
+  cipherSuites: # 加密套件
+    - TLS_RSA_WITH_AES_128_CBC_SHA
+    - TLS_RSA_WITH_AES_256_CBC_SHA
+    - TLS_RSA_WITH_AES_128_GCM_SHA256
+    - TLS_RSA_WITH_AES_256_GCM_SHA384
+    - TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA
+    - TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA
+    - TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
+    - TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
+    - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+    - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+    - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+    - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+    - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
+    - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
+    - TLS_RSA_WITH_RC4_128_SHA
+    - TLS_RSA_WITH_3DES_EDE_CBC_SHA
+    - TLS_RSA_WITH_AES_128_CBC_SHA256
+    - TLS_ECDHE_ECDSA_WITH_RC4_128_SHA
+    - TLS_ECDHE_RSA_WITH_RC4_128_SHA
+    - TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA
+    - TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256
+    - TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+
+services:
+  moduleName: # 服务/模块名, 不参与部署
+    component: fc # 函数组件名?，devs2app/fc | fc
+    # 局部命令，不同的模块执行不同的预部署命令
+    actions:
+      pre-deploy: ${projectConfig.preDeployCmd} # 部署前执行以下命令
+    # 主要配置！！！
+    props:
+      region: ${commonConfig.region} # 地区名
+      service: # 服务配置
+        name: ${projectConfig.serviceName}
+        description: ${projectConfig.serviceDescription}
+        internetAccess: true # 设为true让function可以访问公网
+        role: acs:ram::1110941952716916:role/AliyunFcDefaultRole # 授予函数计算所需权限的RAM role
+        tracingConfig: Disable # 链路追踪，可取值：Enable、Disable
+      function: # 函数配置
+        codeUri: ${projectConfig.codeUri}
+        runtime: custom
+        handler: index.handler
+        environmentVariables: # 环境变量, 会显示在阿里云网址配置上
+          ## 此配置不能删除!
+          PATH: /opt/nodejs16/bin:/usr/local/bin/apache-maven/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/ruby/bin:/opt/bin:/code:/code/bin
+          LD_LIBRARY_PATH: /code:/code/lib:/usr/local/lib:/opt/lib:/opt/php8.1/lib:/opt/php8.0/lib:/opt/php7.2/lib
+          NODE_PATH: /opt/nodejs/node_modules
+        layers:
+          - acs:fc:cn-shenzhen:official:layers/Nodejs16/versions/2
+        customRuntimeConfig:
+          command: ${commonConfig.runCodeCmd}
+        instanceType: ${runConfig.instanceType}
+        cpu: ${runConfig.cpu}
+        instanceConcurrency: ${runConfig.instanceConcurrency}
+        memorySize: ${runConfig.memorySize}
+        timeout: ${runConfig.timeout}
+        diskSize: ${runConfig.diskSize}
+        caPort: ${runConfig.caPort}
+        asyncConfiguration: # 异步配置
+          { destinationConfig: {} }
+      triggers: # 触发器配置
+        - name: httpTrigger # 触发器名字
+          type: http # 触发器类型
+          qualifier: LATEST # 触发服务的版本
+          config:
+            methods: # 前端要个GET就行了
+              - GET
+            authType: anonymous # 鉴权类型，可选值：anonymous(匿名/无需认证)、function(需要认证)
+            disableURLInternet: false

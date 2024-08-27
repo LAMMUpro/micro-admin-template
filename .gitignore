@@ -5,7 +5,7 @@
 # 编译产物
 build
 # 编译产物
-build_*
+./build_*
 # 编译产物
 dist
 target

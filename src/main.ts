@@ -28,7 +28,7 @@ initRouteInterceptor(router);
 
 /** 初始化微前端配置 */
 MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
-  env: 'localhost',
+  env: process.env.NODE_ENV === 'development' ? 'localhost' : 'master',
   tagName: CONSTS.microAppTagName,
   subAppSettingList: [
     {
@@ -37,9 +37,9 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
       routerMode: 'history',
       urlMap: {
         localhost: '//127.0.0.1:1314/micromain/',
-        test: '//xxx.cn/micromain/',
-        pre: '//xxx.cn/micromain/',
-        master: '//xxx.cn/micromain/',
+        test: 'https://micro-admin-template.lammu.cn/micromain/',
+        pre: 'https://micro-admin-template.lammu.cn/micromain/',
+        master: 'https://micro-admin-template.lammu.cn/micromain/',
       },
       builder: 'vite',
       iframe: true,
@@ -51,9 +51,9 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
       routerMode: 'hash',
       urlMap: {
         localhost: '//127.0.0.1:1320/vue3/',
-        test: '//xxx.cn/vue3/',
-        pre: '//xxx.cn/vue3/',
-        master: '//xxx.cn/vue3/',
+        test: 'https://micro-admin-template.lammu.cn/vue3/',
+        pre: 'https://micro-admin-template.lammu.cn/vue3/',
+        master: 'https://micro-admin-template.lammu.cn/vue3/',
       },
       builder: 'vite',
       iframe: true,
@@ -65,9 +65,9 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
       routerMode: 'hash',
       urlMap: {
         localhost: '//127.0.0.1:1330/vue2/',
-        test: '//xxx.cn/vue2/',
-        pre: '//xxx.cn/vue2/',
-        master: '//xxx.cn/vue2/',
+        test: 'https://micro-admin-template.lammu.cn/vue2/',
+        pre: 'https://micro-admin-template.lammu.cn/vue2/',
+        master: 'https://micro-admin-template.lammu.cn/vue2/',
       },
       builder: 'webpack',
       iframe: false,
@@ -79,9 +79,9 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
       routerMode: 'hash',
       urlMap: {
         localhost: '//127.0.0.1:1340/react18/',
-        test: '//xxx.cn/react18/',
-        pre: '//xxx.cn/react18/',
-        master: '//xxx.cn/react18/',
+        test: 'https://micro-admin-template.lammu.cn/react18/',
+        pre: 'https://micro-admin-template.lammu.cn/react18/',
+        master: 'https://micro-admin-template.lammu.cn/react18/',
       },
       builder: 'vite',
       iframe: true,

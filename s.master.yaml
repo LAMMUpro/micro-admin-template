@@ -1,0 +1,26 @@
+extend: s.yaml
+
+## 公共配置（基本不用改）
+commonConfig:
+  functionName: env_master # 函数名
+
+services:
+  moduleName: # 服务/模块名, 不参与部署
+    props:
+      function: # 函数配置
+        name: ${commonConfig.functionName}
+      customDomains: # [自定义域名](https://docs.serverless-devs.com/fc/yaml/customDomains)
+        - domainName: ${env.DomainName_master} # 域名（.env配置）(不带http[s]://)，需要预先手动配置域名解析!!!, 如果是auto取值，系统则会默认分配域名
+          protocol: HTTPS # 协议，取值：HTTP | HTTPS | HTTP,HTTPS （如果不配https，把这个改为HTTP）
+          certId: ${env.CertId_master} # 域名证书Id（.env配置）(Id到数字证书管理服务中心, 证书详情里面找)（如果不配https，把项注释掉）
+          tlsConfig: #（如果不配https，把项注释掉）
+            minVersion: TLSv1.2 # TLS协议版本
+            maxVersion: TLSv1.2
+            cipherSuites: ${commonConfig.cipherSuites}
+          routeConfigs: # 路由配置
+            - path: /* # 路径
+              serviceName: ${projectConfig.serviceName} # 服务名
+              functionName: ${commonConfig.functionName} # 函数名
+              qualifier: LATEST
+              methods: # 前端要个GET就行了
+                - GET

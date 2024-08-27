@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint src",
-    "prepare": "husky"
+    "prepare": "husky",
+    "deploy": "s deploy -t s.master.yaml --use-local"
   },
   "dependencies": {
     "@micro-zoe/micro-app": "1.0.0-rc.6",
@@ -31,6 +32,7 @@
     "eslint-plugin-vue": "^9.27.0",
     "happy-dom": "^14.12.3",
     "husky": "^9.1.2",
+    "local-tool": "^1.1.2",
     "sass": "^1.56.0",
     "typescript": "^5.2.2",
     "typescript-eslint": "^7.15.0",
