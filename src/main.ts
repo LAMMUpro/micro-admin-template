@@ -14,7 +14,6 @@ import 'element-plus/es/components/message/style/index';
 import 'element-plus/es/components/scrollbar/style/index';
 import { MicroAppInit } from 'micro-app-utils';
 import { generateGlobalDataListener } from 'micro-app-utils/listener';
-import { BaseObj } from 'micro-app-utils/types';
 import { MicroComponentImportMap } from 'micro-app-utils/data';
 import { MicroComponentPropsMap } from 'micro-app-utils/data';
 import { renderComponent } from 'micro-app-utils/vue3/renderComponent';

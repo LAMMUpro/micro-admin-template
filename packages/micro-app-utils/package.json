@@ -4,8 +4,18 @@
   "description": "基于micro-app封装的工具函数",
   "main": "index.ts",
   "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./data": "./data.js",
+    "./types": "./types/index.d.ts",
+    "./listener": "./listener.js",
+    "./vue3/MicroApp.vue": "./vue3/MicroApp.vue",
+    "./vue3/MicroComponent.vue": "./vue3/MicroComponent.vue",
+    "./vue3/renderComponent": "./vue3/renderComponent.js",
+    "./react18/MicroComponent": "./react18/MicroComponent.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tsc": "tsc"
   },
   "dependencies": {
     "@micro-zoe/micro-app": "^1.0.0-rc.5"
