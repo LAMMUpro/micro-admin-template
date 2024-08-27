@@ -12,16 +12,25 @@
       <div class="action-list">
         <div
           class="action-item"
-          @click=""
+          @click="openDocsLink()"
         >
           <svg-icon
-            name="zhanwei"
+            name="docs-question"
             size="24px"
           ></svg-icon>
-          <span>回官网</span>
+          <span>项目文档</span>
+        </div>
+        <div
+          class="action-item"
+          @click="openGithubLink()"
+        >
+          <svg-icon
+            name="Github"
+            size="24px"
+          ></svg-icon>
+          <span>源码</span>
         </div>
       </div>
-
       <img
         class="__avatar"
         :src="Global.user.info.avatar"
@@ -63,6 +72,16 @@ function clearCache() {
 
 /** //TODO: 跳转用户中心页面 */
 function toUserCenterPage() {}
+
+/** 打开项目文档 */
+function openDocsLink() {
+  window.open('https://micro-admin-docs.lammu.cn/');
+}
+
+/** 打开项目源码 */
+function openGithubLink() {
+  window.open('https://github.com/LAMMUpro/micro-admin-template');
+}
 </script>
 
 <style lang="scss" scoped>
