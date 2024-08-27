@@ -17,6 +17,6 @@ export function initRouteInterceptor(router: Router) {
 
   router.afterEach((to) => {
     // TODO回显激活菜单
-    menuActiveIndex.value = '0-0';
+    // menuActiveIndex.value = '0-0';
   });
 }
