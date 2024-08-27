@@ -48,3 +48,8 @@ src/assets/iconfont/iconfont.json
 # element自动导入生成的文件
 auto-imports.d.ts
 components.d.ts
+
+# 忽略打包文件
+.idea
+
+apps/subapp-react18-template

@@ -56,6 +56,10 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
         });
       }
     });
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [_is, otherProps]);
 
   /** 销毁钩子 */
@@ -64,7 +68,6 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
     if (isSubApp && MicroComponentSlotMap[elementId]) {
       delete MicroComponentSlotMap[elementId];
     }
-    clearTimeout(timeoutId);
     setTimeout(() => {
       sendGlobalData({
         emitName: 'micro_component_destroy',
