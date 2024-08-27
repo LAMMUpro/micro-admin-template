@@ -49,6 +49,12 @@ src/assets/iconfont/iconfont.json
 auto-imports.d.ts
 components.d.ts
 
+# 忽略打包文件
+.idea
+
+apps/subapp-react18-template
+
+
 # 工具库tsc编译后的产物
 packages/micro-app-utils/**/*.js
 # 这个配置后续还需要优化
