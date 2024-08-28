@@ -153,3 +153,12 @@ export function updateSubAppMenuInfo(subAppName: string, menuInfo: { id: string 
     parameters: [menuInfo],
   });
 }
+
+/**
+ * 生成派发组件id
+ */
+export function generateMicroComponentDomId() {
+  return `micro_component_${('' + Date.now()).slice(5)}_${Math.random()
+    .toString(36)
+    .substring(2)}`;
+}

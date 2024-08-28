@@ -7,7 +7,12 @@
 </template>
 
 <script lang="ts" setup>
-import { isSubApp, sendDataDown, sendGlobalData } from '../index';
+import {
+  generateMicroComponentDomId,
+  isSubApp,
+  sendDataDown,
+  sendGlobalData,
+} from '../index';
 import { MicroComponentSlotMap } from '../data';
 import { MicroComponents } from '../types';
 import { PropType, onUnmounted, useAttrs, useSlots, watch } from 'vue';
@@ -45,9 +50,7 @@ const otherProps = useAttrs();
 const slots = useSlots();
 
 /** 每次使用生成一个唯一的dom id */
-const elementId = `micro_component_${('' + Date.now()).slice(5)}_${Math.random()
-  .toString(36)
-  .substring(2)}`;
+const elementId = generateMicroComponentDomId();
 
 watch(
   [() => props._is, () => JSON.stringify(otherProps)],
