@@ -1,8 +1,6 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
 import { ref } from 'vue';
-import PageEmpty from '@/pages/empty.vue';
 import CONSTS from '@/utils/CONSTS';
-import { isSubApp } from 'micro-app-utils';
 import { MicroAppConfig } from 'micro-app-utils/data';
 
 /** 工作台路由(默认路由) */
@@ -14,71 +12,68 @@ export const adminWorkbenchRoute = {
 };
 
 /** 基础路由 */
-export const baseRoutes: Array<RouteRecordRaw> = isSubApp
-  ? [
+export const baseRoutes: Array<RouteRecordRaw> = [
+  {
+    path: '/',
+    name: 'Layout_40x',
+    component: () => import('@/layouts/index.vue'),
+    children: [
       {
-        path: '/menu',
-        name: 'menu',
-        component: () => import('@/layouts/components/Menu.vue'),
-        meta: { title: '账号未配置菜单' },
-      },
-    ]
-  : [
-      {
-        path: '/',
-        name: 'Layout_404',
-        component: () => import('@/layouts/index.vue'),
-        children: [
-          {
-            path: '/404',
-            name: 'page_404',
-            component: () => import('@/pages/404.vue'),
-            meta: { title: '页面不存在', firstRedirect: adminWorkbenchRoute },
-          },
-        ],
+        path: '/404',
+        name: 'Page404',
+        component: () => import('@/pages/404.vue'),
+        meta: { title: '页面不存在', firstRedirect: adminWorkbenchRoute },
       },
       {
-        path: '/',
-        name: 'HeadLayout',
-        component: () => import('@/layouts/HeadLayout.vue'),
-        children: [
-          {
-            path: '/noMenu',
-            name: 'no_menu',
-            component: () => import('@/pages/noMenu.vue'),
-            meta: {
-              title: '账号未配置菜单',
-              firstRedirect: adminWorkbenchRoute,
-            },
-          },
-        ],
+        path: '/403',
+        name: 'Page403',
+        component: () => import('@/pages/403.vue'),
+        meta: { title: '无权限', firstRedirect: adminWorkbenchRoute },
       },
+    ],
+  },
+  {
+    path: '/',
+    name: 'HeadLayout',
+    component: () => import('@/layouts/HeadLayout.vue'),
+    children: [
       {
-        path: '/empty',
-        name: 'empty',
-        component: PageEmpty,
-        meta: { hidden: true },
+        path: '/noMenu',
+        name: 'no_menu',
+        component: () => import('@/pages/noMenu.vue'),
+        meta: {
+          title: '账号未配置菜单',
+          firstRedirect: adminWorkbenchRoute,
+        },
       },
+    ],
+  },
+  {
+    path: '/empty',
+    name: 'PageEmpty',
+    component: () => import('@/pages/empty.vue'),
+    meta: { hidden: true },
+  },
+  {
+    path: '/login',
+    name: 'PageLogin',
+    component: () => import('@/pages/login.vue'),
+    meta: { title: '登录页', firstRedirect: adminWorkbenchRoute },
+  },
+  {
+    path: '/',
+    name: 'Layout_menu',
+    component: () => import('@/layouts/index.vue'),
+    children: [
       {
-        path: '/login',
-        name: 'login',
-        component: () => import('@/pages/login.vue'),
-        meta: { title: '登录页', firstRedirect: adminWorkbenchRoute },
+        path: '/:catchAll(.*)',
+        name: '_noMatch_',
+        component: () => import('@/pages/404.vue'),
+        meta: { title: '页面不存在' },
       },
-      {
-        path: '/',
-        name: 'Layout_menu',
-        component: () => import('@/layouts/index.vue'),
-        children: [
-          {
-            path: '/:catchAll(.*)',
-            name: '_noMatch_',
-            component: () => import('@/pages/404.vue'),
-            meta: { title: '页面不存在' },
-          },
-        ],
-      },
-    ];
+    ],
+  },
+];
 
 /**
  * 生成用户路由(登录成功后才动态添加)
