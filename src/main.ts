@@ -92,6 +92,13 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
   MicroComponentMap: {
     SvgIcon: SvgIcon,
     BaseDialog: () => import('@/components/base-dialog/index.vue'),
+    /**
+     * 一些基础页面
+     */
+    Page404: () => import('@/pages/404.vue'),
+    Page403: () => import('@/pages/403.vue'),
+    PageEmpty: () => import('@/pages/empty.vue'),
+    PageLogin: () => import('@/pages/login.vue'),
   },
 });
 
