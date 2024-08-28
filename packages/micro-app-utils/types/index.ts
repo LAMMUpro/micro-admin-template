@@ -1,3 +1,4 @@
+import { Component } from 'vue';
 import MicroApp from '../vue3/MicroApp.vue';
 
 /**
@@ -10,6 +11,14 @@ export type BaseObj<T = any> = { [key: string]: T };
  */
 export type MicroComponents = 'SvgIcon' | 'BaseDialog';
 
+/**
+ * 派发组件类型（注册时支持的类型）
+ */
+export type MicroComponentType = Component | (() => Promise<any>);
+
+/**
+ * 子应用配置
+ */
 export interface SubAppSetting<Envs extends string = string> {
   /** 唯一应用名 */
   name: string;

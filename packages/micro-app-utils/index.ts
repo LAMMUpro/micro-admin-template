@@ -7,12 +7,13 @@ import {
   microAppComponentPath,
   microAppComponentProps,
   MicroAppConfig,
-  MicroComponentImportMap,
+  MicroComponentMap,
 } from './data';
 import {
   MicroAppComponentEmit,
   MicroAppComponentProps,
   MicroAppGlobalEmit,
+  MicroComponentType,
   SubAppSetting,
 } from './types';
 
@@ -24,7 +25,14 @@ export function MicroAppInit<Envs extends string>(options: {
   tagName: string;
   env: Envs;
   subAppSettingList: Array<SubAppSetting<Envs>>;
-  MicroComponentImportMap?: { [key: string]: () => Promise<any> };
+  /**
+   * 派发组件注册
+   * @example { SvgIcon: SvgIcon }
+   * @example { SvgIcon: () => import('@/components/svg-icon/index.vue') }
+   */
+  MicroComponentMap?: {
+    [key: string]: MicroComponentType;
+  };
 }) {
   const { tagName, env, subAppSettingList } = {
     ...options,
@@ -45,10 +53,9 @@ export function MicroAppInit<Envs extends string>(options: {
     if (resultKeys.length) console.error(`以下子应用name存在冲突:${resultKeys}`);
   })();
 
-  if (options.MicroComponentImportMap) {
-    Object.keys(options.MicroComponentImportMap).forEach((componentName) => {
-      MicroComponentImportMap[componentName] =
-        options.MicroComponentImportMap![componentName];
+  if (options.MicroComponentMap) {
+    Object.keys(options.MicroComponentMap).forEach((componentName) => {
+      MicroComponentMap[componentName] = options.MicroComponentMap![componentName];
     });
   }
 }

@@ -1,11 +1,17 @@
 import { ref } from 'vue';
-import { BaseObj, MicroAppComponentProps, SubAppSetting } from './types';
+import {
+  BaseObj,
+  MicroAppComponentProps,
+  MicroComponentType,
+  SubAppSetting,
+} from './types';
 
 /**
- * 派发组件导入映射暂存
- * @example { SvgIcon: () => import('@/components/svg-icon/index.vue'), }
+ * 主应用派发组件暂存
+ * @example { SvgIcon: SvgIcon }
+ * @example { SvgIcon: () => import('@/components/svg-icon/index.vue') }
  */
-export const MicroComponentImportMap: { [key: string]: () => Promise<any> } = {};
+export const MicroComponentMap: { [key: string]: MicroComponentType } = {};
 
 /**
  * 微前端，在MicroAppInit函数内赋值

@@ -2,7 +2,7 @@ import { isSubApp } from '..';
 import { MicroComponentPropsMap } from '../data';
 import { BaseObj } from '../types';
 import MicroComponent from './MicroComponent.vue';
-import { DefineComponent, VNode, createApp, defineComponent, h } from 'vue';
+import { Component, VNode, createApp, defineComponent, h } from 'vue';
 
 /**
  * 去除slot不合法的参数，如id
@@ -21,7 +21,7 @@ function banSlotPropKey(slotProps: BaseObj<any>) {
  */
 export async function renderComponent(options: {
   /** Vue组件 */
-  component: DefineComponent<{}, {}, any>;
+  component: Component;
   /** div dom节点id */
   elementId: string;
   /** 插槽名称列表 */

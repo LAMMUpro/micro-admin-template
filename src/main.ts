@@ -14,11 +14,12 @@ import 'element-plus/es/components/message/style/index';
 import 'element-plus/es/components/scrollbar/style/index';
 import { MicroAppInit } from 'micro-app-utils';
 import { generateGlobalDataListener } from 'micro-app-utils/listener';
-import { MicroComponentImportMap } from 'micro-app-utils/data';
+import { MicroComponentMap } from 'micro-app-utils/data';
 import { MicroComponentPropsMap } from 'micro-app-utils/data';
 import { renderComponent } from 'micro-app-utils/vue3/renderComponent';
 import { initGlobalStore } from './Global';
 import { initRouteInterceptor } from './router/interceptor';
+import { Component } from 'vue';
 
 /** 初始化全局数据 */
 initGlobalStore();
@@ -88,8 +89,8 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
       framework: 'react18',
     },
   ],
-  MicroComponentImportMap: {
-    SvgIcon: () => import('@/components/svg-icon/index.vue'),
+  MicroComponentMap: {
+    SvgIcon: SvgIcon,
     BaseDialog: () => import('@/components/base-dialog/index.vue'),
   },
 });
@@ -124,14 +125,31 @@ let globalDataListener: (data: BaseObj<any>) => void;
 
 globalDataListener = generateGlobalDataListener({
   micro_component: ({ subAppName, componentName, elementId, props, slotNameList }) => {
-    const importComponentFunction = MicroComponentImportMap[componentName];
-    if (!importComponentFunction)
-      return console.error(`派发失败: 没有配置组件<${componentName}>`);
+    /** 主应用派发组件(有可能是组件或导入函数) */
+    const MicroComponent = MicroComponentMap[componentName];
+
+    if (!MicroComponent) return console.error(`派发失败: 没有配置组件<${componentName}>`);
 
     if (!MicroComponentPropsMap[elementId]) {
       MicroComponentPropsMap[elementId] = ref({ ...props! });
+      let component: Component;
+      /**
+       * MicroComponent是组件, // TODO判断逻辑
+       */
+      if (
+        '__file' in MicroComponent &&
+        'setup' in MicroComponent &&
+        'name' in MicroComponent
+      ) {
+        component = MicroComponent;
+      } else {
+        /**
+         * MicroComponent是导入函数, 需要使用defineAsyncComponent转一下 // TODO判断逻辑
+         */
+        component = defineAsyncComponent(MicroComponent as () => Promise<any>);
+      }
       renderComponent({
-        component: defineAsyncComponent(importComponentFunction),
+        component,
         elementId,
         slotNameList,
         subAppName,
