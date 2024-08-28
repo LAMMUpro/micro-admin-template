@@ -46,7 +46,7 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
           emitName: 'micro_component',
           parameters: [
             {
-              subAppName: window.__MICRO_APP_NAME__,
+              subAppName: window.__MICRO_APP_NAME__!,
               componentName: _is,
               elementId,
               props: otherProps,

@@ -8,6 +8,8 @@
     ".": "./index.js",
     "./data": "./data.js",
     "./types": "./types/index.d.ts",
+    "./types/exports.d.ts": "./types/exports.d.ts",
+    "./types/global.d.ts": "./types/global.d.ts",
     "./listener": "./listener.js",
     "./vue3/MicroApp.vue": "./vue3/MicroApp.vue",
     "./vue3/MicroComponent.vue": "./vue3/MicroComponent.vue",

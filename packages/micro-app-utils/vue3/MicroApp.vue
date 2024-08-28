@@ -150,7 +150,7 @@ function microAppUnmount() {
  */
 watch(
   [() => props._path, () => nameWithPrefix.value, () => JSON.stringify(otherProps)],
-  (newValueList, oldValueList) => {
+  (_, oldValueList) => {
     nameWithPrefix_old.value = oldValueList[1] || '';
     if (subAppSettting.value && props._path && isMicroAppMounted.value) {
       toSubAppPathSafe();
