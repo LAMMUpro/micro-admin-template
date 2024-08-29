@@ -114,18 +114,6 @@ const dataForm = shallowReactive({
   /** demo子应用列表 */
   subAppList: [
     {
-      label: 'micro-app官网',
-      url: 'https://micro-zoe.github.io/micro-app/',
-      builder: 'webpack',
-      tagType: 'danger',
-    },
-    {
-      label: 'vuetify官网',
-      url: 'https://vuetifyjs.com/en/',
-      builder: 'vite',
-      tagType: 'success',
-    },
-    {
       label: 'element官网',
       url: 'https://element-plus.org/zh-CN/component/overview.html',
       builder: 'vite',
@@ -136,6 +124,18 @@ const dataForm = shallowReactive({
       url: 'https://webpack.js.org/',
       builder: 'webpack',
       tagType: 'primary',
+    },
+    {
+      label: 'vuetify官网',
+      url: 'https://vuetifyjs.com/en/',
+      builder: 'vite',
+      tagType: 'success',
+    },
+    {
+      label: 'wujie官网',
+      url: 'https://wujie-micro.github.io/doc/guide/',
+      builder: 'vite',
+      tagType: 'danger',
     },
   ],
   /** demo子应用选中/切换 */
@@ -186,6 +186,20 @@ const dataForm = shallowReactive({
       /** element子应用 */
       .el-scrollbar.sidebar {
         position: absolute;
+      }
+      /** webpack子应用 */
+      div.site__header {
+        position: sticky;
+        top: 0;
+      }
+      /** wujie子应用 */
+      header.VPNav {
+        display: none;
+      }
+      aside.VPSidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
       }
     }
   }
