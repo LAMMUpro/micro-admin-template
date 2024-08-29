@@ -11,7 +11,16 @@
             <router-view></router-view>
           </div>
         </el-scrollbar>
-        <div class="__footer">2024 © MicroAdmin By Lammu.</div>
+        <div class="__footer">
+          <span>
+            <span class="__copyright">2024 © MicroAdmin By Lammu</span>
+            <a
+              href="https://beian.miit.gov.cn"
+              target="_blank"
+              >桂ICP备2022010908号-1</a
+            >
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -76,6 +85,9 @@ import 'element-plus/es/components/scrollbar/style/index';
         display: flex;
         justify-content: center;
         align-items: center;
+        .__copyright {
+          margin-right: 10px;
+        }
       }
     }
   }
