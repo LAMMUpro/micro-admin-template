@@ -98,7 +98,6 @@ import 'element-plus/es/components/form-item/style/index';
 import 'element-plus/es/components/button/style/index';
 import 'element-plus/es/components/tag/style/index';
 import { modifyData } from '@/utils';
-import microApp from '@micro-zoe/micro-app';
 import { shallowReactive } from 'vue';
 
 function getDefaultFormInfo() {
@@ -127,8 +126,8 @@ const dataForm = shallowReactive({
       tagType: 'success',
     },
     {
-      label: 'naiveui官网',
-      url: 'https://www.naiveui.com/zh-CN/os-theme/components/button',
+      label: 'element官网',
+      url: 'https://element-plus.org/zh-CN/component/overview.html',
       builder: 'vite',
       tagType: 'warning',
     },
@@ -173,7 +172,9 @@ const dataForm = shallowReactive({
 <style lang="scss" scoped>
 .onlinePreview {
   .web-component {
+    /** 样式兼容处理 */
     :deep(micro-app-body) {
+      /** vuetify子应用 */
       div.v-application__wrap {
         header {
           display: none !important;
@@ -181,6 +182,10 @@ const dataForm = shallowReactive({
         nav {
           display: none !important;
         }
+      }
+      /** element子应用 */
+      .el-scrollbar.sidebar {
+        position: absolute;
       }
     }
   }
