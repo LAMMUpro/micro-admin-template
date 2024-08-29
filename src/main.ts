@@ -141,12 +141,12 @@ globalDataListener = generateGlobalDataListener({
       MicroComponentPropsMap[elementId] = ref({ ...props! });
       let component: Component;
       /**
-       * MicroComponent是组件, // TODO判断逻辑
+       * MicroComponent是组件
        */
       if (
-        '__file' in MicroComponent &&
-        'setup' in MicroComponent &&
-        'name' in MicroComponent
+        Object.prototype.toString.call(MicroComponent.name) === '[object String]' &&
+        Object.prototype.toString.call((<any>MicroComponent)?.setup) ===
+          '[object Function]'
       ) {
         component = MicroComponent;
       } else {
