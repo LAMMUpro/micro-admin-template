@@ -9,35 +9,36 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent } from 'vue';
-
 export default defineComponent({
   name: 'SvgIcon',
-  props: {
-    name: {
-      type: String,
-      required: true,
-    },
-    color: {
-      type: String,
-      default: '',
-    },
-    size: {
-      type: String,
-      default: '1em',
-    },
+});
+</script>
+
+<script lang="ts" setup>
+import { computed, defineComponent } from 'vue';
+
+const props = defineProps({
+  name: {
+    type: String,
+    required: true,
   },
-  setup(props) {
-    const iconName: ComputedRef<string> = computed(() => `#icon-${props.name}`);
-    const svgClass: ComputedRef<string> = computed(() => {
-      if (props.name) return `svg-icon icon-${props.name}`;
-      return 'svg-icon';
-    });
-    return {
-      iconName,
-      svgClass,
-    };
+  color: {
+    type: String,
+    default: '',
   },
+  size: {
+    type: String,
+    default: '1em',
+  },
+});
+
+/** svg ID */
+const iconName = computed(() => `#icon-${props.name}`);
+
+/** 类名 */
+const svgClass = computed(() => {
+  if (props.name) return `svg-icon icon-${props.name}`;
+  return 'svg-icon';
 });
 </script>
 
