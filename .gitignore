@@ -52,8 +52,9 @@ components.d.ts
 # 忽略打包文件
 .idea
 
-apps/subapp-react18-template
-
+# 忽略子应用(按理说子应用是git仓库会自动忽略的)
+apps/*
+!apps/README.md
 
 # 工具库tsc编译后的产物
 packages/micro-app-utils/**/*.js
