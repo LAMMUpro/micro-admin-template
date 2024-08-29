@@ -30,6 +30,12 @@ export const baseRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/403.vue'),
         meta: { title: '无权限', firstRedirect: adminWorkbenchRoute },
       },
+      {
+        path: '/onlinePreview',
+        name: 'onlinePreview',
+        component: () => import('@/pages/onlinePreview.vue'),
+        meta: { title: '在线预览网站' },
+      },
     ],
   },
   {
