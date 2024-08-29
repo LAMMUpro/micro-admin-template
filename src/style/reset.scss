@@ -41,3 +41,7 @@ li,
 ol {
   list-style: none;
 }
+
+:focus-visible {
+  outline: none;
+}
