@@ -19,6 +19,7 @@
     "./react18/MicroComponent": "./react18/MicroComponent.js"
   },
   "scripts": {
+    "build": "tsc",
     "tsc": "tsc"
   },
   "dependencies": {

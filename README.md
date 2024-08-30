@@ -33,7 +33,7 @@ npm i pnpm -g
 pnpm i
 # 手动tsc编译micro-app-utils库（后续会优化此步骤）
 cd ./micro-admin-template/packages/micro-app-utils
-npm run tsc # 如果提示tsc不存在则运行npm install -g typescript
+npm run build # 如果提示tsc不存在则运行npm install -g typescript
 # 运行各个项目
 pnpm dev
 ```
