@@ -12,7 +12,10 @@ export function initRouteInterceptor(router: Router) {
     // TODO: 完善登录逻辑
     if (!Global.user.inited.value) Global.user.initData();
     if (!Global.menu.inited.value) Global.menu.initData();
-    if (!isAddedAsyncRoutes) addAsyncRoute();
+    if (!isAddedAsyncRoutes) {
+      addAsyncRoute();
+      return next({ path: to.path, query: to.query });
+    }
 
     /**
      * 如果是子应用路由 => 取消之前菜单的激活状态/记录/激活目标菜单
