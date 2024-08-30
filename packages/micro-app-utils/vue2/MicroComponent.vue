@@ -15,9 +15,6 @@ import {
 } from '../index';
 import { MicroComponentSlotMap } from '../data';
 
-/** 每次使用生成一个唯一的dom id */
-const elementId = generateMicroComponentDomId();
-
 export default {
   name: 'MicroComponent',
   props: {
@@ -44,7 +41,8 @@ export default {
   },
   data() {
     return {
-      elementId,
+      /** 每次使用生成一个唯一的dom id */
+      elementId: generateMicroComponentDomId(),
     };
   },
   computed: {
@@ -66,7 +64,7 @@ export default {
            */
           if (isSubApp) {
             /** vue2要用$scopedSlots而不是$slots */
-            MicroComponentSlotMap[elementId] = this.$scopedSlots;
+            MicroComponentSlotMap[this.elementId] = this.$scopedSlots;
             /**
              * vue2的props和event是分开的，且事件前缀不带on
              */
@@ -81,8 +79,12 @@ export default {
                 {
                   subAppName: window.__MICRO_APP_NAME__,
                   componentName: this._is,
-                  elementId,
-                  props: otherProps,
+                  elementId: this.elementId,
+                  props: {
+                    ...otherProps,
+                    class: this.$vnode.data.staticClass,
+                    style: this.$vnode.data.staticStyle,
+                  },
                   slotNameList: Object.keys(this.$scopedSlots),
                 },
               ],
@@ -96,7 +98,7 @@ export default {
               parameters: [
                 {
                   slotName: this._slotName,
-                  elementId,
+                  elementId: this.elementId,
                   parentElementId: this._parentElementId,
                   props: this.$attrs,
                 },
@@ -110,13 +112,13 @@ export default {
   },
   beforeDestroy() {
     /** 清除插槽缓存 */
-    if (isSubApp && MicroComponentSlotMap[elementId]) {
-      delete MicroComponentSlotMap[elementId];
+    if (isSubApp && MicroComponentSlotMap[this.elementId]) {
+      delete MicroComponentSlotMap[this.elementId];
     }
     setTimeout(() => {
       sendGlobalData({
         emitName: 'micro_component_destroy',
-        parameters: [elementId],
+        parameters: [this.elementId],
       });
     });
   },
