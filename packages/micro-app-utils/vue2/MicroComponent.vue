@@ -15,6 +15,21 @@ import {
 } from '../index';
 import { MicroComponentSlotMap } from '../data';
 
+/**
+ * 处理vue2和vue3 v-model差异
+ * value => modelValue
+ * input => update:modelValue
+ */
+function processVModel(props) {
+  if ('value' in props && 'onInput' in props) {
+    props['modelValue'] = props.value;
+    props['update:modelValue'] = props.onInput;
+    delete props.value;
+    delete props.onInput;
+  }
+  return props;
+}
+
 export default {
   name: 'MicroComponent',
   props: {
@@ -66,13 +81,30 @@ export default {
             /** vue2要用$scopedSlots而不是$slots */
             MicroComponentSlotMap[this.elementId] = this.$scopedSlots;
             /**
-             * vue2的props和event是分开的，且事件前缀不带on
+             * vue2的props和event是分开的
+             * 事件前缀不带on
+             * vue2的v-model === value + input（vue3的非input组件v-model === modelValue + update:modelValue）
              */
             const otherProps = this.$attrs;
-            Object.keys(this.$listeners).forEach((eventKey) => {
-              otherProps[`on${eventKey[0].toUpperCase()}${eventKey.slice(1)}`] =
-                this.$listeners[eventKey];
+
+            /**
+             * vue3格式的props, 事件, 原生属性也在里面
+             */
+            const vue3Props = processVModel({
+              ...otherProps,
+              /**
+               * 处理原生属性
+               */
+              class: this.$vnode.data.staticClass,
+              style: this.$vnode.data.staticStyle,
+              /** 处理事件 */
+              ...Object.keys(this.$listeners).reduce((result, eventKey) => {
+                result[`on${eventKey[0].toUpperCase()}${eventKey.slice(1)}`] =
+                  this.$listeners[eventKey];
+                return result;
+              }, {}),
             });
+
             sendGlobalData({
               emitName: 'micro_component',
               parameters: [
@@ -80,11 +112,7 @@ export default {
                   subAppName: window.__MICRO_APP_NAME__,
                   componentName: this._is,
                   elementId: this.elementId,
-                  props: {
-                    ...otherProps,
-                    class: this.$vnode.data.staticClass,
-                    style: this.$vnode.data.staticStyle,
-                  },
+                  props: vue3Props,
                   slotNameList: Object.keys(this.$scopedSlots),
                 },
               ],
