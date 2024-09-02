@@ -31,6 +31,9 @@ function processVModel(props) {
 }
 
 export default {
+  /**
+   * vue2使用MicroComponent 默认插槽时, 外层必须用<template #default><template>包裹, 否则响应式会丢失(原因未知)
+   */
   name: 'MicroComponent',
   props: {
     /** 指定渲染组件名称 */
