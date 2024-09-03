@@ -33,6 +33,19 @@ export const MicroAppConfig: {
 export const MicroComponentSlotMap: BaseObj<any> = {};
 
 /**
+ * 插槽相关数据暂存（供react子应用使用）
+ * key: 父节点id
+ * value: {key: slotName value:看定义}
+ * //TODO组件销毁清空数据
+ */
+export const ReactMicroComponentSlotInfoMap: BaseObj<{
+  [key: string]: {
+    elementId: string;
+    root?: any;
+  };
+}> = {};
+
+/**
  * 派发组件所有props数据暂存（主应用使用）
  */
 export const MicroComponentPropsMap: BaseObj<any> = {};

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { isSubApp, sendGlobalData } from '../index';
-import { MicroComponentSlotMap } from '../data';
+import { MicroComponentSlotMap, ReactMicroComponentSlotInfoMap } from '../data';
 import { BaseObj } from '../types';
 
 interface MicroComponentProps {
@@ -11,15 +11,15 @@ interface MicroComponentProps {
 }
 
 /**
+ * 存储之前组件参数JSON.stringify结果，用于判断组件props是否发生变化(插槽不算props)
+ */
+let oldVue3PropsString = '';
+
+/**
  * 插槽统一通过属性传，不要通过children传
  */
 const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
-  const { _is, ...otherProps } = props;
-
-  /** 插槽，从props过滤得到 */
-  const slotNameList = Object.keys(props).filter((propKey) =>
-    React.isValidElement(props[propKey])
-  );
+  const { _is, ...otherPropsWithSlot } = props;
 
   // 生成唯一的 DOM ID
   const elementId = useMemo(() => {
@@ -27,6 +27,55 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
       .toString(36)
       .substring(2)}`;
   }, []);
+
+  /** 插槽，从props过滤得到 */
+  const slotNameList = Object.keys(props).filter((propKey) =>
+    React.isValidElement(props[propKey])
+  );
+
+  /**
+   * vue3组件格式的组件参数
+   * 不包括插槽
+   */
+  const vue3Props = Object.keys(otherPropsWithSlot).reduce((result, key) => {
+    if (!React.isValidElement(otherPropsWithSlot[key]))
+      result[key] = otherPropsWithSlot[key];
+    return result;
+  }, {} as BaseObj<any>);
+
+  /** 存储当前组件参数JSON.stringify结果 */
+  const vue3PropsString = JSON.stringify(vue3Props);
+
+  if (vue3PropsString !== oldVue3PropsString) {
+    /**
+     * 插槽不需要更新，仅派发组件更新
+     */
+    oldVue3PropsString = vue3PropsString;
+    console.log('插槽不需要更新');
+  } else {
+    // TODO 点击一次+1会触发两次
+    console.log('更新插槽');
+    /**
+     * 插槽需要更新，派发组件不需要更新
+     * // TODO具体哪个插槽需要更新需要进一步判断
+     */
+    if (ReactMicroComponentSlotInfoMap[elementId])
+      slotNameList.forEach((slotName) => {
+        /** 当前插槽信息 */
+        const slotInfo = ReactMicroComponentSlotInfoMap[elementId][slotName];
+        /** 当前插槽对应的dom节点 */
+        const Element = document.body.querySelector(`#${slotInfo.elementId}`);
+        /** 插槽对应虚拟dom */
+        const component = otherPropsWithSlot[slotName];
+        /** 插槽对应渲染器 */
+        const root = slotInfo.root;
+
+        if (root && Element && component) {
+          /** 插槽重新渲染 */
+          root.render(component);
+        }
+      });
+  }
 
   let timeoutId: NodeJS.Timeout;
 
@@ -49,7 +98,7 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
               subAppName: window.__MICRO_APP_NAME__!,
               componentName: _is,
               elementId,
-              props: otherProps,
+              props: vue3Props,
               slotNameList,
             },
           ],
@@ -63,21 +112,23 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
       if (isSubApp && MicroComponentSlotMap[elementId]) {
         delete MicroComponentSlotMap[elementId];
       }
-      setTimeout(() => {
-        sendGlobalData({
-          emitName: 'micro_component_destroy',
-          parameters: [elementId],
-        });
-      });
+      // TODO 销毁时机
+      // setTimeout(() => {
+      //   sendGlobalData({
+      //     emitName: 'micro_component_destroy',
+      //     parameters: [elementId],
+      //   });
+      // });
     };
-  }, [_is, otherProps]);
+  }, [_is, vue3Props]);
 
   return (
-    <div
-      className="MicroComponent"
-      id={elementId}
-    >
-      {props.children}
+    <div>
+      <div>{oldVue3PropsString}</div>
+      <div
+        className="MicroComponent"
+        id={elementId}
+      ></div>
     </div>
   );
 };
