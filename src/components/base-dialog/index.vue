@@ -31,12 +31,12 @@
                 ></i>
               </div>
               <div class="base-dialog-body">
-                <!-- // TODO 实现滚动效果 -->
-                <!-- <el-scrollbar max-height="76vh" ref="scrollbarRef"> -->
-                <div style="padding-left: 10px; padding-right: 10px">
+                <el-scrollbar
+                  max-height="76vh"
+                  ref="scrollbarRef"
+                >
                   <slot></slot>
-                </div>
-                <!-- </el-scrollbar> -->
+                </el-scrollbar>
               </div>
               <div
                 class="base-dialog-footer"
@@ -71,7 +71,8 @@ export default defineComponent({
 import { defineComponent } from 'vue';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { usezIndex } from '@/hook';
-// import { ElScrollbar } from 'element-plus';
+import { ElScrollbar } from 'element-plus';
+import 'element-plus/es/components/scrollbar/style/index';
 
 const props = defineProps({
   title: {
@@ -242,7 +243,7 @@ onUnmounted(function () {
 @mixin closeIcon($color, $size, $land: 1px) {
   position: relative;
   &::before {
-    transition: var(--transition);
+    transition: 0.3s all;
     content: '';
     position: absolute;
     top: 50%;
@@ -254,7 +255,7 @@ onUnmounted(function () {
   }
 
   &::after {
-    transition: var(--transition);
+    transition: 0.3s all;
     content: '';
     position: absolute;
     top: 50%;
@@ -279,18 +280,18 @@ onUnmounted(function () {
 }
 
 .base-dialog-content {
-  border-radius: var(--border-radius);
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14),
     0px 3px 1px -2px rgba(0, 0, 0, 0.12);
   background-color: #fff;
   overflow: hidden;
   flex-direction: column;
   display: flex;
+  border-radius: 8px;
 }
 
 .dialog-move-enter-active,
 .dialog-move-leave-active {
-  transition: var(--transition);
+  transition: 0.3s all;
 }
 
 .dialog-move-enter-from,
@@ -299,15 +300,14 @@ onUnmounted(function () {
 }
 
 .base-dialog-title {
-  padding: 12px 14px;
-  border-bottom: solid 1px #eee;
+  padding: 20px 24px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   h2 {
-    font-size: 18px;
+    font-size: 16px;
     color: #303133;
-    font-weight: normal;
+    font-weight: 400;
   }
 
   i {
@@ -317,7 +317,7 @@ onUnmounted(function () {
     cursor: pointer;
     transform: rotate(0);
     @include closeIcon(#666, 16px);
-    transition: var(--transition);
+    transition: 0.3s all;
 
     &:hover {
       transform: rotate(180deg);
@@ -326,13 +326,12 @@ onUnmounted(function () {
 }
 
 .base-dialog-body {
-  padding: 12px 15px;
+  padding: 10px 24px;
   min-height: 0px;
 }
 
 .base-dialog-footer {
   text-align: right;
-  border-top: solid 1px #eee;
-  padding: 15px;
+  padding: 0 24px 20px;
 }
 </style>
