@@ -8,6 +8,7 @@ import {
   microAppComponentProps,
   MicroAppConfig,
   MicroComponentMap,
+  setElConfigProvider,
 } from './data';
 import {
   MicroAppComponentEmit,
@@ -33,13 +34,16 @@ export function MicroAppInit<Envs extends string>(options: {
   MicroComponentMap?: {
     [key: string]: MicroComponentType;
   };
+  /** 需要把element-plus ElConfigProvider组件传过来用 */
+  ElConfigProvider: any;
 }) {
-  const { tagName, env, subAppSettingList } = {
+  const { tagName, env, subAppSettingList, ElConfigProvider } = {
     ...options,
   };
   MicroAppConfig.env = env;
   MicroAppConfig.tagName = tagName;
   MicroAppConfig.subAppSettingList = subAppSettingList;
+  setElConfigProvider(ElConfigProvider);
   /**
    * 检查subAppSettingList是否存在name冲突
    */

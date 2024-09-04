@@ -13,6 +13,14 @@ import {
  */
 export const MicroComponentMap: { [key: string]: MicroComponentType } = {};
 
+/** element-plus ElConfigProvider组件（主应用暂存） */
+export let ElConfigProvider: any;
+
+/** 赋值ElConfigProvider */
+export function setElConfigProvider(component: any) {
+  ElConfigProvider = component;
+}
+
 /**
  * 微前端，在MicroAppInit函数内赋值
  */

@@ -20,6 +20,7 @@ import { renderComponent } from 'micro-app-utils/vue3/renderComponent';
 import { initGlobalStore } from './Global';
 import { initRouteInterceptor } from './router/interceptor';
 import { Component } from 'vue';
+import { ElConfigProvider } from 'element-plus';
 
 /** 初始化全局数据 */
 initGlobalStore();
@@ -31,6 +32,7 @@ initRouteInterceptor(router);
 MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
   env: process.env.NODE_ENV === 'development' ? 'localhost' : 'master',
   tagName: CONSTS.microAppTagName,
+  ElConfigProvider,
   subAppSettingList: [
     {
       name: 'micromain',

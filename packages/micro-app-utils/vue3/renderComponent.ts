@@ -1,5 +1,5 @@
 import { isSubApp } from '..';
-import { MicroComponentPropsMap } from '../data';
+import { ElConfigProvider, MicroComponentPropsMap } from '../data';
 import { BaseObj } from '../types';
 import MicroComponent from './MicroComponent.vue';
 import { Component, VNode, createApp, defineComponent, h } from 'vue';
@@ -54,11 +54,26 @@ export async function renderComponent(options: {
         setup() {
           /** 如果是微前端，通过内部传递参数 */
           return () => {
-            return h(
-              options.component,
-              MicroComponentPropsMap[options.elementId].value,
-              slotMap
-            );
+            if (ElConfigProvider) {
+              /** 需要套一层ElConfigProvider, 修改element-plus组件的前缀 */
+              return h(
+                ElConfigProvider,
+                {
+                  namespace: 'main-el',
+                },
+                h(
+                  options.component,
+                  MicroComponentPropsMap[options.elementId].value,
+                  slotMap
+                )
+              );
+            } else {
+              return h(
+                options.component,
+                MicroComponentPropsMap[options.elementId].value,
+                slotMap
+              );
+            }
           };
         },
       });

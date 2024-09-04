@@ -63,7 +63,7 @@
 <script lang="ts" setup>
 import { shallowReactive } from 'vue';
 import { ElButton } from 'element-plus';
-import 'element-plus/es/components/button/style/index.mjs';
+import 'element-plus/es/components/button/style/index';
 import BaseDialog from '@/components/base-dialog/index.vue';
 
 const dataDialog = shallowReactive({
