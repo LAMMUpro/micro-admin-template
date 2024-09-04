@@ -36,6 +36,12 @@ export const baseRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/onlinePreview.vue'),
         meta: { title: '在线预览网站' },
       },
+      {
+        path: '/demo/micromainComponent',
+        name: 'micromainComponent',
+        component: () => import('@/pages/demo/micromainComponent.vue'),
+        meta: { title: '派发组件源测试' },
+      },
     ],
   },
   {
