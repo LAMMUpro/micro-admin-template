@@ -1,3 +1,5 @@
+// 公共样式，子应用可以直接使用，一般以-m-开头
+
 /* 溢出...显示 当前节点生效 */
 .ellipsis {
   overflow: hidden;
@@ -12,13 +14,91 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
 /* 溢出...显示 子节点生效 */
 .ellipsis_1 {
   -webkit-line-clamp: 1;
 }
+
 .ellipsis_2 {
   -webkit-line-clamp: 2;
 }
+
 .ellipsis_3 {
   -webkit-line-clamp: 3;
+}
+
+
+
+.-m-card {
+  border-radius: 4px;
+  padding: 10px 6px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  background-color: white;
+
+  &.lightblue {
+    background-color: lightblue;
+  }
+
+  &.lightcoral {
+    background-color: lightcoral;
+  }
+
+  &.lightcyan {
+    background-color: lightcyan;
+  }
+
+  &.lightgoldenrodyellow {
+    background-color: lightgoldenrodyellow;
+  }
+
+  &.lightgray {
+    background-color: lightgray;
+  }
+
+  &.lightgreen {
+    background-color: lightgreen;
+  }
+
+  &.lightgrey {
+    background-color: lightgrey;
+  }
+
+  &.lightgrey {
+    background-color: lightgrey;
+  }
+
+  &.lightpink {
+    background-color: lightpink;
+  }
+
+  &.lightsalmon {
+    background-color: lightsalmon;
+  }
+
+  &.lightseagreen {
+    background-color: lightseagreen;
+  }
+
+  .-m-title {
+    display: block;
+    position: relative;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    padding-left: 8px;
+    margin-bottom: 8px;
+
+    &::after {
+      position: absolute;
+      content: '';
+      top: 50%;
+      left: 0;
+      width: 3px;
+      height: 15px;
+      transform: translate(0, -50%);
+      background-color: #358cff;
+    }
+  }
 }
