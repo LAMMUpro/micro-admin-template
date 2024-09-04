@@ -11,9 +11,9 @@ interface MicroComponentProps {
 }
 
 /**
- * 存储之前组件参数JSON.stringify结果，用于判断组件props是否发生变化(插槽不算props)
+ * 存储历史组件参数JSON.stringify结果，用于判断组件props是否发生变化(插槽不算props)
  */
-let oldVue3PropsString = '';
+let oldVue3PropsStringMap: BaseObj<string> = {};
 
 /**
  * 插槽统一通过属性传，不要通过children传
@@ -46,15 +46,15 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
   /** 存储当前组件参数JSON.stringify结果 */
   const vue3PropsString = JSON.stringify(vue3Props);
 
-  if (vue3PropsString !== oldVue3PropsString) {
+  if (vue3PropsString !== oldVue3PropsStringMap[elementId]) {
     /**
      * 插槽不需要更新，仅派发组件更新
      */
-    oldVue3PropsString = vue3PropsString;
-    console.log('插槽不需要更新');
+    oldVue3PropsStringMap[elementId] = vue3PropsString;
+    console.log(`插槽${elementId}不需要更新`);
   } else {
     // TODO 点击一次+1会触发两次
-    console.log('更新插槽');
+    console.log(`更新插槽${elementId}`);
     /**
      * 插槽需要更新，派发组件不需要更新
      * // TODO具体哪个插槽需要更新需要进一步判断
