@@ -123,13 +123,11 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
   }, [_is, vue3Props]);
 
   return (
-    <div>
-      <div>{oldVue3PropsString}</div>
-      <div
-        className="MicroComponent"
-        id={elementId}
-      ></div>
-    </div>
+    <div
+      className="MicroComponent"
+      style={{ display: 'contents' }}
+      id={elementId}
+    ></div>
   );
 };
 
