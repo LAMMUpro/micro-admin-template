@@ -87,7 +87,7 @@ const props = defineProps({
   /** 弹出层内容区域宽度 */
   width: {
     type: String,
-    default: '50%',
+    default: '60%',
   },
   /** 是否可以通过点击遮罩层关闭`Dialog` */
   closeByMask: {
@@ -312,8 +312,8 @@ onUnmounted(function () {
 
   i {
     display: inline-block;
-    width: 28px;
-    height: 28px;
+    width: 16px;
+    height: 16px;
     cursor: pointer;
     transform: rotate(0);
     @include closeIcon(#666, 16px);
