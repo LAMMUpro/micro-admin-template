@@ -3,7 +3,7 @@
     class="__micro-app"
     :is="MicroAppConfig.tagName"
     v-if="subAppSettting"
-    :default-page="props._defaultPage || `${subAppSettting?.prefix}/#/empty`"
+    :default-page="props._defaultPage || `/${subAppSettting?.prefix}/#/empty`"
     :keep-alive="props._keepAlive"
     :name="nameWithPrefix"
     :iframe="subAppSettting?.iframe"
