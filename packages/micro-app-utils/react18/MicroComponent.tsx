@@ -38,8 +38,13 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
    * 不包括插槽
    */
   const vue3Props = Object.keys(otherPropsWithSlot).reduce((result, key) => {
-    if (!React.isValidElement(otherPropsWithSlot[key]))
-      result[key] = otherPropsWithSlot[key];
+    if (!React.isValidElement(otherPropsWithSlot[key])) {
+      /** 属性名转换 */
+      const vue3PropsKey = {
+        'className': 'class',
+      }[key] || key;
+      result[vue3PropsKey] = otherPropsWithSlot[key];
+    }
     return result;
   }, {} as BaseObj<any>);
 
