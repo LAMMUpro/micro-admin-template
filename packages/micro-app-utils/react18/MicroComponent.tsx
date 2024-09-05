@@ -46,36 +46,46 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
   /** 存储当前组件参数JSON.stringify结果 */
   const vue3PropsString = JSON.stringify(vue3Props);
 
-  if (vue3PropsString !== oldVue3PropsStringMap[elementId]) {
-    /**
-     * 插槽不需要更新，仅派发组件更新
-     */
-    oldVue3PropsStringMap[elementId] = vue3PropsString;
-    console.log(`插槽${elementId}不需要更新`);
-  } else {
-    // TODO 点击一次+1会触发两次
-    console.log(`更新插槽${elementId}`);
-    /**
-     * 插槽需要更新，派发组件不需要更新
-     * // TODO具体哪个插槽需要更新需要进一步判断
-     */
-    if (ReactMicroComponentSlotInfoMap[elementId])
-      slotNameList.forEach((slotName) => {
-        /** 当前插槽信息 */
-        const slotInfo = ReactMicroComponentSlotInfoMap[elementId][slotName];
-        /** 当前插槽对应的dom节点 */
-        const Element = document.body.querySelector(`#${slotInfo.elementId}`);
-        /** 插槽对应虚拟dom */
-        const component = otherPropsWithSlot[slotName];
-        /** 插槽对应渲染器 */
-        const root = slotInfo.root;
+  useEffect(() => {
+    if (vue3PropsString !== oldVue3PropsStringMap[elementId]) {
+      /**
+       * 插槽不需要更新，仅派发组件更新
+       */
+      oldVue3PropsStringMap[elementId] = vue3PropsString;
+      console.log(`插槽${elementId}不需要更新`);
+    } else {
+      // TODO 点击一次+1会触发两次
+      console.log(`更新插槽${elementId}`);
+      /**
+       * 插槽需要更新，派发组件不需要更新
+       * // TODO具体哪个插槽需要更新需要进一步判断
+       */
+      if (ReactMicroComponentSlotInfoMap[elementId])
+        slotNameList.forEach((slotName) => {
+          /** 当前插槽信息 */
+          const slotInfo = ReactMicroComponentSlotInfoMap[elementId][slotName];
+          /** 当前插槽对应的dom节点 */
+          const Element = document.body.querySelector(`#${slotInfo.elementId}`);
+          /** 插槽对应虚拟dom */
+          const component = otherPropsWithSlot[slotName];
+          /** 插槽对应渲染器 */
+          const root = slotInfo.root;
 
-        if (root && Element && component) {
-          /** 插槽重新渲染 */
-          root.render(component);
-        }
-      });
-  }
+          if (root && Element && component) {
+            /** 插槽重新渲染 */
+            root.render(component);
+          }
+        });
+    }
+    /**
+     * 解决root.render 问题
+     * 原因：
+     *  渲染过程中应该值纯函数，根据props返回视图，不应该有副作用，，而root.render是一种副作用，会导致对外部状态照成影响。
+     *
+     * 解决：
+     *  将副作用移到useEffect中，useEffect会在渲染之后执行
+     * */
+  }, [vue3PropsString, elementId, slotNameList, otherPropsWithSlot]);
 
   let timeoutId: NodeJS.Timeout;
 
