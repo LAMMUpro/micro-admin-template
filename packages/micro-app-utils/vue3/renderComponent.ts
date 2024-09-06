@@ -26,8 +26,8 @@ export async function renderComponent(options: {
   elementId: string;
   /** 插槽名称列表 */
   slotNameList: Array<string>;
-  /** 子应用name */
-  subAppName: string;
+  /** 子应用名称集合，第一位存的是目标应用，后面依次是中间应用 */
+  subAppNameList: Array<string>;
 }) {
   if (!isSubApp) {
     /** 被注入的应用要预留一个<div/>节点 */
@@ -41,7 +41,7 @@ export async function renderComponent(options: {
           h(MicroComponent, {
             _is: '' as any, // 渲染插槽不需要传_is参数
             ...banSlotPropKey({ ...slotProps }),
-            _subAppName: options.subAppName,
+            _subAppNameList: options.subAppNameList,
             _slotName: slotName,
             _parentElementId: options.elementId,
           });

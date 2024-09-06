@@ -10,6 +10,7 @@
 import {
   generateMicroComponentDomId,
   isSubApp,
+  sendDataUp,
   sendDataDown,
   sendGlobalData,
 } from '../index';
@@ -41,10 +42,10 @@ export default {
       type: String,
       required: true,
     },
-    /** 子应用使用时候不需要传 */
-    _subAppName: {
-      type: String,
-      default: '',
+    /** 子应用集合，子应用使用时候不需要传 */
+    _subAppNameList: {
+      type: Array,
+      default: () => [],
     },
     /** 子应用使用时候不需要传 */
     _slotName: {
@@ -108,11 +109,11 @@ export default {
               }, {}),
             });
 
-            sendGlobalData({
-              emitName: 'micro_component',
+            sendDataUp({
+              emitName: 'micro_component_request',
               parameters: [
                 {
-                  subAppName: window.__MICRO_APP_NAME__,
+                  subAppNameList: [window.__MICRO_APP_NAME__],
                   componentName: this._is,
                   elementId: this.elementId,
                   props: vue3Props,
@@ -124,10 +125,12 @@ export default {
             /**
              * 如果是主应用，则是插槽情况需要向子应用发送渲染插槽请求
              */
-            sendDataDown(props._subAppName, {
-              emitName: 'micro_component',
+            const nextSubAppName = props._subAppNameList.slice(-1)[0];
+            sendDataDown(nextSubAppName, {
+              emitName: 'micro_component_slot',
               parameters: [
                 {
+                  subAppNameList: props._subAppNameList.slice(0, -1),
                   slotName: this._slotName,
                   elementId: this.elementId,
                   parentElementId: this._parentElementId,

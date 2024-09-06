@@ -93,6 +93,17 @@ export async function getUserMenus() {
       parentId: '0',
       children: [
         {
+          id: '333',
+          parentId: '111',
+          prefixName: '/react子应用',
+          name: '首页',
+          componentStr: '/manage/center.vue',
+          sort: 0,
+          hidden: false,
+          path: '/react18/#/home',
+          targetType: 1,
+        },
+        {
           id: '222',
           parentId: '111',
           prefixName: '/react子应用',
@@ -152,6 +163,17 @@ export async function getUserMenus() {
           id: '222',
           parentId: '111',
           prefixName: '/vue3子应用',
+          name: '首页',
+          componentStr: '/manage/center.vue',
+          sort: 0,
+          hidden: false,
+          path: '/vue3/#/home',
+          targetType: 1,
+        },
+        {
+          id: '222',
+          parentId: '111',
+          prefixName: '/vue3子应用',
           name: '派发组件',
           componentStr: '/manage/center.vue',
           sort: 0,
@@ -193,6 +215,17 @@ export async function getUserMenus() {
       id: '111',
       parentId: '0',
       children: [
+        {
+          id: '222',
+          parentId: '111',
+          prefixName: '/vue2子应用',
+          name: '首页',
+          componentStr: '/manage/center.vue',
+          sort: 0,
+          hidden: false,
+          path: '/vue2/#/home',
+          targetType: 1,
+        },
         {
           id: '222',
           parentId: '111',

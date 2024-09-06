@@ -43,8 +43,26 @@ export interface SubAppSetting<Envs extends string = string> {
  *
  */
 export interface ListenerCallbacks {
-  /** 主应用派发组件回传渲染slot(子应用监听) */
-  micro_component: (params: {
+  /** 请求主应用派发组件(主应用监听) */
+  micro_component_request: (params: {
+    /** 子应用名称集合，第一位存的是目标应用，后面依次是中间应用 */
+    subAppNameList: Array<string>;
+    /** 组件名称 */
+    componentName: MicroComponents;
+    /** dom节点id */
+    elementId: string;
+    /** 组件属性（包括事件） */
+    props: BaseObj<any>;
+    /** 插槽名称列表 */
+    slotNameList: Array<string>;
+  }) => void;
+  /** 
+   * 主应用派发组件回传渲染slot(子应用监听)
+   * 如果是中间应用接收到这个请求需要往下传递，直到传给指定子应用
+   */
+  micro_component_slot: (params: {
+    /** 子应用名称集合，第一位存的是目标应用，后面依次是中间应用 */
+    subAppNameList: Array<string>;
     /** 插槽名称 */
     slotName: string;
     /** dom节点id */
@@ -60,19 +78,6 @@ export interface ListenerCallbacks {
  * 数据监听回调类型(需时常更新)
  */
 export interface GlobalListenerCallbacks {
-  /** 请求主应用派发组件(主应用监听) */
-  micro_component: (params: {
-    /** 子应用名称 */
-    subAppName: string;
-    /** 组件名称 */
-    componentName: MicroComponents;
-    /** dom节点id */
-    elementId: string;
-    /** 组件属性（包括事件） */
-    props: BaseObj<any>;
-    /** 插槽名称列表 */
-    slotNameList: Array<string>;
-  }) => void;
   /** 派发组件销毁事件(主应用监听) */
   micro_component_destroy: (elementId: string) => void;
 }

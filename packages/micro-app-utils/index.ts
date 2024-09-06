@@ -8,9 +8,11 @@ import {
   microAppComponentProps,
   MicroAppConfig,
   MicroComponentMap,
+  setDataListener,
   setElConfigProvider,
 } from './data';
 import {
+  BaseObj,
   MicroAppComponentEmit,
   MicroAppComponentProps,
   MicroAppGlobalEmit,
@@ -27,23 +29,28 @@ export function MicroAppInit<Envs extends string>(options: {
   env: Envs;
   subAppSettingList: Array<SubAppSetting<Envs>>;
   /**
-   * 派发组件注册
+   * 派发组件注册（主应用需要传）
    * @example { SvgIcon: SvgIcon }
    * @example { SvgIcon: () => import('@/components/svg-icon/index.vue') }
    */
   MicroComponentMap?: {
     [key: string]: MicroComponentType;
   };
-  /** 需要把element-plus ElConfigProvider组件传过来用 */
-  ElConfigProvider: any;
+  /** 需要把element-plus ElConfigProvider组件传过来用（主应用需要传） */
+  ElConfigProvider?: any;
+  /** 应用数据监听函数, 用于中间应用传递事件 */
+  dataListener?: (data: BaseObj<any>) => void;
 }) {
-  const { tagName, env, subAppSettingList, ElConfigProvider } = {
+  const { tagName, env, subAppSettingList, ElConfigProvider, dataListener } = {
     ...options,
   };
+
   MicroAppConfig.env = env;
   MicroAppConfig.tagName = tagName;
   MicroAppConfig.subAppSettingList = subAppSettingList;
   setElConfigProvider(ElConfigProvider);
+  setDataListener(dataListener);
+
   /**
    * 检查subAppSettingList是否存在name冲突
    */

@@ -13,12 +13,20 @@ import {
  */
 export const MicroComponentMap: { [key: string]: MicroComponentType } = {};
 
-/** element-plus ElConfigProvider组件（主应用暂存） */
+/** 暂存element-plus ElConfigProvider组件（主应用暂存） */
 export let ElConfigProvider: any;
 
 /** 赋值ElConfigProvider */
 export function setElConfigProvider(component: any) {
   ElConfigProvider = component;
+}
+
+/** 暂存应用数据监听函数, 用于中间应用传递事件 */
+export let dataListener: any;
+
+/** 赋值dataListener */
+export function setDataListener(func: any) {
+  dataListener = func;
 }
 
 /**

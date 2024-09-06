@@ -3,7 +3,7 @@
     class="__micro-app"
     :is="MicroAppConfig.tagName"
     v-if="subAppSettting"
-    :default-page="props._defaultPage || `${subAppSettting?.prefix}/#/empty`"
+    :default-page="props._defaultPage || `/${subAppSettting?.prefix}/#/empty`"
     :keep-alive="props._keepAlive"
     :name="nameWithPrefix"
     :iframe="subAppSettting?.iframe"
@@ -24,7 +24,7 @@ import { PropType, onBeforeUnmount, ref } from 'vue';
 import { watch } from 'vue';
 import { computed, useAttrs } from 'vue';
 import { sendDataDown } from '../index';
-import { MicroAppConfig } from '../data';
+import { MicroAppConfig, dataListener } from '../data';
 
 /**
  * micro-app对应的属性
@@ -124,6 +124,7 @@ const isMicroAppMounted = ref(false);
  * ps: 如果是非pure模式，会导致子应用的url发生改变，会导致路由重新跳转(例如应用未加载前路由还没加载，应用加载完成前动态路由加载了，search模式会自动刷新页面，但pure模式不会，所以要以兼容pure模式为准：跳转到不存在页面先暂存，动态添加路由后跳转到暂存页面)
  */
 function microAppMounted() {
+  if (dataListener) microApp.addDataListener(nameWithPrefix.value, dataListener);
   timer = setTimeout(() => {
     isMicroAppMounted.value = true;
     /** 这里需要手动跳转一次，watch时的跳转可能不会生效，因为应用还没挂载完成 */
@@ -138,6 +139,7 @@ function microAppMounted() {
  * 2. 清空数据
  */
 function microAppUnmount() {
+  if (dataListener) microApp.removeDataListener(nameWithPrefix.value, dataListener);
   isMicroAppMounted.value = false;
   /** 需要子应用每次window.mount的时候重建router 或 window.unmount的时候重定向路由至默认路由 */
   activePath.value = props._defaultPage;

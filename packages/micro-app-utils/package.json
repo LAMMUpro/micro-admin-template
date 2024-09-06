@@ -16,14 +16,12 @@
     "./vue3/renderComponent": "./vue3/renderComponent.js",
     "./vue2/MicroApp.vue": "./vue2/MicroApp.vue",
     "./vue2/MicroComponent.vue": "./vue2/MicroComponent.vue",
-    "./react18/MicroComponent": "./react18/MicroComponent.js"
+    "./react18/MicroComponent": "./react18/MicroComponent.js",
+    "./react18/MicroApp": "./react18/MicroApp.js"
   },
   "scripts": {
     "build": "tsc",
     "tsc": "tsc"
-  },
-  "dependencies": {
-    "@micro-zoe/micro-app": "^1.0.0-rc.5"
   },
   "keywords": [],
   "author": "lammu",
