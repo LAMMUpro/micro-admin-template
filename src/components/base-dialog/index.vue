@@ -32,6 +32,7 @@
               </div>
               <div class="base-dialog-body">
                 <el-scrollbar
+                  class="el-scrollbar"
                   max-height="76vh"
                   ref="scrollbarRef"
                 >
@@ -105,7 +106,7 @@ const props = defineProps({
   },
   scrollToTopOnClose: {
     type: Boolean,
-    default: false,
+    default: true,
   },
 });
 
@@ -327,7 +328,11 @@ onUnmounted(function () {
 
 .base-dialog-body {
   padding: 10px 24px;
+  padding-right: 0px;
   min-height: 0px;
+  .el-scrollbar {
+    padding-right: 24px;
+  }
 }
 
 .base-dialog-footer {
