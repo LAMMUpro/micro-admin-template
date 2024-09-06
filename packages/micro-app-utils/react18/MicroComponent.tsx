@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { isSubApp, sendGlobalData } from '../index';
+import { generateMicroComponentDomId, isSubApp, sendDataUp } from '../index';
 import { MicroComponentSlotMap, ReactMicroComponentSlotInfoMap } from '../data';
 import { BaseObj } from '../types';
 
@@ -23,9 +23,7 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
 
   // 生成唯一的 DOM ID
   const elementId = useMemo(() => {
-    return `micro_component_${('' + Date.now()).slice(5)}_${Math.random()
-      .toString(36)
-      .substring(2)}`;
+    return generateMicroComponentDomId();
   }, []);
 
   /** 插槽，从props过滤得到 */
@@ -40,9 +38,10 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
   const vue3Props = Object.keys(otherPropsWithSlot).reduce((result, key) => {
     if (!React.isValidElement(otherPropsWithSlot[key])) {
       /** 属性名转换 */
-      const vue3PropsKey = {
-        'className': 'class',
-      }[key] || key;
+      const vue3PropsKey =
+        {
+          className: 'class',
+        }[key] || key;
       result[vue3PropsKey] = otherPropsWithSlot[key];
     }
     return result;
@@ -96,11 +95,11 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
           return result;
         }, {} as BaseObj<any>);
 
-        sendGlobalData({
-          emitName: 'micro_component',
+        sendDataUp({
+          emitName: 'micro_component_request',
           parameters: [
             {
-              subAppName: window.__MICRO_APP_NAME__!,
+              subAppNameList: [window.__MICRO_APP_NAME__!],
               componentName: _is,
               elementId,
               props: vue3Props,

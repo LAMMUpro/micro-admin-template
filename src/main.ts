@@ -13,7 +13,10 @@ import '@/style/index.scss';
 import 'element-plus/es/components/message/style/index';
 import 'element-plus/es/components/scrollbar/style/index';
 import { MicroAppInit } from 'micro-app-utils';
-import { generateGlobalDataListener } from 'micro-app-utils/listener';
+import {
+  generateDataListener,
+  generateGlobalDataListener,
+} from 'micro-app-utils/listener';
 import { MicroComponentMap } from 'micro-app-utils/data';
 import { MicroComponentPropsMap } from 'micro-app-utils/data';
 import { renderComponent } from 'micro-app-utils/vue3/renderComponent';
@@ -21,6 +24,50 @@ import { initGlobalStore } from './Global';
 import { initRouteInterceptor } from './router/interceptor';
 import { Component } from 'vue';
 import { ElConfigProvider } from 'element-plus';
+
+/** microApp数据监听回调 */
+const dataListener = generateDataListener({
+  micro_component_request: ({
+    subAppNameList,
+    componentName,
+    elementId,
+    props,
+    slotNameList,
+  }) => {
+    /** 主应用派发组件(有可能是组件或导入函数) */
+    const MicroComponent = MicroComponentMap[componentName];
+
+    if (!MicroComponent) return console.error(`派发失败: 没有配置组件<${componentName}>`);
+
+    if (!MicroComponentPropsMap[elementId]) {
+      MicroComponentPropsMap[elementId] = ref({ ...props! });
+      let component: Component;
+      /**
+       * MicroComponent是组件
+       */
+      if (
+        Object.prototype.toString.call(MicroComponent.name) === '[object String]' &&
+        Object.prototype.toString.call((<any>MicroComponent)?.setup) ===
+          '[object Function]'
+      ) {
+        component = MicroComponent;
+      } else {
+        /**
+         * MicroComponent是导入函数, 需要使用defineAsyncComponent转一下 // TODO判断逻辑
+         */
+        component = defineAsyncComponent(MicroComponent as () => Promise<any>);
+      }
+      renderComponent({
+        subAppNameList,
+        component,
+        elementId,
+        slotNameList,
+      });
+    } else {
+      MicroComponentPropsMap[elementId].value = { ...props };
+    }
+  },
+});
 
 /** 初始化全局数据 */
 initGlobalStore();
@@ -33,6 +80,7 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
   env: process.env.NODE_ENV === 'development' ? 'localhost' : 'master',
   tagName: CONSTS.microAppTagName,
   ElConfigProvider,
+  dataListener,
   subAppSettingList: [
     {
       name: 'micromain',
@@ -133,40 +181,6 @@ app.mount('#__micro-app-main');
 let globalDataListener: (data: BaseObj<any>) => void;
 
 globalDataListener = generateGlobalDataListener({
-  micro_component: ({ subAppName, componentName, elementId, props, slotNameList }) => {
-    /** 主应用派发组件(有可能是组件或导入函数) */
-    const MicroComponent = MicroComponentMap[componentName];
-
-    if (!MicroComponent) return console.error(`派发失败: 没有配置组件<${componentName}>`);
-
-    if (!MicroComponentPropsMap[elementId]) {
-      MicroComponentPropsMap[elementId] = ref({ ...props! });
-      let component: Component;
-      /**
-       * MicroComponent是组件
-       */
-      if (
-        Object.prototype.toString.call(MicroComponent.name) === '[object String]' &&
-        Object.prototype.toString.call((<any>MicroComponent)?.setup) ===
-          '[object Function]'
-      ) {
-        component = MicroComponent;
-      } else {
-        /**
-         * MicroComponent是导入函数, 需要使用defineAsyncComponent转一下 // TODO判断逻辑
-         */
-        component = defineAsyncComponent(MicroComponent as () => Promise<any>);
-      }
-      renderComponent({
-        component,
-        elementId,
-        slotNameList,
-        subAppName,
-      });
-    } else {
-      MicroComponentPropsMap[elementId].value = { ...props };
-    }
-  },
   micro_component_destroy: (elementId: string) => {
     if (MicroComponentPropsMap[elementId]) delete MicroComponentPropsMap[elementId];
   },

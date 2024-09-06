@@ -11,6 +11,7 @@ import {
   generateMicroComponentDomId,
   isSubApp,
   sendDataDown,
+  sendDataUp,
   sendGlobalData,
 } from '../index';
 import { MicroComponentSlotMap } from '../data';
@@ -26,10 +27,10 @@ const props = defineProps({
     type: String as PropType<MicroComponents>,
     required: true,
   },
-  /** 子应用使用时候不需要传 */
-  _subAppName: {
-    type: String,
-    default: '',
+  /** 子应用集合，子应用使用时候不需要传 */
+  _subAppNameList: {
+    type: Array as PropType<Array<string>>,
+    default: () => [],
   },
   /** 子应用使用时候不需要传 */
   _slotName: {
@@ -64,11 +65,11 @@ watch(
         /**
          * 如果是子应用，则向主应用发送派发组件请求
          */
-        sendGlobalData({
-          emitName: 'micro_component',
+        sendDataUp({
+          emitName: 'micro_component_request',
           parameters: [
             {
-              subAppName: window.__MICRO_APP_NAME__!,
+              subAppNameList: [window.__MICRO_APP_NAME__!],
               componentName: props._is,
               elementId,
               props: otherProps,
@@ -80,10 +81,12 @@ watch(
         /**
          * 如果是主应用，则是插槽情况需要向子应用发送渲染插槽请求
          */
-        sendDataDown(props._subAppName, {
-          emitName: 'micro_component',
+        const nextSubAppName = props._subAppNameList.slice(-1)[0];
+        sendDataDown(nextSubAppName, {
+          emitName: 'micro_component_slot',
           parameters: [
             {
+              subAppNameList: props._subAppNameList.slice(0, -1),
               slotName: props._slotName,
               elementId,
               parentElementId: props._parentElementId,
