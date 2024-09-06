@@ -39,8 +39,8 @@
           v-model="dataForm.subAppSetting.builder"
           :disabled="dataForm.inPreview"
         >
-          <el-radio label="webpack"> webpack </el-radio>
-          <el-radio label="vite"> vite </el-radio>
+          <el-radio value="webpack"> webpack </el-radio>
+          <el-radio value="vite"> vite </el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
