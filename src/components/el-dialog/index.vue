@@ -4,8 +4,13 @@
     append-to-body
   >
     <el-scrollbar :max-height="props.maxHeight">
-      <slot></slot>
+      <template #default>
+        <slot></slot>
+      </template>
     </el-scrollbar>
+    <template #footer>
+      <slot name="footer"></slot>
+    </template>
   </el-dialog>
 </template>
 
