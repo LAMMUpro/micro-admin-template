@@ -138,6 +138,20 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
       iframe: true,
       framework: 'react18',
     },
+    {
+      name: 'vue2v',
+      prefix: 'vue2v',
+      routerMode: 'hash',
+      urlMap: {
+        localhost: '//127.0.0.1:1350/vue2v/',
+        test: 'https://micro-admin-template.lammu.cn/vue2v/',
+        pre: 'https://micro-admin-template.lammu.cn/vue2v/',
+        master: 'https://micro-admin-template.lammu.cn/vue2v/',
+      },
+      builder: 'vite',
+      iframe: true,
+      framework: 'vue2',
+    },
   ],
   MicroComponentMap: {
     SvgIcon: SvgIcon,
