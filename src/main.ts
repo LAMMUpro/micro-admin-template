@@ -75,84 +75,86 @@ initGlobalStore();
 /** 初始化路由拦截器 */
 initRouteInterceptor(router);
 
+window._subAppSettingList_ = [
+  {
+    name: 'micromain',
+    prefix: 'micromain',
+    routerMode: 'history',
+    urlMap: {
+      localhost: '//127.0.0.1:1314/micromain/',
+      test: 'https://micro-admin-template.lammu.cn/micromain/',
+      pre: 'https://micro-admin-template.lammu.cn/micromain/',
+      master: 'https://micro-admin-template.lammu.cn/micromain/',
+    },
+    builder: 'vite',
+    iframe: true,
+    framework: 'vue3',
+  },
+  {
+    name: 'vue3',
+    prefix: 'vue3',
+    routerMode: 'hash',
+    urlMap: {
+      localhost: '//127.0.0.1:1320/vue3/',
+      test: 'https://micro-admin-template.lammu.cn/vue3/',
+      pre: 'https://micro-admin-template.lammu.cn/vue3/',
+      master: 'https://micro-admin-template.lammu.cn/vue3/',
+    },
+    builder: 'vite',
+    iframe: true,
+    framework: 'vue3',
+  },
+  {
+    name: 'vue2',
+    prefix: 'vue2',
+    routerMode: 'hash',
+    urlMap: {
+      localhost: '//127.0.0.1:1330/vue2/',
+      test: 'https://micro-admin-template.lammu.cn/vue2/',
+      pre: 'https://micro-admin-template.lammu.cn/vue2/',
+      master: 'https://micro-admin-template.lammu.cn/vue2/',
+    },
+    builder: 'webpack',
+    iframe: false,
+    framework: 'vue2',
+  },
+  {
+    name: 'react18',
+    prefix: 'react18',
+    routerMode: 'hash',
+    urlMap: {
+      localhost: '//127.0.0.1:1340/react18/',
+      test: 'https://micro-admin-template.lammu.cn/react18/',
+      pre: 'https://micro-admin-template.lammu.cn/react18/',
+      master: 'https://micro-admin-template.lammu.cn/react18/',
+    },
+    builder: 'vite',
+    iframe: true,
+    framework: 'react18',
+  },
+  {
+    name: 'vue2v',
+    prefix: 'vue2v',
+    routerMode: 'hash',
+    urlMap: {
+      localhost: '//127.0.0.1:1350/vue2v/',
+      test: 'https://micro-admin-template.lammu.cn/vue2v/',
+      pre: 'https://micro-admin-template.lammu.cn/vue2v/',
+      master: 'https://micro-admin-template.lammu.cn/vue2v/',
+    },
+    builder: 'vite',
+    iframe: true,
+    framework: 'vue2',
+  },
+];
+
 /** 初始化微前端配置 */
 MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
   env: process.env.NODE_ENV === 'development' ? 'localhost' : 'master',
   tagName: CONSTS.microAppTagName,
   ElConfigProvider,
   dataListener,
-  subAppSettingList: [
-    {
-      name: 'micromain',
-      prefix: 'micromain',
-      routerMode: 'history',
-      urlMap: {
-        localhost: '//127.0.0.1:1314/micromain/',
-        test: 'https://micro-admin-template.lammu.cn/micromain/',
-        pre: 'https://micro-admin-template.lammu.cn/micromain/',
-        master: 'https://micro-admin-template.lammu.cn/micromain/',
-      },
-      builder: 'vite',
-      iframe: true,
-      framework: 'vue3',
-    },
-    {
-      name: 'vue3',
-      prefix: 'vue3',
-      routerMode: 'hash',
-      urlMap: {
-        localhost: '//127.0.0.1:1320/vue3/',
-        test: 'https://micro-admin-template.lammu.cn/vue3/',
-        pre: 'https://micro-admin-template.lammu.cn/vue3/',
-        master: 'https://micro-admin-template.lammu.cn/vue3/',
-      },
-      builder: 'vite',
-      iframe: true,
-      framework: 'vue3',
-    },
-    {
-      name: 'vue2',
-      prefix: 'vue2',
-      routerMode: 'hash',
-      urlMap: {
-        localhost: '//127.0.0.1:1330/vue2/',
-        test: 'https://micro-admin-template.lammu.cn/vue2/',
-        pre: 'https://micro-admin-template.lammu.cn/vue2/',
-        master: 'https://micro-admin-template.lammu.cn/vue2/',
-      },
-      builder: 'webpack',
-      iframe: false,
-      framework: 'vue2',
-    },
-    {
-      name: 'react18',
-      prefix: 'react18',
-      routerMode: 'hash',
-      urlMap: {
-        localhost: '//127.0.0.1:1340/react18/',
-        test: 'https://micro-admin-template.lammu.cn/react18/',
-        pre: 'https://micro-admin-template.lammu.cn/react18/',
-        master: 'https://micro-admin-template.lammu.cn/react18/',
-      },
-      builder: 'vite',
-      iframe: true,
-      framework: 'react18',
-    },
-    {
-      name: 'vue2v',
-      prefix: 'vue2v',
-      routerMode: 'hash',
-      urlMap: {
-        localhost: '//127.0.0.1:1350/vue2v/',
-        test: 'https://micro-admin-template.lammu.cn/vue2v/',
-        pre: 'https://micro-admin-template.lammu.cn/vue2v/',
-        master: 'https://micro-admin-template.lammu.cn/vue2v/',
-      },
-      builder: 'vite',
-      iframe: true,
-      framework: 'vue2',
-    },
-  ],
+  subAppSettingList: window._subAppSettingList_,
   MicroComponentMap: {
     SvgIcon: SvgIcon,
     BaseDialog: () => import('@/components/base-dialog/index.vue'),

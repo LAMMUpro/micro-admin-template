@@ -56,7 +56,7 @@ export interface ListenerCallbacks {
     /** 插槽名称列表 */
     slotNameList: Array<string>;
   }) => void;
-  /** 
+  /**
    * 主应用派发组件回传渲染slot(子应用监听)
    * 如果是中间应用接收到这个请求需要往下传递，直到传给指定子应用
    */
@@ -139,6 +139,8 @@ export interface MicroAppWindow {
   rawWindow: Window;
   /** 父应用document对象 */
   rawDocument: Document;
+  /** 微前端应用配置 */
+  _subAppSettingList_: Array<SubAppSetting>;
 }
 
 /** window.microApp */
