@@ -71,7 +71,10 @@ export function MicroAppInit<Envs extends string>(options: {
   }
 }
 
-/** 是否子应用(应用是否在微前端环境下) */
+/** 是否是顶级应用 */
+export const isTopApp = !window.__MICRO_APP_ENVIRONMENT__;
+
+/** 是否子应用(应用是否在微前端环境下, isSubApp为true时是无法判断处于第几层嵌套的) */
 export const isSubApp = window.__MICRO_APP_ENVIRONMENT__ || false;
 
 /**
@@ -139,7 +142,7 @@ export function sendGlobalData(data: MicroAppComponentProps | MicroAppGlobalEmit
 export function generateExportComponent(component: any) {
   return defineComponent({
     setup() {
-      if (!isSubApp) return () => h('div', null, '导出组件暂不支持单独打开');
+      if (isTopApp) return () => h('div', null, '导出组件暂不支持单独打开');
       /** 如果是微前端，通过内部传递参数 */
       return () => {
         if (microAppComponentPath.value) {

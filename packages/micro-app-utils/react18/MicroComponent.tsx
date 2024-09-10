@@ -1,3 +1,4 @@
+// @ts-ignore
 import React, { useEffect, useMemo } from 'react';
 import { generateMicroComponentDomId, isSubApp, sendDataUp } from '../index';
 import { MicroComponentSlotMap, ReactMicroComponentSlotInfoMap } from '../data';
@@ -137,10 +138,12 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
   }, [_is, vue3Props]);
 
   return (
+    // @ts-ignore
     <div
       className="MicroComponent"
       style={{ display: 'contents' }}
       id={elementId}
+      // @ts-ignore
     ></div>
   );
 };

@@ -1,4 +1,4 @@
-import { isSubApp } from '..';
+import { isTopApp } from '..';
 import { ElConfigProvider, MicroComponentPropsMap } from '../data';
 import { BaseObj } from '../types';
 import MicroComponent from './MicroComponent.vue';
@@ -29,7 +29,7 @@ export async function renderComponent(options: {
   /** 子应用名称集合，第一位存的是目标应用，后面依次是中间应用 */
   subAppNameList: Array<string>;
 }) {
-  if (!isSubApp) {
+  if (isTopApp) {
     /** 被注入的应用要预留一个<div/>节点 */
     const elementDom = window.document?.body.querySelector(`#${options.elementId}`);
     if (elementDom) {

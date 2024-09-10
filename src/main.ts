@@ -2,7 +2,7 @@ import { createApp, App, ref, defineAsyncComponent } from 'vue';
 import AppVue from './App.vue';
 import router from './router';
 import microApp from '@micro-zoe/micro-app';
-import { isSubApp } from 'micro-app-utils';
+import { isTopApp } from 'micro-app-utils';
 import SvgIcon from '@/components/svg-icon/index.vue';
 import CONSTS from './utils/CONSTS';
 /** 样式 */
@@ -203,7 +203,7 @@ globalDataListener = generateGlobalDataListener({
 });
 
 /** 当作主应用运行时 */
-if (!isSubApp) {
+if (isTopApp) {
   microApp.addGlobalDataListener(globalDataListener);
 
   /**
