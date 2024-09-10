@@ -3,7 +3,10 @@
     class="__el-dialog"
     append-to-body
   >
-    <el-scrollbar :max-height="props.maxHeight">
+    <el-scrollbar
+      class="main-el-dialog__scrollbar"
+      :max-height="props.maxHeight"
+    >
       <template #default>
         <slot></slot>
       </template>
@@ -37,5 +40,17 @@ defineExpose({});
   top: 50%;
   transform: translate(-50%, -50%);
   border-radius: 6px;
+  padding-right: 0;
+  padding-bottom: 12px;
+  .main-el-dialog__scrollbar {
+    padding-right: 16px;
+  }
+  .main-el-dialog__body {
+    color: black;
+  }
+  .main-el-dialog__footer {
+    padding-top: 10px;
+    padding-right: 16px;
+  }
 }
 </style>
