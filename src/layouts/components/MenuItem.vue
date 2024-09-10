@@ -10,7 +10,7 @@
         :src="menuInfo.icon"
         alt="icon"
       />
-      <span>{{ menuInfo.name }}</span>
+      <span class="-m-ellipsis">{{ menuInfo.name }}</span>
     </template>
     <MenuItem
       v-for="(item, index) in props.menuInfo.children"

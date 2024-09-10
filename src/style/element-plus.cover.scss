@@ -1,3 +1,11 @@
 // 修改element-plus样式的命名空间，需要从vite.config.ts导入此文件！
 @forward 'element-plus/theme-chalk/src/mixins/config.scss' with ($namespace: 'main-el'
 );
+
+:root {
+
+  // 调整菜单文本溢出宽度
+  .main-el-menu:not(.main-el-menu--collapse) .main-el-sub-menu__title {
+    padding-right: calc(var(--main-el-menu-base-level-padding) + 14px);
+  }
+}
