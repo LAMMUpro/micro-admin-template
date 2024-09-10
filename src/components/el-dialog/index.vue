@@ -1,7 +1,8 @@
 <template>
   <el-dialog
+    :append-to-body="false"
     class="__el-dialog"
-    append-to-body
+    :width="props.width"
   >
     <el-scrollbar
       class="main-el-dialog__scrollbar"
@@ -27,6 +28,10 @@ const props = defineProps({
   maxHeight: {
     type: String,
     default: '80vh',
+  },
+  width: {
+    type: String,
+    default: '60%',
   },
 });
 

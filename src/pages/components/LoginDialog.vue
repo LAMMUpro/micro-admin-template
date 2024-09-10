@@ -1,16 +1,16 @@
 <template>
-  <base-dialog
+  <el-dialog
     title="登录"
     width="600px"
     :modelValue="props.show"
     @update:modelValue="emit('update:show', $event)"
   >
     <LoginCard></LoginCard>
-  </base-dialog>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
-import BaseDialog from '@/components/base-dialog/index.vue';
+import ElDialog from '@/components/el-dialog/index.vue';
 import LoginCard from './LoginCard.vue';
 
 const props = defineProps({

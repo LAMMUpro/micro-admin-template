@@ -1,4 +1,4 @@
-## 悬挂组件
+## 延迟渲染组件
 
 说明：对于一些一开始不显示的元素可以设置成不挂载，第一次显示即挂载，之后不会重新挂载
 已注册为全局组件
@@ -12,12 +12,15 @@
   <!-- 基本使用 -->
   <!-- 弹框和抽屉必须使用v-model -->
   <base-suspense v-model:visible="show">
-    <base-dialog v-model="show"></base-dialog>
+    <el-dialog v-model="show"></el-dialog>
   </base-suspense>
 
   <!-- 立即挂载 -->
-  <base-suspense v-model:visible="show" immediate>
-    <base-dialog v-model="show"></base-dialog>
+  <base-suspense
+    v-model:visible="show"
+    immediate
+  >
+    <el-dialog v-model="show"></el-dialog>
   </base-suspense>
 </template>
 <script lang="ts" setup>

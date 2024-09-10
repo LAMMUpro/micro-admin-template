@@ -34,6 +34,7 @@ const dataListener = generateDataListener({
     props,
     slotNameList,
   }) => {
+    console.log('派发组件', elementId);
     /** 主应用派发组件(有可能是组件或导入函数) */
     const MicroComponent = MicroComponentMap[componentName];
 
@@ -157,7 +158,7 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
   subAppSettingList: window._subAppSettingList_,
   MicroComponentMap: {
     SvgIcon: SvgIcon,
-    BaseDialog: () => import('@/components/base-dialog/index.vue'),
+    ElDialog: () => import('@/components/el-dialog/index.vue'),
     /**
      * 一些基础页面
      */
