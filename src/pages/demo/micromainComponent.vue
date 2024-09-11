@@ -66,10 +66,10 @@
       <template #footer>
         <el-button
           type="primary"
-          @click="dataElDialog.submit"
+          @click="dataElDialog.submit()"
           >确定</el-button
         >
-        <el-button @click="dataElDialog.cancel">取消</el-button>
+        <el-button @click="dataElDialog.cancel()">取消</el-button>
       </template>
     </el-dialog>
   </div>
@@ -77,7 +77,7 @@
 
 <script lang="ts" setup>
 import { shallowReactive } from 'vue';
-import { ElButton } from 'element-plus';
+import { ElButton, ElMessage } from 'element-plus';
 import 'element-plus/es/components/button/style/index';
 import ElDialog from '@/components/el-dialog/index.vue';
 
@@ -88,6 +88,7 @@ const dataElDialog = shallowReactive({
     this.show = true;
   },
   submit() {
+    ElMessage.success('已确认');
     this.cancel();
   },
   cancel() {
