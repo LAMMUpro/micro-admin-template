@@ -79,7 +79,7 @@ export async function renderComponent(options: {
       });
       createApp(component).mount(elementDom);
     } else {
-      console.warn('未预留div节点');
+      console.warn(`找不到节点#${options.elementId}`);
     }
   } else {
     console.warn('暂不兼容子应用独立运行时派发组件，//TODO');

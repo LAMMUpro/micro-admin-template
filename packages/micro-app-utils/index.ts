@@ -1,7 +1,7 @@
 /**
  * 微前端相关变量
  */
-import { defineComponent, h } from 'vue';
+import { defineAsyncComponent, defineComponent, h } from 'vue';
 import microApp from '@micro-zoe/micro-app';
 import {
   microAppComponentPath,
@@ -65,8 +65,28 @@ export function MicroAppInit<Envs extends string>(options: {
   })();
 
   if (options.MicroComponentMap) {
+    /**
+     * 存的时候就转好，之后可以直接使用h函数渲染
+     */
     Object.keys(options.MicroComponentMap).forEach((componentName) => {
-      MicroComponentMap[componentName] = options.MicroComponentMap![componentName];
+      const MicroComponent = options.MicroComponentMap![componentName];
+      /**
+       * MicroComponent是组件
+       */
+      if (
+        Object.prototype.toString.call(MicroComponent.name) === '[object String]' &&
+        Object.prototype.toString.call((<any>MicroComponent)?.setup) ===
+          '[object Function]'
+      ) {
+        MicroComponentMap[componentName] = MicroComponent;
+      } else {
+        /**
+         * MicroComponent是导入函数, 需要使用defineAsyncComponent转一下 // TODO判断逻辑
+         */
+        MicroComponentMap[componentName] = defineAsyncComponent(
+          MicroComponent as () => Promise<any>
+        );
+      }
     });
   }
 }
