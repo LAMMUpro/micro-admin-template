@@ -1,6 +1,11 @@
 // @ts-ignore
 import React, { useEffect, useMemo } from 'react';
-import { generateMicroComponentDomId, isSubApp, sendDataUp } from '../index';
+import {
+  generateMicroComponentDomId,
+  isSubApp,
+  sendDataUp,
+  sendGlobalData,
+} from '../index';
 import { MicroComponentSlotMap, ReactMicroComponentSlotInfoMap } from '../data';
 import { BaseObj } from '../types';
 
@@ -120,22 +125,24 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
         });
       }
     });
+  }, [_is, vue3Props]);
 
+  /** 组件销毁钩子 */
+  useEffect(() => {
     return () => {
       clearTimeout(timeoutId);
       // 清除插槽缓存
       if (isSubApp && MicroComponentSlotMap[elementId]) {
         delete MicroComponentSlotMap[elementId];
       }
-      // TODO 销毁时机
-      // setTimeout(() => {
-      //   sendGlobalData({
-      //     emitName: 'micro_component_destroy',
-      //     parameters: [elementId],
-      //   });
-      // });
+      setTimeout(() => {
+        sendGlobalData({
+          emitName: 'micro_component_destroy',
+          parameters: [elementId],
+        });
+      });
     };
-  }, [_is, vue3Props]);
+  }, []);
 
   return (
     // @ts-ignore

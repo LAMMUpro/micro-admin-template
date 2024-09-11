@@ -38,6 +38,7 @@ const dataListener = generateDataListener({
 
     if (!MicroComponent) return console.error(`派发失败: 没有注册组件<${componentName}>`);
 
+    /** 首次渲染 */
     if (!MicroComponentPropsMap[elementId]) {
       MicroComponentPropsMap[elementId] = ref({ ...props! });
       renderComponent({
@@ -47,6 +48,7 @@ const dataListener = generateDataListener({
         slotNameList,
       });
     } else {
+      /** 再次更新 */
       MicroComponentPropsMap[elementId].value = { ...props };
     }
   },
@@ -181,6 +183,7 @@ let globalDataListener: (data: BaseObj<any>) => void;
 
 globalDataListener = generateGlobalDataListener({
   micro_component_destroy: (elementId: string) => {
+    console.log('销毁派发组件', elementId);
     if (MicroComponentPropsMap[elementId]) delete MicroComponentPropsMap[elementId];
   },
 });
