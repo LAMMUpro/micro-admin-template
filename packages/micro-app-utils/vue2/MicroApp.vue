@@ -11,7 +11,7 @@
     :inline="MicroAppConfig.env === 'localhost'"
     :destroy="_destroy"
     :clearData="_clearData"
-    :router-mode="_routerMode"
+    :router-mode="_routerMode || isSubApp ? 'pure' : 'search'"
     :disable-scopecss="_disableScopecss"
     @mounted="microAppMounted"
     @unmount="microAppUnmount"
@@ -20,8 +20,15 @@
 
 <script>
 import microApp from '@micro-zoe/micro-app';
-import { sendDataDown } from '../index';
+import { isSubApp, sendDataDown } from '../index';
 import { MicroAppConfig, dataListener } from '../data';
+
+/**
+ * 从path中提取子应用前缀
+ */
+function getSubAppPrefixFromRouteUrl(url) {
+  return url?.match?.(/(?<=^\/).*?(?=\/)/)?.[0];
+}
 
 /** name_path_props子应用prefix_name和其它值的分隔标识 */
 const splitTag = '_____';
@@ -59,7 +66,7 @@ export default {
     /** 默认路由，一般用`前缀/#/empty`做中转路由（hash模式），对应子应用需要添加这个路由 */
     _defaultPage: {
       type: String,
-      default: '',
+      default: '/#/empty',
     },
     /** 是否keep-alive，需要对应子应用也开启keep-alive，一般不用 */
     _keepAlive: {
@@ -76,10 +83,10 @@ export default {
       type: Boolean,
       default: false,
     },
-    /** 虚拟路由系统分为四种模式search(默认)、native、native-scope、pure */
+    /** 虚拟路由系统分为四种模式search、native、native-scope、pure (顶级应用默认search，子应用默认pure) */
     _routerMode: {
       type: String,
-      default: 'search',
+      default: '',
     },
     /** 是否关闭样式隔离，在某些极端情况下会使用，例如子应用独立运行时，主应用跨应用渲染需要关闭样式隔离确保样式导入生效 */
     _disableScopecss: {
@@ -123,9 +130,14 @@ export default {
       handler(newValue, oldValue) {
         const index = oldValue?.indexOf('___');
         this.nameWithPrefix_old = index > -1 ? oldValue.slice(0, index) : '';
-        if (this.subAppSettting && this._path && this.isMicroAppMounted) {
-          this.toSubAppPathSafe();
-        }
+        /**
+         * 当主应用子应用切换时，路由结束后(即nameWithPrefix.value变化了)子应用的卸载钩子还没有执行，此时isMicroAppMounted状态还没有得到更新，所以需要setTimeout一下
+         */
+        setTimeout(() => {
+          if (this.subAppSettting && this._path && this.isMicroAppMounted) {
+            this.toSubAppPathSafe();
+          }
+        });
       },
       immediate: true,
     },
@@ -154,6 +166,7 @@ export default {
      */
     microAppUnmount() {
       if (dataListener) microApp.removeDataListener(this.nameWithPrefix, dataListener);
+      microApp.clearDataListener(this.nameWithPrefix);
       this.isMicroAppMounted = false;
       /** 需要子应用每次window.mount的时候重建router 或 window.unmount的时候重定向路由至默认路由 */
       this.activePath = this._defaultPage;
@@ -165,6 +178,15 @@ export default {
      * 会处理是否在目标页的情况
      */
     toSubAppPathSafe() {
+      /**
+       * _name为空时不允许跳转
+       * 前缀不匹配时时不允许跳转
+       */
+      if (
+        !this._name ||
+        this.subAppSettting?.prefix !== getSubAppPrefixFromRouteUrl(this._path)
+      )
+        return;
       if (this.activePath === this._defaultPage) {
         /** 如果当前是中转路由，直接替换 */
         this.timer = setTimeout(() => {
@@ -201,12 +223,6 @@ export default {
       const { mode } = {
         ...options,
       };
-      sendDataDown(this.nameWithPrefix, {
-        eventType: 'component',
-        props: this.$attrs,
-        subAppPath: this._path,
-      });
-      this.activePath = this._path;
 
       microApp.router[mode]({
         name: this.nameWithPrefix,
@@ -216,6 +232,13 @@ export default {
          */
         path: this._path,
       });
+
+      sendDataDown(this.nameWithPrefix, {
+        eventType: 'component',
+        props: this.$attrs,
+        subAppPath: this._path,
+      });
+      this.activePath = this._path;
     },
     /** 跳到默认页面 */
     toDefaultPage() {
