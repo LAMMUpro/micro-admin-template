@@ -12,7 +12,6 @@ import {
   isSubApp,
   sendDataUp,
   sendDataDown,
-  sendGlobalData,
 } from '../index';
 import { MicroComponentSlotMap } from '../data';
 
@@ -150,7 +149,7 @@ export default {
       delete MicroComponentSlotMap[this.elementId];
     }
     setTimeout(() => {
-      sendGlobalData({
+      sendDataUp({
         emitName: 'micro_component_destroy',
         parameters: [this.elementId],
       });

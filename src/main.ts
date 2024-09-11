@@ -52,6 +52,9 @@ const dataListener = generateDataListener({
       MicroComponentPropsMap[elementId].value = { ...props };
     }
   },
+  micro_component_destroy: (elementId: string) => {
+    if (MicroComponentPropsMap[elementId]) delete MicroComponentPropsMap[elementId];
+  },
 });
 
 /** 初始化全局数据 */
@@ -182,10 +185,7 @@ app.mount('#__micro-app-main');
 let globalDataListener: (data: BaseObj<any>) => void;
 
 globalDataListener = generateGlobalDataListener({
-  micro_component_destroy: (elementId: string) => {
-    console.log('销毁派发组件', elementId);
-    if (MicroComponentPropsMap[elementId]) delete MicroComponentPropsMap[elementId];
-  },
+  /** 暂无 */
 });
 
 /** 当作主应用运行时 */

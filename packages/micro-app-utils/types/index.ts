@@ -72,15 +72,14 @@ export interface ListenerCallbacks {
     /** 组件属性（包括事件） */
     props: BaseObj<any>;
   }) => void;
-}
-
-/**
- * 数据监听回调类型(需时常更新)
- */
-export interface GlobalListenerCallbacks {
   /** 派发组件销毁事件(主应用监听) */
   micro_component_destroy: (elementId: string) => void;
 }
+
+/**
+ * 全局数据监听回调类型(需时常更新)
+ */
+export interface GlobalListenerCallbacks {}
 
 /** 由数据监听回调类型映射的类型 */
 type GenerateEmitType<T extends BaseObj<any>> = {

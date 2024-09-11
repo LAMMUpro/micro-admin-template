@@ -12,7 +12,6 @@ import {
   isSubApp,
   sendDataDown,
   sendDataUp,
-  sendGlobalData,
 } from '../index';
 import { MicroComponentSlotMap } from '../data';
 import { MicroComponents } from '../types';
@@ -107,7 +106,7 @@ onUnmounted(() => {
   }
 
   setTimeout(() => {
-    sendGlobalData({
+    sendDataUp({
       emitName: 'micro_component_destroy',
       parameters: [elementId],
     });

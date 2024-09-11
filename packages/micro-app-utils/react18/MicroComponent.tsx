@@ -1,11 +1,6 @@
 // @ts-ignore
 import React, { useEffect, useMemo } from 'react';
-import {
-  generateMicroComponentDomId,
-  isSubApp,
-  sendDataUp,
-  sendGlobalData,
-} from '../index';
+import { generateMicroComponentDomId, isSubApp, sendDataUp } from '../index';
 import { MicroComponentSlotMap, ReactMicroComponentSlotInfoMap } from '../data';
 import { BaseObj } from '../types';
 
@@ -136,7 +131,7 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
         delete MicroComponentSlotMap[elementId];
       }
       setTimeout(() => {
-        sendGlobalData({
+        sendDataUp({
           emitName: 'micro_component_destroy',
           parameters: [elementId],
         });
