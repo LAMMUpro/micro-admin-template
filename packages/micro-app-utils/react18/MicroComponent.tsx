@@ -1,7 +1,11 @@
 // @ts-ignore
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { generateMicroComponentDomId, isSubApp, sendDataUp } from '../index';
-import { MicroComponentSlotMap, ReactMicroComponentSlotInfoMap } from '../data';
+import {
+  MicroComponentPropsMap,
+  MicroComponentSlotMap,
+  ReactMicroComponentSlotInfoMap,
+} from '../data';
 import { BaseObj } from '../types';
 
 interface MicroComponentProps {
@@ -21,6 +25,9 @@ let oldVue3PropsStringMap: BaseObj<string> = {};
  */
 const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
   const { _is, ...otherPropsWithSlot } = props;
+
+  /** 存储旧的_is */
+  const _is_old = useRef(undefined);
 
   // 生成唯一的 DOM ID
   const elementId = useMemo(() => {
@@ -52,15 +59,20 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
   const vue3PropsString = JSON.stringify(vue3Props);
 
   useEffect(() => {
+    /**
+     * 更新props
+     */
     if (vue3PropsString !== oldVue3PropsStringMap[elementId]) {
       /**
        * 插槽不需要更新，仅派发组件更新
        */
       oldVue3PropsStringMap[elementId] = vue3PropsString;
       console.log(`插槽${elementId}不需要更新`);
-    } else {
-      // TODO 点击一次+1会触发两次
-      console.log(`更新插槽${elementId}`);
+    } else if (slotNameList.length) {
+      /**
+       * 更新插槽
+       */
+      console.log(`更新插槽${elementId}`, slotNameList);
       /**
        * 插槽需要更新，派发组件不需要更新
        * // TODO具体哪个插槽需要更新需要进一步判断
@@ -98,14 +110,27 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
     // 子应用使用时必须传 _is，主应用使用(插槽情况)不需要传 _id
     if (isSubApp && !_is) return;
 
+    /** 如果_is变化了，清空props/slot缓存，之后会重新渲染组件 */
+    if (props._is !== _is_old.current && MicroComponentPropsMap[elementId]) {
+      delete MicroComponentPropsMap[elementId];
+      delete MicroComponentSlotMap[elementId];
+    }
+
     // 必须延迟，否则并列组件渲染只会发送的事件会被覆盖
     timeoutId = setTimeout(() => {
+      /**
+       * 如果是子应用，则向主应用发送派发组件请求
+       */
       if (isSubApp) {
-        MicroComponentSlotMap[elementId] = slotNameList.reduce((result, slotName) => {
-          result[slotName] = props[slotName];
-          return result;
-        }, {} as BaseObj<any>);
-
+        /** 更新props时不用重新保存slots */
+        if (!MicroComponentSlotMap[elementId])
+          MicroComponentSlotMap[elementId] = slotNameList.reduce((result, slotName) => {
+            result[slotName] = props[slotName];
+            return result;
+          }, {} as BaseObj<any>);
+        /**
+         * 如果是子应用，则向主应用发送派发组件请求
+         */
         sendDataUp({
           emitName: 'micro_component_request',
           parameters: [
@@ -120,16 +145,20 @@ const MicroComponent: React.FC<MicroComponentProps> = (props: BaseObj<any>) => {
         });
       }
     });
+    /** 维护旧的_is值 */
+    _is_old.current = props._is;
   }, [_is, vue3Props]);
 
   /** 组件销毁钩子 */
   useEffect(() => {
     return () => {
+      /** react不清除定时器会报错 */
       clearTimeout(timeoutId);
-      // 清除插槽缓存
+      /** 清除插槽缓存 */
       if (isSubApp && MicroComponentSlotMap[elementId]) {
         delete MicroComponentSlotMap[elementId];
       }
+
       setTimeout(() => {
         sendDataUp({
           emitName: 'micro_component_destroy',
