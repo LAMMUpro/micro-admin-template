@@ -3,7 +3,7 @@
     class="__micro-app"
     :is="MicroAppConfig.tagName"
     v-if="subAppSettting"
-    :default-page="_defaultPage || `/${subAppSettting?.prefix}/#/empty`"
+    :default-page="defaultPage"
     :keep-alive="_keepAlive"
     :name="nameWithPrefix"
     :iframe="subAppSettting?.iframe"
@@ -66,7 +66,7 @@ export default {
     /** 默认路由，一般用`前缀/#/empty`做中转路由（hash模式），对应子应用需要添加这个路由 */
     _defaultPage: {
       type: String,
-      default: '/#/empty',
+      default: '',
     },
     /** 是否keep-alive，需要对应子应用也开启keep-alive，一般不用 */
     _keepAlive: {
@@ -121,9 +121,18 @@ export default {
     name_path_props() {
       return this.nameWithPrefix + splitTag + this._path + JSON.stringify(this.$attrs);
     },
+    /** 默认页面（中转页） */
+    defaultPage() {
+      return (
+        this._defaultPage ||
+        (this.subAppSettting?.prefix
+          ? `/${this.subAppSettting?.prefix}/#/empty`
+          : '/#/empty')
+      );
+    },
   },
   mounted() {
-    this.activePath = this._defaultPage;
+    this.activePath = this.defaultPage;
   },
   watch: {
     /** 子应用name / path / 剩余参数发生变化，重新跳转页面 */
@@ -154,10 +163,16 @@ export default {
     microAppMounted() {
       if (dataListener) microApp.addDataListener(this.nameWithPrefix, dataListener);
       this.timer = setTimeout(() => {
-        this.isMicroAppMounted = true;
-        /** 这里需要手动跳转一次，watch时的跳转可能不会生效，因为应用还没挂载完成 */
-        this.toSubAppPathSafe();
-        this.$emit('_mounted');
+        const subAppName = `${props._prefix}${props._name}`;
+        /** 确保子应用真的渲染成功了 */
+        if (microApp.getAllApps().includes(subAppName)) {
+          this.isMicroAppMounted = true;
+          /** 这里需要手动跳转一次，watch时的跳转可能不会生效，因为应用还没挂载完成 */
+          this.toSubAppPathSafe();
+          this.$emit('_mounted');
+        } else {
+          console.warn(`子应用${subAppName}渲染异常`);
+        }
       }, 4);
     },
     /**
@@ -170,7 +185,7 @@ export default {
       microApp.clearDataListener(this.nameWithPrefix);
       this.isMicroAppMounted = false;
       /** 需要子应用每次window.mount的时候重建router 或 window.unmount的时候重定向路由至默认路由 */
-      this.activePath = this._defaultPage;
+      this.activePath = this.defaultPage;
       microApp.clearData(this.nameWithPrefix);
       this.$emit('_unmount');
     },
@@ -188,7 +203,7 @@ export default {
         this.subAppSettting?.prefix !== getSubAppPrefixFromRouteUrl(this._path)
       )
         return;
-      if (this.activePath === this._defaultPage) {
+      if (this.activePath === this.defaultPage) {
         /** 如果当前是中转路由，直接替换 */
         this.timer = setTimeout(() => {
           this.toSubAppPath({ mode: 'replace' });
@@ -245,9 +260,9 @@ export default {
     toDefaultPage() {
       microApp.router.push({
         name: this.nameWithPrefix,
-        path: this._defaultPage,
+        path: this.defaultPage,
       });
-      this.activePath = this._defaultPage;
+      this.activePath = this.defaultPage;
     },
   },
   beforeDestroy() {
