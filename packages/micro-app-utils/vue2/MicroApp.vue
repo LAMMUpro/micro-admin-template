@@ -105,6 +105,7 @@ export default {
       timer: 0,
       /** 子应用真实name（旧的），用于判断当前跳转是否跨子应用跳转 */
       nameWithPrefix_old: '',
+      isSubApp,
     };
   },
   computed: {
