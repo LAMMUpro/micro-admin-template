@@ -163,7 +163,7 @@ export default {
     microAppMounted() {
       if (dataListener) microApp.addDataListener(this.nameWithPrefix, dataListener);
       this.timer = setTimeout(() => {
-        const subAppName = `${props._prefix}${props._name}`;
+        const subAppName = `${this._prefix}${this._name}`;
         /** 确保子应用真的渲染成功了 */
         if (microApp.getAllApps().includes(subAppName)) {
           this.isMicroAppMounted = true;
