@@ -2,16 +2,16 @@ import { subAppLocation } from 'micro-app-utils';
 
 /** 不同环境url包含的字符串, 用于判断当前是测试环境还是正式环境, 要求不能相互匹配!!! */
 const urlSubStringInfo = {
-  test: 'test.xxx.cn',
-  pre: 'pre.xxx.cn',
-  master: 'xxx.cn',
+  test: 'test.micro-admin-template.lammu.cn',
+  pre: 'pre.micro-admin-template.lammu.cn',
+  master: 'micro-admin-template.lammu.cn',
 };
 
 /** 不同环境对应的origin */
 const originMap = {
-  test: 'https://test.xxx.cn',
-  pre: 'https://pre.xxx.cn',
-  master: 'https://xxx.cn',
+  test: 'https://test.micro-admin-template.lammu.cn',
+  pre: 'https://pre.micro-admin-template.lammu.cn',
+  master: 'https://micro-admin-template.lammu.cn',
 };
 
 export default class ModuleConfig {
@@ -31,7 +31,7 @@ export default class ModuleConfig {
   readonly uploadFilePrefix = '/api/comservice-server';
   /** token名称 */
   get tokenKey() {
-    return 'login_boshiyunconsole_ticket';
+    return '';
   }
   /** 运行环境 */
   get env(): 'localhost' | 'test' | 'pre' | 'master' {
