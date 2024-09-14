@@ -61,11 +61,14 @@ export async function renderComponent(options: {
                 {
                   namespace: 'main-el',
                 },
-                h(
-                  options.component,
-                  MicroComponentPropsMap[options.elementId].value,
-                  slotMap
-                )
+                {
+                  default: () =>
+                    h(
+                      options.component,
+                      MicroComponentPropsMap[options.elementId].value,
+                      slotMap
+                    ),
+                }
               );
             } else {
               return h(
