@@ -1,8 +1,4 @@
-/** @jsxRuntime classic */
-/** @jsx jsxCustomEvent */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import jsxCustomEvent from '@micro-zoe/micro-app/polyfill/jsx-custom-event';
-
 // @ts-ignore
 import React, { useEffect, useMemo, useRef } from 'react';
 // @ts-ignore
@@ -53,6 +49,11 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
     return _prefix + _name;
   }, [_name, _prefix]);
 
+  /** 子应用配置 */
+  const subAppSettting: SubAppSetting | undefined = useMemo(() => {
+    return MicroAppConfig.subAppSettingList.find((item) => item.name === _name);
+  }, [_name]);
+
   const oldValueList: MutableRefObject<string[]> = useRef([
     _path,
     nameWithPrefix,
@@ -90,11 +91,6 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
       }
     });
   }, [_path, _prefix, _name, JSON.stringify(otherProps)]);
-
-  /** 子应用配置 */
-  const subAppSettting: SubAppSetting | undefined = useMemo(() => {
-    return MicroAppConfig.subAppSettingList.find((item) => item.name === _name);
-  }, [_name]);
 
   /** 子应用配置是否存在*/
   const isSubAppSetting: boolean = useMemo((): boolean => {
@@ -214,25 +210,23 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
   return (
     // @ts-ignore
     <>
-      {isSubAppSetting && (
-        // @ts-ignore
-        <micro-app-react18
-          iframe
-          className="__micro-app"
-          is={MicroAppConfig.tagName}
-          default-page={defaultPage}
-          keep-alive={_keepAlive}
-          name={nameWithPrefix}
-          url={subAppSettting?.urlMap[_env || MicroAppConfig.env]}
-          inline={MicroAppConfig.env === 'localhost'}
-          destroy={_destroy}
-          clearData={_clearData}
-          router-mode={_routerMode}
-          disable-scopecss={_disableScopecss}
-          onMounted={microAppMounted}
-          onUnmount={microAppUnmount}
-        />
-      )}
+      {isSubAppSetting &&
+        // 处理react自定义事件
+        jsxCustomEvent(MicroAppConfig.tagName, {
+          iframe: true,
+          class: '__micro-app',
+          'default-page': defaultPage,
+          'keep-alive': _keepAlive,
+          name: nameWithPrefix,
+          url: subAppSettting?.urlMap[_env || MicroAppConfig.env],
+          inline: MicroAppConfig.env === 'localhost',
+          destroy: _destroy,
+          clearData: _clearData,
+          'router-mode': _routerMode,
+          'disable-scopecss': _disableScopecss,
+          onMounted: microAppMounted,
+          onUnmount: microAppUnmount,
+        })}
     </>
   );
 };
