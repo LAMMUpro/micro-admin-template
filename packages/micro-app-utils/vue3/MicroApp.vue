@@ -1,26 +1,69 @@
 <template>
-  <component
-    class="__micro-app"
-    :is="MicroAppConfig.tagName"
-    v-if="subAppSettting"
-    :default-page="defaultPage"
-    :keep-alive="props._keepAlive"
-    :name="nameWithPrefix"
-    :iframe="subAppSettting?.iframe"
-    :url="subAppSettting?.urlMap[props._env || MicroAppConfig.env]"
-    :inline="MicroAppConfig.env === 'localhost'"
-    :destroy="props._destroy"
-    :clearData="props._clearData"
-    :router-mode="props._routerMode || isSubApp ? 'pure' : 'search'"
-    :disable-scopecss="props._disableScopecss"
-    @mounted="microAppMounted"
-    @unmount="microAppUnmount"
-  ></component>
+  <div class="__content">
+    <!-- micro-app子应用 -->
+    <component
+      class="__micro-app"
+      :is="MicroAppConfig.tagName"
+      v-if="subAppSettting"
+      :default-page="defaultPage"
+      :keep-alive="props._keepAlive"
+      :name="nameWithPrefix"
+      :iframe="subAppSettting?.iframe"
+      :url="subAppSettting?.urlMap[props._env || MicroAppConfig.env]"
+      :inline="MicroAppConfig.env === 'localhost'"
+      :destroy="props._destroy"
+      :clearData="props._clearData"
+      :router-mode="props._routerMode || isSubApp ? 'pure' : 'search'"
+      :disable-scopecss="props._disableScopecss"
+      @mounted="microAppMounted"
+      @unmount="microAppUnmount"
+      @error="microAppError"
+    ></component>
+    <!-- 应用未配置 -->
+    <div
+      v-if="!subAppSettting"
+      class="__content"
+    >
+      <slot name="config"></slot>
+      <div
+        v-if="!slots.error"
+        class="__tip-msg __config"
+      >
+        未配置应用
+      </div>
+    </div>
+    <!-- 加载失败样式 -->
+    <div
+      class="__content"
+      v-else-if="subAppStatus === 'error'"
+    >
+      <slot name="error"></slot>
+      <div
+        v-if="!slots.error"
+        class="__tip-msg __error"
+      >
+        应用加载失败
+      </div>
+    </div>
+    <!-- 加载中样式 -->
+    <div
+      class="__content"
+      v-else-if="subAppStatus === 'loading'"
+    >
+      <slot name="loading"></slot>
+      <div
+        v-if="!slots.loading"
+        class="__tip-msg __loading"
+      >
+        应用加载中...
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import microApp from '@micro-zoe/micro-app';
-import { PropType, onBeforeUnmount, ref } from 'vue';
+import { PropType, onBeforeUnmount, ref, useSlots } from 'vue';
 import { watch } from 'vue';
 import { computed, useAttrs } from 'vue';
 import { getSubAppPrefixFromRouteUrl, isSubApp, sendDataDown } from '../index';
@@ -94,6 +137,9 @@ const emit = defineEmits<{
 /** 剩余参数当做传给组件的props */
 const otherProps = useAttrs();
 
+/** 插槽列表，可以自定义加载中(loading)样式 / 失败(error)样式 / 无配置(config)样式 */
+const slots = useSlots();
+
 /** 子应用真实name（连前缀） */
 const nameWithPrefix = computed(() => {
   return props._prefix + props._name;
@@ -104,6 +150,9 @@ const nameWithPrefix_old = ref('');
 
 /** 定时器 */
 let timer: NodeJS.Timeout;
+
+/** 记录应用开始加载时间点 */
+let appStartTimeStamp = Date.now();
 
 /** 子应用配置 */
 const subAppSettting = computed(() => {
@@ -122,8 +171,12 @@ const defaultPage = computed(
 /** 实际的path */
 const activePath = ref(defaultPage.value);
 
-/** 子应用是否渲染完成 */
-const isMicroAppMounted = ref(false);
+/**
+ * 子应用状态
+ */
+const subAppStatus = ref<'unMounted' | 'loading' | 'mounted' | 'error'>(
+  props._name ? 'loading' : 'unMounted'
+);
 
 /**
  * 子应用渲染完成钩子（需要延迟执行！）
@@ -138,12 +191,20 @@ function microAppMounted() {
     const subAppName = `${props._prefix}${props._name}`;
     /** 确保子应用真的渲染成功了 */
     if (microApp.getAllApps().includes(subAppName)) {
-      isMicroAppMounted.value = true;
-      /** 这里需要手动跳转一次，watch时的跳转可能不会生效，因为应用还没挂载完成 */
-      toSubAppPathSafe();
-      emit('_mounted');
+      const durationMS = Date.now() - appStartTimeStamp;
+      function callback() {
+        subAppStatus.value = 'mounted';
+        /** 这里需要手动跳转一次，watch时的跳转可能不会生效，因为应用还没挂载完成 */
+        toSubAppPathSafe();
+        emit('_mounted');
+      }
+      if (durationMS < 300) {
+        setTimeout(() => callback(), 300 - durationMS);
+      } else {
+        callback();
+      }
     } else {
-      console.warn(`子应用${subAppName}渲染异常`);
+      subAppStatus.value = 'error';
     }
   }, 4);
 }
@@ -156,11 +217,19 @@ function microAppMounted() {
 function microAppUnmount() {
   if (dataListener) microApp.removeDataListener(nameWithPrefix.value, dataListener);
   microApp.clearDataListener(nameWithPrefix.value);
-  isMicroAppMounted.value = false;
+  subAppStatus.value = props._name ? 'loading' : 'unMounted';
+  appStartTimeStamp = Date.now();
   /** 需要子应用每次window.mount的时候重建router 或 window.unmount的时候重定向路由至默认路由 */
   activePath.value = defaultPage.value;
   microApp.clearData(nameWithPrefix.value);
   emit('_unmount');
+}
+
+/**
+ * 子应用渲染报错
+ */
+function microAppError() {
+  subAppStatus.value = 'error';
 }
 
 /**
@@ -174,7 +243,7 @@ watch(
      * 当主应用子应用切换时，路由结束后(即nameWithPrefix.value变化了)子应用的卸载钩子还没有执行，此时isMicroAppMounted状态还没有得到更新，所以需要setTimeout一下
      */
     setTimeout(() => {
-      if (subAppSettting.value && props._path && isMicroAppMounted.value) {
+      if (subAppSettting.value && props._path && subAppStatus.value === 'mounted') {
         toSubAppPathSafe();
       }
     });
@@ -264,9 +333,3 @@ onBeforeUnmount(() => {
   clearTimeout(timer);
 });
 </script>
-
-<style lang="scss" scoped>
-.__micro-app {
-  height: 100%;
-}
-</style>
