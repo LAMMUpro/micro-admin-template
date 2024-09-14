@@ -13,7 +13,7 @@ import {
   sendDataUp,
   sendDataDown,
 } from '../index';
-import { MicroComponentPropsMap, MicroComponentSlotMap } from '../data';
+import { MicroComponentSlotMap } from '../data';
 
 /**
  * 处理vue2和vue3 v-model差异
@@ -76,13 +76,17 @@ export default {
         /** 子应用使用时必须传_is，主应用使用(插槽情况)不需要传_id */
         if (isSubApp && !this._is) return;
 
-        /** 如果_is变化了，清空props/slot缓存，之后会重新渲染组件 */
-        if (
-          this._is !== oldValue?.slice(0, newValue?.indexOf('|')) &&
-          MicroComponentPropsMap[this.elementId]
-        ) {
-          delete MicroComponentPropsMap[this.elementId];
-          delete MicroComponentSlotMap[this.elementId];
+        /**
+         * 如果_is变化了(且旧值不为undefined)，清空props/slot缓存，之后会重新渲染组件
+         * vue2版本不用考虑主应用环境情况下调用
+         */
+        const _is_old = oldValue?.slice(0, newValue?.indexOf('|'));
+        if (isSubApp && _is_old !== undefined && this._is !== _is_old) {
+          /** 子应用环境下通知主应用删缓存 */
+          sendDataUp({
+            emitName: 'micro_component_clear_props_slots',
+            parameters: [this.elementId],
+          });
         }
 
         /** 必须延迟，否则并列组件渲染只会发送的事件会被覆盖 */

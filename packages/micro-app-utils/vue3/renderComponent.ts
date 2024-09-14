@@ -1,5 +1,9 @@
 import { isTopApp } from '..';
-import { ElConfigProvider, MicroComponentPropsMap } from '../data';
+import {
+  ElConfigProvider,
+  MicroComponentInstanceMap,
+  MicroComponentPropsMap,
+} from '../data';
 import { BaseObj } from '../types';
 import MicroComponent from './MicroComponent.vue';
 import { Component, VNode, createApp, defineComponent, h } from 'vue';
@@ -80,7 +84,9 @@ export async function renderComponent(options: {
           };
         },
       });
-      createApp(component).mount(elementDom);
+      const vueInstance = createApp(component);
+      MicroComponentInstanceMap[options.elementId] = vueInstance; // 存起来，之后可能需要手动销毁
+      vueInstance.mount(elementDom);
     } else {
       console.warn(`找不到节点#${options.elementId}`);
     }

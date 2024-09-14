@@ -74,6 +74,8 @@ export interface ListenerCallbacks {
   }) => void;
   /** 派发组件销毁事件(主应用监听) */
   micro_component_destroy: (elementId: string) => void;
+  /** 派发组件清除属性/插槽缓存(主应用监听) */
+  micro_component_clear_props_slots: (elementId: string) => void;
 }
 
 /**

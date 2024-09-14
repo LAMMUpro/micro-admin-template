@@ -17,7 +17,11 @@ import {
   generateDataListener,
   generateGlobalDataListener,
 } from 'micro-app-utils/listener';
-import { MicroComponentMap } from 'micro-app-utils/data';
+import {
+  MicroComponentInstanceMap,
+  MicroComponentMap,
+  MicroComponentSlotMap,
+} from 'micro-app-utils/data';
 import { MicroComponentPropsMap } from 'micro-app-utils/data';
 import { renderComponent } from 'micro-app-utils/vue3/renderComponent';
 import { initGlobalStore } from './Global';
@@ -54,6 +58,11 @@ const dataListener = generateDataListener({
   },
   micro_component_destroy: (elementId: string) => {
     if (MicroComponentPropsMap[elementId]) delete MicroComponentPropsMap[elementId];
+  },
+  micro_component_clear_props_slots: (elementId: string) => {
+    MicroComponentInstanceMap[elementId]?.unmount();
+    delete MicroComponentPropsMap[elementId];
+    delete MicroComponentSlotMap[elementId];
   },
 });
 

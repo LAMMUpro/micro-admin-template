@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { App, ref } from 'vue';
 import {
   BaseObj,
   MicroAppComponentProps,
@@ -47,6 +47,11 @@ export const MicroAppConfig: {
  * 派发组件插槽暂存（子应用使用）
  */
 export const MicroComponentSlotMap: BaseObj<any> = {};
+
+/**
+ * 派发组件实例暂存（主应用使用）
+ */
+export const MicroComponentInstanceMap: BaseObj<App<Element>> = {};
 
 /**
  * 插槽相关数据暂存（供react子应用使用）

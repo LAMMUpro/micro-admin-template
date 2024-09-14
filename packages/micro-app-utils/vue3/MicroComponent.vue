@@ -10,6 +10,7 @@
 import {
   generateMicroComponentDomId,
   isSubApp,
+  isTopApp,
   sendDataDown,
   sendDataUp,
 } from '../index';
@@ -58,10 +59,21 @@ watch(
     /** 子应用使用时必须传_is，主应用使用(插槽情况)不需要传_id */
     if (isSubApp && !props._is) return;
 
-    /** 如果_is变化了，清空props/slot缓存，之后会重新渲染组件 */
-    if (props._is !== _is_old && MicroComponentPropsMap[elementId]) {
-      delete MicroComponentPropsMap[elementId];
-      delete MicroComponentSlotMap[elementId];
+    /**
+     * 如果_is变化了(且旧值不为undefined)，清空props/slot缓存，之后会重新渲染组件
+     */
+    if (_is_old !== undefined && props._is !== _is_old) {
+      /** 主应用环境下直接删 */
+      if (isTopApp && MicroComponentPropsMap[elementId]) {
+        delete MicroComponentPropsMap[elementId];
+        delete MicroComponentSlotMap[elementId];
+      } else if (isSubApp) {
+        /** 子应用环境下通知主应用删缓存 */
+        sendDataUp({
+          emitName: 'micro_component_clear_props_slots',
+          parameters: [elementId],
+        });
+      }
     }
 
     /** 必须延迟，否则并列组件渲染只会发送的事件会被覆盖 */
