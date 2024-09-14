@@ -23,15 +23,8 @@ import microApp from '@micro-zoe/micro-app';
 import { PropType, onBeforeUnmount, ref } from 'vue';
 import { watch } from 'vue';
 import { computed, useAttrs } from 'vue';
-import { isSubApp, sendDataDown } from '../index';
+import { getSubAppPrefixFromRouteUrl, isSubApp, sendDataDown } from '../index';
 import { MicroAppConfig, dataListener } from '../data';
-
-/**
- * 从path中提取子应用前缀
- */
-function getSubAppPrefixFromRouteUrl(url: string) {
-  return url?.match?.(/(?<=^\/).*?(?=\/)/)?.[0];
-}
 
 /**
  * micro-app对应的属性

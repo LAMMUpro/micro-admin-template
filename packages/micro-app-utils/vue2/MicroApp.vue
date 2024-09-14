@@ -20,15 +20,8 @@
 
 <script>
 import microApp from '@micro-zoe/micro-app';
-import { isSubApp, sendDataDown } from '../index';
+import { getSubAppPrefixFromRouteUrl, isSubApp, sendDataDown } from '../index';
 import { MicroAppConfig, dataListener } from '../data';
-
-/**
- * 从path中提取子应用前缀
- */
-function getSubAppPrefixFromRouteUrl(url) {
-  return url?.match?.(/(?<=^\/).*?(?=\/)/)?.[0];
-}
 
 /** name_path_props子应用prefix_name和其它值的分隔标识 */
 const splitTag = '_____';

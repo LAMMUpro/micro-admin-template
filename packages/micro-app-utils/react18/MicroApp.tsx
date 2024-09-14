@@ -3,12 +3,14 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import jsxCustomEvent from '@micro-zoe/micro-app/polyfill/jsx-custom-event';
 
+// @ts-ignore
 import React, { useEffect, useMemo, useRef } from 'react';
-import microApp from '@micro-zoe/micro-app';
+// @ts-ignore
 import type { MutableRefObject } from 'react';
+import microApp from '@micro-zoe/micro-app';
 
 import { MicroAppConfig, dataListener } from '../data';
-import { isSubApp, sendDataDown } from '../index';
+import { getSubAppPrefixFromRouteUrl, isSubApp, sendDataDown } from '../index';
 import { SubAppSetting } from '../types';
 
 interface MicroAppProps {
@@ -38,10 +40,8 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
     _path = '',
     _keepAlive,
     _env,
-    onMounted = () => {
-    },
-    onUnmount = () => {
-    },
+    onMounted = () => {},
+    onUnmount = () => {},
     ...otherProps
   } = props;
 
@@ -53,10 +53,10 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
     return _prefix + _name;
   }, [_name, _prefix]);
 
-  const oldValueList: MutableRefObject<(string)[]> = useRef([
+  const oldValueList: MutableRefObject<string[]> = useRef([
     _path,
     nameWithPrefix,
-    JSON.stringify(otherProps)
+    JSON.stringify(otherProps),
   ]);
 
   /** 默认页面（中转页） */
@@ -108,7 +108,7 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
    * 3. 抛出事件
    * ps: 如果是非pure模式，会导致子应用的url发生改变，会导致路由重新跳转(例如应用未加载前路由还没加载，应用加载完成前动态路由加载了，search模式会自动刷新页面，但pure模式不会，所以要以兼容pure模式为准：跳转到不存在页面先暂存，动态添加路由后跳转到暂存页面)
    */
-  const microAppMounted = ():void => {
+  const microAppMounted = (): void => {
     if (dataListener) microApp.addDataListener(nameWithPrefix, dataListener);
     timer = setTimeout(() => {
       const subAppName = `${props._prefix}${props._name}`;
@@ -129,7 +129,7 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
    * 1. 更新渲染完成标识
    * 2. 清空数据
    */
-  const microAppUnmount = ():void => {
+  const microAppUnmount = (): void => {
     if (dataListener) microApp.removeDataListener(nameWithPrefix, dataListener);
     microApp.clearDataListener(nameWithPrefix);
     isMicroAppMounted.current = false;
@@ -143,13 +143,12 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
    * 跳转到目标页面
    * 会处理是否在目标页的情况
    */
-  const toSubAppPathSafe = ():void => {
+  const toSubAppPathSafe = (): void => {
     /**
      * _name为空时不允许跳转
      * 前缀不匹配时时不允许跳转
      */
-    if (!_name || subAppSettting?.prefix !== getSubAppPrefixFromRouteUrl(_path))
-      return;
+    if (!_name || subAppSettting?.prefix !== getSubAppPrefixFromRouteUrl(_path)) return;
     if (activePath.current === defaultPage) {
       /** 如果当前是中转路由，直接替换 */
       timer = setTimeout(() => {
@@ -159,7 +158,7 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
       /** 如果当前其它路由，直接跳转，如果是同一应用页面跳转用push，如果是跨应用跳转，用replace */
       timer = setTimeout(() => {
         toSubAppPath({
-          mode: nameWithPrefixOld.current === nameWithPrefix ? 'push' : 'replace'
+          mode: nameWithPrefixOld.current === nameWithPrefix ? 'push' : 'replace',
         });
       }, 4);
     } else {
@@ -172,7 +171,7 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
         toSubAppPath({ mode: 'replace' });
       }, 4);
     }
-  }
+  };
 
   /**
    * 跳转到目标页，该方法不会校验是否在当前页
@@ -182,7 +181,7 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
    */
   const toSubAppPath = (options: { mode: 'replace' | 'push' }): void => {
     const { mode } = {
-      ...options
+      ...options,
     };
 
     microApp.router[mode]({
@@ -191,30 +190,32 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
        * 不要对props._path进行处理（比如添加参数），原样跳转就行
        * ps：props._path有可能是编码 或 半编码的，解析很可能报错
        */
-      path: _path
+      path: _path,
     });
 
     sendDataDown(nameWithPrefix, {
       eventType: 'component',
       props: otherProps,
-      subAppPath: _path
+      subAppPath: _path,
     });
 
     activePath.current = _path;
-  }
+  };
 
   /** 跳到默认页面 */
-  const toDefaultPage = ():void => {
+  const toDefaultPage = (): void => {
     microApp.router.push({
       name: nameWithPrefix,
-      path: defaultPage
+      path: defaultPage,
     });
     activePath.current = defaultPage;
-  }
+  };
 
   return (
+    // @ts-ignore
     <>
       {isSubAppSetting && (
+        // @ts-ignore
         <micro-app-react18
           iframe
           className="__micro-app"
@@ -235,10 +236,5 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
     </>
   );
 };
-
-const getSubAppPrefixFromRouteUrl = (url: string): string => {
-  return url?.match?.(/(?<=^\/).*?(?=\/)/)?.[0];
-};
-
 
 export default MicroApp;

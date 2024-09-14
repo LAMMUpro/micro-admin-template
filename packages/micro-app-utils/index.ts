@@ -196,3 +196,10 @@ export function generateMicroComponentDomId() {
     .toString(36)
     .substring(2)}`;
 }
+
+/**
+ * 从path中提取子应用前缀
+ */
+export function getSubAppPrefixFromRouteUrl(url: string) {
+  return url?.match?.(/(?<=^\/).*?(?=\/)/)?.[0];
+}
