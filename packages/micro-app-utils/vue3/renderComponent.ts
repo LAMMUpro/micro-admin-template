@@ -39,7 +39,7 @@ export async function renderComponent(options: {
       const slotMap = options.slotNameList.reduce((result, slotName) => {
         result[slotName] = (slotProps) =>
           h(MicroComponent, {
-            _is: undefined as any, // 渲染插槽不需要传_is参数
+            _is: '' as any, // 渲染插槽不需要传_is参数
             ...banSlotPropKey({ ...slotProps }),
             _subAppNameList: options.subAppNameList,
             _slotName: slotName,
