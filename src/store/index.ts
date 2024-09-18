@@ -27,6 +27,19 @@ const useGlobalStore = defineStore({
   }),
   getters: {},
   actions: {
+    updateMenu(menus: Array<MenuItemType>) {
+      this.menus = menus;
+    },
+    updatePermissions(permissions: Array<string>) {
+      this.permissions = permissions;
+    },
+    updateUserInfo(userInfo: UserInfoType) {
+      this.userInfo = userInfo;
+    },
+    /**
+     * 以下主应用才需要写
+     */
+
     /** 加载菜单 */
     async loadMenu() {
       const res = await getUserMenus();
@@ -53,16 +66,6 @@ const useGlobalStore = defineStore({
         }
         return res.code;
       }
-    },
-
-    updateMenu(menus: Array<MenuItemType>) {
-      this.menus = menus;
-    },
-    updatePermissions(permissions: Array<string>) {
-      this.permissions = permissions;
-    },
-    updateUserInfo(userInfo: UserInfoType) {
-      this.userInfo = userInfo;
     },
   },
   persist: true,
