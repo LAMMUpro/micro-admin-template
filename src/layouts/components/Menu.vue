@@ -43,7 +43,6 @@ import { ElScrollbar, ElMenu, ElInput, ElMessage } from 'element-plus';
 import 'element-plus/es/components/scrollbar/style/index';
 import 'element-plus/es/components/menu/style/index';
 import 'element-plus/es/components/input/style/index';
-import Global from '@/Global';
 import MenuItem from './MenuItem.vue';
 import { MenuItemType } from '@/types/common';
 import { useRoute, useRouter } from 'vue-router';
@@ -52,7 +51,9 @@ import { MicroAppConfig } from 'micro-app-utils/data';
 import { subAppPath } from '@/pages/SubMicroApp.vue';
 import CONSTS from '@/utils/CONSTS';
 import { currentRouteFullName } from './RouteInfoBar.vue';
+import useGlobalStore from '@/store';
 
+const globalStore = useGlobalStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -79,9 +80,9 @@ watch(
  */
 const menus = computed(() => {
   if (menuKeyWord.value) {
-    return filterMenuByKeyWord(Global.menu.info.menus);
+    return filterMenuByKeyWord(globalStore.menus);
   } else {
-    return Global.menu.info.menus;
+    return globalStore.menus;
   }
 });
 
@@ -99,7 +100,7 @@ function handleMenuChange(key: string) {
     if (menuInfo) {
       menuInfo = menuInfo.children?.[+index];
     } else {
-      menuInfo = Global.menu.info.menus[+index];
+      menuInfo = globalStore.menus[+index];
     }
   });
 

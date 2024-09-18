@@ -14,25 +14,31 @@ const originMap = {
   master: 'https://micro-admin-template.lammu.cn',
 };
 
-export default class ModuleConfig {
+export default {
   /** 是否本地开发环境 */
-  readonly isLocalhost = import.meta.env.DEV;
+  isLocalhost: import.meta.env.DEV,
   /** 是否测试环境 */
-  readonly isTest = this.env === 'test';
+  get isTest() {
+    return this.env === 'test';
+  },
   /** 是否预发环境 */
-  readonly isPre = this.env === 'pre';
+  get isPre() {
+    return this.env === 'pre';
+  },
   /** 是否生产环境 */
-  readonly isMaster = this.env === 'master';
+  get isMaster() {
+    return this.env === 'master';
+  },
   /** hostname */
-  readonly hostname = subAppLocation?.hostname;
+  hostname: subAppLocation?.hostname,
   /** 不同环境origin */
-  readonly originMap = originMap;
+  originMap: originMap,
   /** 后台返回文件地址组合前缀 */
-  readonly uploadFilePrefix = '/api/comservice-server';
+  uploadFilePrefix: '/api/comservice-server',
   /** token名称 */
   get tokenKey() {
     return '';
-  }
+  },
   /** 运行环境 */
   get env(): 'localhost' | 'test' | 'pre' | 'master' {
     const hostname = subAppLocation.hostname;
@@ -48,5 +54,5 @@ export default class ModuleConfig {
       console.error('判断不出当前代码运行环境,请检查配置!!!');
       return 'localhost';
     }
-  }
-}
+  },
+};

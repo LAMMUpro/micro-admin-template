@@ -24,9 +24,10 @@ import {
 } from 'micro-app-utils/data';
 import { MicroComponentPropsMap } from 'micro-app-utils/data';
 import { renderComponent } from 'micro-app-utils/vue3/renderComponent';
-import { initGlobalStore } from './Global';
 import { initRouteInterceptor } from './router/interceptor';
 import { ElConfigProvider } from 'element-plus';
+import { createPinia } from 'pinia';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 /** microApp数据监听回调 */
 const dataListener = generateDataListener({
@@ -65,12 +66,6 @@ const dataListener = generateDataListener({
     delete MicroComponentSlotMap[elementId];
   },
 });
-
-/** 初始化全局数据 */
-initGlobalStore();
-
-/** 初始化路由拦截器 */
-initRouteInterceptor(router);
 
 window._subAppSettingList_ = [
   {
@@ -186,6 +181,13 @@ microApp.start({
 
 const app: App<Element> = createApp(AppVue);
 app.use(router);
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
+app.use(pinia);
+
+/** 初始化路由拦截器 */
+initRouteInterceptor(router);
+
 // 注册全局组件: `svg-icon`
 app.component('svg-icon', SvgIcon);
 app.mount('#__micro-app-main');

@@ -4,6 +4,7 @@ import { MenuOriginType } from '@/types/common';
  * // TODO: 获取用户信息
  */
 export async function getUserInfo() {
+  console.log('模拟远程加载用户信息');
   return {
     code: 1,
     data: {
@@ -20,6 +21,7 @@ export async function getUserInfo() {
  * // TODO: 获取用户菜单
  */
 export async function getUserMenus() {
+  console.log('模拟远程加载菜单信息');
   const menus: Array<MenuOriginType> = [
     {
       id: '444',

@@ -33,12 +33,12 @@
       </div>
       <img
         class="__avatar"
-        :src="Global.user.info.avatar"
+        :src="globalStore.userInfo.avatar"
         alt="avatar"
       />
       <el-dropdown>
         <div class="__nickname">
-          <span>{{ Global.user.info.name }}</span>
+          <span>{{ globalStore.userInfo.name }}</span>
           <svg-icon name="arrow-bottom" />
         </div>
         <template #dropdown>
@@ -56,11 +56,13 @@
 </template>
 
 <script lang="ts" setup>
-import Global from '@/Global';
 import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
 import 'element-plus/es/components/dropdown/style/index';
 import 'element-plus/es/components/dropdown-menu/style/index';
 import 'element-plus/es/components/dropdown-item/style/index';
+import useGlobalStore from '@/store';
+
+const globalStore = useGlobalStore();
 
 /** //TODO: 退出登录 */
 function onLogout() {}

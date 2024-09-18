@@ -1,16 +1,17 @@
 import { MenuItemType, MenuOriginType } from '@/types/common';
+import Config from '@/utils/Config';
 import { subAppLocation } from 'micro-app-utils';
 
 /**
  * 跳转到PC官网
  */
 export function handleNavigate2PC() {
-  // if (Global.config.env === 'localhost') {
-  //   // 本地环境跳转到开发环境
-  //   subAppLocation.href = Global.config.originMap['test'];
-  // } else {
-  subAppLocation.href = '/';
-  // }
+  if (Config.env === 'localhost') {
+    // 本地环境跳转到开发环境
+    subAppLocation.href = Config.originMap['test'];
+  } else {
+    subAppLocation.href = '/';
+  }
 }
 
 /**

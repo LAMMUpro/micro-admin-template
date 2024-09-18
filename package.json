@@ -19,7 +19,9 @@
     "element-plus": "2.7.8",
     "js-cookie": "^3.0.5",
     "vue": "^3.5.1",
-    "vue-router": "^4.4.3"
+    "vue-router": "^4.4.3",
+    "pinia": "^2.2.2",
+    "pinia-plugin-persistedstate": "^4.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",

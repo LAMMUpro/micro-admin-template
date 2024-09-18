@@ -111,3 +111,17 @@ export type MenuItemType = MenuOriginType & {
   /** 菜单名称（关键词高亮） */
   _nameHTML_?: string;
 } & RouteRecordRaw;
+
+/** 用户信息 */
+export interface UserInfoType {
+  /** 用户头像url */
+  avatar: string;
+  /** 邮箱 */
+  email: string;
+  /** 用户记录id */
+  id: string;
+  /** 用户名称 */
+  name: string;
+  /** 用户手机号 */
+  phone: string;
+}
