@@ -240,7 +240,7 @@ watch(
   (_, oldValueList) => {
     nameWithPrefix_old.value = oldValueList[1] || '';
     /**
-     * 当主应用子应用切换时，路由结束后(即nameWithPrefix.value变化了)子应用的卸载钩子还没有执行，此时isMicroAppMounted状态还没有得到更新，所以需要setTimeout一下
+     * 当主应用子应用切换时，路由结束后(即nameWithPrefix.value变化了)子应用的卸载钩子还没有执行，此时subAppStatus状态还没有得到更新，所以需要setTimeout一下
      */
     setTimeout(() => {
       if (subAppSettting.value && props._path && subAppStatus.value === 'mounted') {
