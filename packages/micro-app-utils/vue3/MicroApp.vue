@@ -1,5 +1,5 @@
 <template>
-  <div class="__content">
+  <div class="__micro-app-container __content">
     <!-- micro-app子应用 -->
     <component
       class="__micro-app"
