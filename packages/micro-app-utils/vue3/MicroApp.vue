@@ -19,45 +19,48 @@
       @unmount="microAppUnmount"
       @error="microAppError"
     ></component>
-    <!-- 应用未配置 -->
-    <div
-      v-if="!subAppSettting"
-      class="__content"
-    >
-      <slot name="config"></slot>
+    <!-- 子应用环境下使用才显示状态，顶层应用有额外的状态UI -->
+    <template v-if="isSubApp">
+      <!-- 应用未配置 -->
       <div
-        v-if="!slots.error"
-        class="__tip-msg __config"
+        v-if="!subAppSettting"
+        class="__content"
       >
-        未配置应用
+        <slot name="config"></slot>
+        <div
+          v-if="!slots.error"
+          class="__tip-msg __config"
+        >
+          未配置应用
+        </div>
       </div>
-    </div>
-    <!-- 加载失败样式 -->
-    <div
-      class="__content"
-      v-else-if="subAppStatus === 'error'"
-    >
-      <slot name="error"></slot>
+      <!-- 加载失败样式 -->
       <div
-        v-if="!slots.error"
-        class="__tip-msg __error"
+        class="__content"
+        v-else-if="subAppStatus === 'error'"
       >
-        应用加载失败
+        <slot name="error"></slot>
+        <div
+          v-if="!slots.error"
+          class="__tip-msg __error"
+        >
+          应用加载失败
+        </div>
       </div>
-    </div>
-    <!-- 加载中样式 -->
-    <div
-      class="__content"
-      v-else-if="subAppStatus === 'loading'"
-    >
-      <slot name="loading"></slot>
+      <!-- 加载中样式 -->
       <div
-        v-if="!slots.loading"
-        class="__tip-msg __loading"
+        class="__content"
+        v-else-if="subAppStatus === 'loading'"
       >
-        应用加载中...
+        <slot name="loading"></slot>
+        <div
+          v-if="!slots.loading"
+          class="__tip-msg __loading"
+        >
+          应用加载中...
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
