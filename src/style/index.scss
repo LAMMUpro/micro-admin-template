@@ -8,7 +8,9 @@
 
   // 路由组件样式
   .__micro-app-container {
-    height: 100%;
+    .__micro-app {
+      height: 100%;
+    }
 
     .__content {
       display: contents;
