@@ -96,6 +96,9 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
   const nameWithPrefixOld: MutableRefObject<string> = useRef('');
   /** 实际的path */
   const activePath: MutableRefObject<string> = useRef(defaultPage);
+  /** 记录应用开始加载时间点 */
+  const appStartTimeStamp: MutableRefObject<number> = useRef(Date.now());
+
   /** 子应用状态 */
   const [subAppStatus, setSubAppStatus] = useState(_name ? 'loading' : 'unMounted');
 
@@ -137,10 +140,18 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
       const subAppName = `${props._prefix}${props._name}`;
       /** 确保子应用真的渲染成功了 */
       if (microApp.getAllApps().includes(subAppName)) {
-        setSubAppStatus('mounted');
-        /** 这里需要手动跳转一次，watch时的跳转可能不会生效，因为应用还没挂载完成 */
-        toSubAppPathSafe();
-        _mounted();
+        const durationMS = Date.now() - appStartTimeStamp.current;
+        function callback() {
+          setSubAppStatus('mounted');
+          /** 这里需要手动跳转一次，watch时的跳转可能不会生效，因为应用还没挂载完成 */
+          toSubAppPathSafe();
+          _mounted();
+        }
+        if (durationMS < 300) {
+          setTimeout(() => callback(), 300 - durationMS);
+        } else {
+          callback();
+        }
       } else {
         setSubAppStatus('error');
         _error();
@@ -157,6 +168,7 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
     if (dataListener) microApp.removeDataListener(nameWithPrefix, dataListener);
     microApp.clearDataListener(nameWithPrefix);
     setSubAppStatus(_name ? 'loading' : 'unMounted');
+    appStartTimeStamp.current = Date.now();
     /** 需要子应用每次window.mount的时候重建router 或 window.unmount的时候重定向路由至默认路由 */
     activePath.current = defaultPage;
     microApp.clearData(nameWithPrefix);
