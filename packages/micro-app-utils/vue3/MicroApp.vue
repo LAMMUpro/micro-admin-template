@@ -21,14 +21,14 @@
     ></component>
     <!-- 子应用环境下使用才显示状态，顶层应用有额外的状态UI -->
     <template v-if="isSubApp">
-      <!-- 应用未配置 -->
+      <!-- 应用未配置样式 -->
       <div
         v-if="!subAppSettting"
         class="__content"
       >
         <slot name="config"></slot>
         <div
-          v-if="!slots.error"
+          v-if="!slots.config"
           class="__tip-msg __config"
         >
           未配置模块
@@ -337,41 +337,6 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-// 路由组件样式
-.__micro-app-container {
-  &.__content,
-  .__content {
-    display: contents;
-  }
-
-  .__micro-app {
-    height: 100%;
-  }
-
-  .__tip-msg {
-    width: 100%;
-    font-size: 14px;
-    text-align: center;
-    padding: 10px;
-    border-radius: 3px;
-    font-weight: 800;
-    margin-bottom: 2px;
-
-    &.__error {
-      color: #fff1f0;
-      background-color: #f5222d;
-    }
-
-    &.__config {
-      color: #fff7e6;
-      background-color: #fa8c16;
-    }
-
-    &.__loading {
-      color: #e6f4ff;
-      background-color: #1677ff;
-    }
-  }
-}
+<style lang="scss">
+// 样式写在全局文件@/style/index.scss
 </style>
