@@ -307,7 +307,7 @@ const MicroAppStatus: React.FC<never> = (props: {
             <props.config></props.config>
           ) : (
             // @ts-ignore
-            <div className="__tip-msg __config">未配置模块</div>
+            <div className="__tip-msg __config">模块未配置</div>
           )}
           {/* @ts-ignore */}
         </div>

@@ -31,7 +31,7 @@
           v-if="!slots.config"
           class="__tip-msg __config"
         >
-          未配置模块
+          模块未配置
         </div>
       </div>
       <!-- 加载失败样式 -->

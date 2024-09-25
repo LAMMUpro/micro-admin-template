@@ -31,7 +31,7 @@
           v-if="!$slots.config"
           class="__tip-msg __config"
         >
-          未配置模块
+          模块未配置
         </div>
       </div>
       <!-- 加载失败样式 -->
@@ -138,8 +138,6 @@ export default {
       MicroAppConfig,
       /** 实际的path */
       activePath: '',
-      /** 子应用是否渲染完成 */
-      isMicroAppMounted: false,
       /** 子应用状态 'unMounted' | 'loading' | 'mounted' | 'error' */
       subAppStatus: 'unMounted',
       /** 定时器 */
