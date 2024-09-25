@@ -1,21 +1,24 @@
 <template>
-  <component
-    class="__micro-app"
-    :is="MicroAppConfig.tagName"
-    v-if="subAppSettting"
-    :default-page="defaultPage"
-    :keep-alive="_keepAlive"
-    :name="nameWithPrefix"
-    :iframe="subAppSettting?.iframe"
-    :url="subAppSettting?.urlMap[_env || MicroAppConfig.env]"
-    :inline="MicroAppConfig.env === 'localhost'"
-    :destroy="_destroy"
-    :clearData="_clearData"
-    :router-mode="_routerMode || isSubApp ? 'pure' : 'search'"
-    :disable-scopecss="_disableScopecss"
-    @mounted="microAppMounted"
-    @unmount="microAppUnmount"
-  ></component>
+  <div class="__micro-app-container __content">
+    <!-- micro-app子应用 -->
+    <component
+      class="__micro-app"
+      :is="MicroAppConfig.tagName"
+      v-if="subAppSettting"
+      :default-page="defaultPage"
+      :keep-alive="_keepAlive"
+      :name="nameWithPrefix"
+      :iframe="subAppSettting?.iframe"
+      :url="subAppSettting?.urlMap[_env || MicroAppConfig.env]"
+      :inline="MicroAppConfig.env === 'localhost'"
+      :destroy="_destroy"
+      :clearData="_clearData"
+      :router-mode="_routerMode || isSubApp ? 'pure' : 'search'"
+      :disable-scopecss="_disableScopecss"
+      @mounted="microAppMounted"
+      @unmount="microAppUnmount"
+    ></component>
+  </div>
 </template>
 
 <script>
@@ -266,8 +269,41 @@ export default {
 };
 </script>
 
-<style scoped>
-.__micro-app {
-  height: 100%;
+<style lang="scss" scoped>
+// 路由组件样式
+.__micro-app-container {
+  &.__content,
+  .__content {
+    display: contents;
+  }
+
+  .__micro-app {
+    height: 100%;
+  }
+
+  .__tip-msg {
+    width: 100%;
+    font-size: 14px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 3px;
+    font-weight: 800;
+    margin-bottom: 2px;
+
+    &.__error {
+      color: #fff1f0;
+      background-color: #f5222d;
+    }
+
+    &.__config {
+      color: #fff7e6;
+      background-color: #fa8c16;
+    }
+
+    &.__loading {
+      color: #e6f4ff;
+      background-color: #1677ff;
+    }
+  }
 }
 </style>
