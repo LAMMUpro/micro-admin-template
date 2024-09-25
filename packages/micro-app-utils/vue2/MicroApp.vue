@@ -224,6 +224,7 @@ export default {
           }
         } else {
           this.subAppStatus = 'error';
+          this.$emit('_error');
         }
       }, 4);
     },
@@ -247,6 +248,7 @@ export default {
      */
     microAppError() {
       this.subAppStatus = 'error';
+      this.$emit('_error');
     },
     /**
      * 跳转到目标页面

@@ -20,10 +20,14 @@ interface MicroAppProps {
   _clearData?: boolean;
   _routerMode?: string;
   _disableScopecss?: boolean;
-  onMounted?: () => void;
-  onUnmount?: () => void;
+  _mounted?: () => void;
+  _unmount?: () => void;
+  _error?: () => void;
+  /** 自定义错误样式 */
   error?: React.FC;
+  /** 自定义加载样式 */
   loading?: React.FC;
+  /** 自定义无配置样式 */
   config?: React.FC;
 }
 
@@ -39,8 +43,9 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
     _path = '',
     _keepAlive,
     _env,
-    onMounted = () => {},
-    onUnmount = () => {},
+    _mounted = () => {},
+    _unmount = () => {},
+    _error = () => {},
     ...otherProps
   } = props;
 
@@ -119,9 +124,10 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
         setSubAppStatus('mounted');
         /** 这里需要手动跳转一次，watch时的跳转可能不会生效，因为应用还没挂载完成 */
         toSubAppPathSafe();
-        onMounted();
+        _mounted();
       } else {
         setSubAppStatus('error');
+        _error();
       }
     }, 4);
   };
@@ -138,7 +144,7 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
     /** 需要子应用每次window.mount的时候重建router 或 window.unmount的时候重定向路由至默认路由 */
     activePath.current = defaultPage;
     microApp.clearData(nameWithPrefix);
-    onUnmount();
+    _unmount();
   };
 
   /**
@@ -146,6 +152,7 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
    */
   const microAppError = (): void => {
     setSubAppStatus('error');
+    _error();
   };
 
   /**

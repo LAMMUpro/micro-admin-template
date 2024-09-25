@@ -135,6 +135,7 @@ const props = defineProps({
 const emit = defineEmits<{
   (e: '_mounted'): void;
   (e: '_unmount'): void;
+  (e: '_error'): void;
 }>();
 
 /** 剩余参数当做传给组件的props */
@@ -208,6 +209,7 @@ function microAppMounted() {
       }
     } else {
       subAppStatus.value = 'error';
+      emit('_error');
     }
   }, 4);
 }
@@ -233,6 +235,7 @@ function microAppUnmount() {
  */
 function microAppError() {
   subAppStatus.value = 'error';
+  emit('_error');
 }
 
 /**
