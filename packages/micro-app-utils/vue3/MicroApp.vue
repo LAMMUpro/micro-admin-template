@@ -20,7 +20,7 @@
       @error="microAppError"
     ></component>
     <!-- 子应用环境下使用才显示状态，顶层应用有额外的状态UI -->
-    <template v-if="isSubApp">
+    <template v-if="true">
       <!-- 应用未配置 -->
       <div
         v-if="!subAppSettting"
@@ -337,7 +337,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 // 路由组件样式
 .__micro-app-container {
   &.__content,
