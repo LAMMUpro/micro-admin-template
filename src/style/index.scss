@@ -5,42 +5,6 @@
 
 #__micro-app-main {
   width: 100vw;
-
-  // 路由组件样式
-  .__micro-app-container {
-    .__micro-app {
-      height: 100%;
-    }
-
-    .__content {
-      display: contents;
-    }
-
-    .__tip-msg {
-      width: 100%;
-      font-size: 14px;
-      text-align: center;
-      padding: 10px;
-      border-radius: 3px;
-      font-weight: 800;
-      margin-bottom: 2px;
-
-      &.__error {
-        color: #fff1f0;
-        background-color: #f5222d;
-      }
-
-      &.__config {
-        color: #fff7e6;
-        background-color: #fa8c16;
-      }
-
-      &.__loading {
-        color: #e6f4ff;
-        background-color: #1677ff;
-      }
-    }
-  }
 }
 
 /** 重置样式表 */
