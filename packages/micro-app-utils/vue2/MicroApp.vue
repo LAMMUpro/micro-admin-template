@@ -17,7 +17,50 @@
       :disable-scopecss="_disableScopecss"
       @mounted="microAppMounted"
       @unmount="microAppUnmount"
+      @error="microAppError"
     ></component>
+    <!-- 子应用环境下使用才显示状态，顶层应用有额外的状态UI -->
+    <template v-if="isSubApp">
+      <!-- 应用未配置 -->
+      <div
+        v-if="!subAppSettting"
+        class="__content"
+      >
+        <slot name="config"></slot>
+        <div
+          v-if="!$slots.error"
+          class="__tip-msg __config"
+        >
+          未配置模块
+        </div>
+      </div>
+      <!-- 加载失败样式 -->
+      <div
+        class="__content"
+        v-else-if="subAppStatus === 'error'"
+      >
+        <slot name="error"></slot>
+        <div
+          v-if="!$slots.error"
+          class="__tip-msg __error"
+        >
+          模块加载失败
+        </div>
+      </div>
+      <!-- 加载中样式 -->
+      <div
+        class="__content"
+        v-else-if="subAppStatus === 'loading'"
+      >
+        <slot name="loading"></slot>
+        <div
+          v-if="!$slots.loading"
+          class="__tip-msg __loading"
+        >
+          模块加载中...
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -97,11 +140,15 @@ export default {
       activePath: '',
       /** 子应用是否渲染完成 */
       isMicroAppMounted: false,
+      /** 子应用状态 'unMounted' | 'loading' | 'mounted' | 'error' */
+      subAppStatus: 'unMounted',
       /** 定时器 */
       timer: 0,
       /** 子应用真实name（旧的），用于判断当前跳转是否跨子应用跳转 */
       nameWithPrefix_old: '',
       isSubApp,
+      /** 记录应用开始加载时间点 */
+      appStartTimeStamp: Date.now(),
     };
   },
   computed: {
@@ -113,10 +160,6 @@ export default {
     subAppSettting() {
       return MicroAppConfig.subAppSettingList.find((item) => item.name === this._name);
     },
-    /** 由prefix\name\path\参数组成的唯一字符串 */
-    name_path_props() {
-      return this.nameWithPrefix + splitTag + this._path + JSON.stringify(this.$attrs);
-    },
     /** 默认页面（中转页） */
     defaultPage() {
       return (
@@ -126,12 +169,17 @@ export default {
           : '/#/empty')
       );
     },
+    /** 由prefix\name\path\参数组成的唯一字符串 */
+    name_path_props() {
+      return this.nameWithPrefix + splitTag + this._path + JSON.stringify(this.$attrs);
+    },
   },
   mounted() {
+    this.subAppStatus = this._name ? 'loading' : 'unMounted';
     this.activePath = this.defaultPage;
   },
   watch: {
-    /** 子应用name / path / 剩余参数发生变化，重新跳转页面 */
+    /** 子应用name / prefix / path / 剩余参数发生变化，重新跳转页面 */
     name_path_props: {
       handler(newValue, oldValue) {
         const index = oldValue?.indexOf('___');
@@ -140,7 +188,7 @@ export default {
          * 当主应用子应用切换时，路由结束后(即nameWithPrefix.value变化了)子应用的卸载钩子还没有执行，此时isMicroAppMounted状态还没有得到更新，所以需要setTimeout一下
          */
         setTimeout(() => {
-          if (this.subAppSettting && this._path && this.isMicroAppMounted) {
+          if (this.subAppSettting && this._path && this.subAppStatus === 'mounted') {
             this.toSubAppPathSafe();
           }
         });
@@ -162,12 +210,20 @@ export default {
         const subAppName = `${this._prefix}${this._name}`;
         /** 确保子应用真的渲染成功了 */
         if (microApp.getAllApps().includes(subAppName)) {
-          this.isMicroAppMounted = true;
-          /** 这里需要手动跳转一次，watch时的跳转可能不会生效，因为应用还没挂载完成 */
-          this.toSubAppPathSafe();
-          this.$emit('_mounted');
+          const durationMS = Date.now() - this.appStartTimeStamp;
+          const callback = () => {
+            this.subAppStatus = 'mounted';
+            /** 这里需要手动跳转一次，watch时的跳转可能不会生效，因为应用还没挂载完成 */
+            this.toSubAppPathSafe();
+            this.$emit('_mounted');
+          };
+          if (durationMS < 300) {
+            setTimeout(() => callback(), 300 - durationMS);
+          } else {
+            callback();
+          }
         } else {
-          console.warn(`子应用${subAppName}渲染异常`);
+          this.subAppStatus = 'error';
         }
       }, 4);
     },
@@ -179,11 +235,18 @@ export default {
     microAppUnmount() {
       if (dataListener) microApp.removeDataListener(this.nameWithPrefix, dataListener);
       microApp.clearDataListener(this.nameWithPrefix);
-      this.isMicroAppMounted = false;
+      this.subAppStatus = this._name ? 'loading' : 'unMounted';
+      this.appStartTimeStamp = Date.now();
       /** 需要子应用每次window.mount的时候重建router 或 window.unmount的时候重定向路由至默认路由 */
       this.activePath = this.defaultPage;
       microApp.clearData(this.nameWithPrefix);
       this.$emit('_unmount');
+    },
+    /**
+     * 子应用渲染报错
+     */
+    microAppError() {
+      this.subAppStatus = 'error';
     },
     /**
      * 跳转到目标页面

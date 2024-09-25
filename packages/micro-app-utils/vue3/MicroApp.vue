@@ -20,7 +20,7 @@
       @error="microAppError"
     ></component>
     <!-- 子应用环境下使用才显示状态，顶层应用有额外的状态UI -->
-    <template v-if="true">
+    <template v-if="isSubApp">
       <!-- 应用未配置 -->
       <div
         v-if="!subAppSettting"
