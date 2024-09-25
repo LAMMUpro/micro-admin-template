@@ -10,18 +10,34 @@ import { getSubAppPrefixFromRouteUrl, isSubApp, sendDataDown } from '../index';
 import { SubAppSetting } from '../types';
 
 interface MicroAppProps {
-  _name?: string;
-  _prefix?: string;
-  _path?: string;
-  _defaultPage: string;
-  _keepAlive?: boolean;
+  /** 指定应用环境 */
   _env?: string;
+  /** 子应用名称前缀, name不能重复，所以需要加前缀，可根据根据业务名称区分 */
+  _prefix?: string;
+  /** 子应用名称 */
+  _name?: string;
+  /**
+   * 要跳转的路径, 一般不要带查询参数
+   * @example /#/ExportComponent/contract/ContractDetailByUUID
+   */
+  _path?: string;
+  /** 默认路由，一般用`前缀/#/empty`做中转路由（hash模式），对应子应用需要添加这个路由 */
+  _defaultPage: string;
+  /** 是否keep-alive，需要对应子应用也开启keep-alive，一般不用 */
+  _keepAlive?: boolean;
+  /** 卸载时是否强制删除缓存资源 */
   _destroy?: boolean;
+  /** 卸载时清空数据通讯中的缓存数据, 默认false */
   _clearData?: boolean;
+  /** 虚拟路由系统分为四种模式search、native、native-scope、pure (顶级应用默认search，子应用默认pure) */
   _routerMode?: string;
+  /** 是否关闭样式隔离，在某些极端情况下会使用，例如子应用独立运行时，主应用跨应用渲染需要关闭样式隔离确保样式导入生效 */
   _disableScopecss?: boolean;
+  /** 应用加载成功回调 */
   _mounted?: () => void;
+  /** 应用卸载回调 */
   _unmount?: () => void;
+  /** 应用加载失败回调 */
   _error?: () => void;
   /** 自定义错误样式 */
   error?: React.FC;
