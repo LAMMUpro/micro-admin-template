@@ -1,6 +1,6 @@
 import jsxCustomEvent from '@micro-zoe/micro-app/polyfill/jsx-custom-event';
 // @ts-ignore
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 // @ts-ignore
 import type { MutableRefObject } from 'react';
 import microApp from '@micro-zoe/micro-app';
@@ -22,6 +22,9 @@ interface MicroAppProps {
   _disableScopecss?: boolean;
   onMounted?: () => void;
   onUnmount?: () => void;
+  error?: React.FC;
+  loading?: React.FC;
+  config?: React.FC;
 }
 
 const MicroApp: React.FC<never> = (props: MicroAppProps) => {
@@ -68,9 +71,12 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
     );
   }, [_path]);
 
-  const nameWithPrefixOld: MutableRefObject<string> = useRef(''); // 子应用真实name（旧的），用于判断当前跳转是否跨子应用跳转
-  const isMicroAppMounted: MutableRefObject<boolean> = useRef(false); // 子应用是否渲染完成
-  const activePath: MutableRefObject<string> = useRef(defaultPage); // 实际的path
+  /** nameWithPrefixOld */
+  const nameWithPrefixOld: MutableRefObject<string> = useRef('');
+  /** 实际的path */
+  const activePath: MutableRefObject<string> = useRef(defaultPage);
+  /** 子应用状态 */
+  const [subAppStatus, setSubAppStatus] = useState(_name ? 'loading' : 'unMounted');
 
   useEffect(() => {
     return () => {
@@ -83,10 +89,10 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
   useEffect(() => {
     nameWithPrefixOld.current = oldValueList?.current[1] || '';
     /**
-     * 当主应用子应用切换时，路由结束后(即nameWithPrefix.value变化了)子应用的卸载钩子还没有执行，此时isMicroAppMounted状态还没有得到更新，所以需要setTimeout一下
+     * 当主应用子应用切换时，路由结束后(即nameWithPrefix.value变化了)子应用的卸载钩子还没有执行，此时subAppStatus状态还没有得到更新，所以需要setTimeout一下
      */
     setTimeout(() => {
-      if (subAppSettting && _path && isMicroAppMounted.current) {
+      if (subAppSettting && _path && subAppStatus === 'mounted') {
         toSubAppPathSafe();
       }
     });
@@ -110,12 +116,12 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
       const subAppName = `${props._prefix}${props._name}`;
       /** 确保子应用真的渲染成功了 */
       if (microApp.getAllApps().includes(subAppName)) {
-        isMicroAppMounted.current = true;
+        setSubAppStatus('mounted');
         /** 这里需要手动跳转一次，watch时的跳转可能不会生效，因为应用还没挂载完成 */
         toSubAppPathSafe();
         onMounted();
       } else {
-        console.warn(`子应用${subAppName}渲染异常`);
+        setSubAppStatus('error');
       }
     }, 4);
   };
@@ -128,11 +134,18 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
   const microAppUnmount = (): void => {
     if (dataListener) microApp.removeDataListener(nameWithPrefix, dataListener);
     microApp.clearDataListener(nameWithPrefix);
-    isMicroAppMounted.current = false;
+    setSubAppStatus(_name ? 'loading' : 'unMounted');
     /** 需要子应用每次window.mount的时候重建router 或 window.unmount的时候重定向路由至默认路由 */
     activePath.current = defaultPage;
     microApp.clearData(nameWithPrefix);
     onUnmount();
+  };
+
+  /**
+   * 子应用渲染报错
+   */
+  const microAppError = (): void => {
+    setSubAppStatus('error');
   };
 
   /**
@@ -209,7 +222,8 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
 
   return (
     // @ts-ignore
-    <>
+    <div className="__micro-app-container __content">
+      {/* micro-app子应用 */}
       {isSubAppSetting &&
         // 处理react自定义事件
         jsxCustomEvent(MicroAppConfig.tagName, {
@@ -226,9 +240,74 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
           'disable-scopecss': _disableScopecss,
           onMounted: microAppMounted,
           onUnmount: microAppUnmount,
+          onError: microAppError,
         })}
-    </>
+      {/* 子应用环境下使用才显示状态，顶层应用有额外的状态UI */}
+      <MicroAppStatus
+        subAppStatus={subAppStatus}
+        subAppSettting={subAppSettting}
+        configSlot={props.config}
+        errorSlot={props.error}
+        loadingSlot={props.loading}
+      ></MicroAppStatus>
+      {/* @ts-ignore */}
+    </div>
   );
+};
+
+const MicroAppStatus: React.FC<never> = (props: {
+  subAppStatus: 'unMounted' | 'loading' | 'mounted' | 'error';
+  subAppSettting: Object;
+  error?: React.FC;
+  loading?: React.FC;
+  config?: React.FC;
+}) => {
+  if (isSubApp) {
+    if (!props.subAppSettting) {
+      return (
+        // 应用未配置样式
+        // @ts-ignore
+        <div className="__content">
+          {props.config ? (
+            <props.config></props.config>
+          ) : (
+            // @ts-ignore
+            <div className="__tip-msg __config">未配置模块</div>
+          )}
+          {/* @ts-ignore */}
+        </div>
+      );
+    } else if (props.subAppStatus === 'error') {
+      return (
+        // 加载失败样式
+        // @ts-ignore
+        <div className="__content">
+          {props.error ? (
+            <props.error></props.error>
+          ) : (
+            // @ts-ignore
+            <div className="__tip-msg __error">模块加载失败</div>
+          )}
+          {/* @ts-ignore */}
+        </div>
+      );
+    } else if (props.subAppStatus === 'loading') {
+      return (
+        // 加载中样式
+        // @ts-ignore
+        <div className="__content">
+          {props.loading ? (
+            <props.loading></props.loading>
+          ) : (
+            // @ts-ignore
+            <div className="__tip-msg __loading">模块加载中...</div>
+          )}
+          {/* @ts-ignore */}
+        </div>
+      );
+    }
+  }
+  return null;
 };
 
 export default MicroApp;
