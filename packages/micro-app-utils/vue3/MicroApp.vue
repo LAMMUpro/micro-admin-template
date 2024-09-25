@@ -31,7 +31,7 @@
           v-if="!slots.error"
           class="__tip-msg __config"
         >
-          未配置应用
+          未配置模块
         </div>
       </div>
       <!-- 加载失败样式 -->
@@ -44,7 +44,7 @@
           v-if="!slots.error"
           class="__tip-msg __error"
         >
-          应用加载失败
+          模块加载失败
         </div>
       </div>
       <!-- 加载中样式 -->
@@ -57,7 +57,7 @@
           v-if="!slots.loading"
           class="__tip-msg __loading"
         >
-          应用加载中...
+          模块加载中...
         </div>
       </div>
     </template>
