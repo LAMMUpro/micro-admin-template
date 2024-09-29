@@ -39,12 +39,27 @@
         class="__content"
         v-else-if="subAppStatus === 'error'"
       >
-        <slot name="error"></slot>
+        <slot
+          name="error"
+          v-if="!isHideErrorTip"
+        ></slot>
         <div
-          v-if="!slots.error"
+          v-if="!slots.error && !isHideErrorTip"
           class="__tip-msg __error"
         >
-          模块加载失败
+          <span>模块加载失败</span>
+          <span>&nbsp;&nbsp;</span>
+          <span
+            class="__reload-btn"
+            @click="emit('_reloadApp')"
+            >重新加载</span
+          >
+          <span>&nbsp;&nbsp;</span>
+          <span
+            class="__close-btn"
+            @click="isHideErrorTip = true"
+            >点击关闭</span
+          >
         </div>
       </div>
       <!-- 加载中样式 -->
@@ -136,6 +151,7 @@ const emit = defineEmits<{
   (e: '_mounted'): void;
   (e: '_unmount'): void;
   (e: '_error'): void;
+  (e: '_reloadApp'): void;
 }>();
 
 /** 剩余参数当做传给组件的props */
@@ -181,6 +197,9 @@ const activePath = ref(defaultPage.value);
 const subAppStatus = ref<'unMounted' | 'loading' | 'mounted' | 'error'>(
   props._name ? 'loading' : 'unMounted'
 );
+
+/** 是否隐藏错误提示卡片（应用加载失败时可以点击手动关闭错误提示） */
+const isHideErrorTip = ref(false);
 
 /**
  * 子应用渲染完成钩子（需要延迟执行！）

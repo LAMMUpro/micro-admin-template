@@ -41,6 +41,11 @@
         color: #e6f4ff;
         background-color: #1677ff;
       }
+
+      .__reload-btn,
+      .__close-btn {
+        cursor: pointer;
+      }
     }
   }
 }

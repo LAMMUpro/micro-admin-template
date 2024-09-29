@@ -7,6 +7,22 @@ import MicroApp from '../vue3/MicroApp.vue';
 export type BaseObj<T = any> = { [key: string]: T };
 
 /**
+ * MicroApp组件属性类型定义(需要同步)
+ */
+export interface MicroAppPropsType {
+  _env?: string;
+  _prefix?: string;
+  _name: string;
+  _path: string;
+  _defaultPage?: string;
+  _keepAlive?: boolean;
+  _destroy?: boolean;
+  _clearData?: boolean;
+  _routerMode?: 'search' | 'native' | 'native-scope' | 'pure';
+  _disableScopecss?: boolean;
+}
+
+/**
  * 派发组件列表
  */
 export type MicroComponents = 'SvgIcon' | 'ElDialog';
