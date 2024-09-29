@@ -39,12 +39,27 @@
         class="__content"
         v-else-if="subAppStatus === 'error'"
       >
-        <slot name="error"></slot>
+        <slot
+          name="error"
+          v-if="!isHideErrorTip"
+        ></slot>
         <div
-          v-if="!$slots.error"
+          v-if="!$slots.error && !isHideErrorTip"
           class="__tip-msg __error"
         >
-          模块加载失败
+          <span>模块加载失败</span>
+          <span>&nbsp;&nbsp;</span>
+          <span
+            class="__reload-btn"
+            @click="$emit('_reloadApp')"
+            >重新加载</span
+          >
+          <span>&nbsp;&nbsp;</span>
+          <span
+            class="__close-btn"
+            @click="isHideErrorTip = true"
+            >点击关闭</span
+          >
         </div>
       </div>
       <!-- 加载中样式 -->
@@ -147,6 +162,8 @@ export default {
       isSubApp,
       /** 记录应用开始加载时间点 */
       appStartTimeStamp: Date.now(),
+      /** 是否隐藏错误提示卡片（应用加载失败时可以点击手动关闭错误提示） */
+      isHideErrorTip: false,
     };
   },
   computed: {
