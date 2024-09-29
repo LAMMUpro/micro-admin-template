@@ -39,8 +39,6 @@ interface MicroAppProps {
   _unmount?: () => void;
   /** 应用加载失败回调 */
   _error?: () => void;
-  /** 组件内部重新渲染方法 */
-  _reloadApp: () => void;
   /** 自定义错误样式 */
   error?: React.FC;
   /** 自定义加载样式 */
@@ -64,7 +62,6 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
     _mounted = () => {},
     _unmount = () => {},
     _error = () => {},
-    _reloadApp = () => {},
     ...otherProps
   } = props;
 
@@ -104,9 +101,6 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
 
   /** 子应用状态 */
   const [subAppStatus, setSubAppStatus] = useState(_name ? 'loading' : 'unMounted');
-
-  /** 是否隐藏错误提示卡片（应用加载失败时可以点击手动关闭错误提示） */
-  const [isHideErrorTip, setIsHideErrorTip] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -290,9 +284,6 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
         configSlot={props.config}
         errorSlot={props.error}
         loadingSlot={props.loading}
-        isHideErrorTip={isHideErrorTip}
-        setIsHideErrorTip={setIsHideErrorTip}
-        _reloadApp={_reloadApp}
       ></MicroAppStatus>
       {/* @ts-ignore */}
     </div>
@@ -305,9 +296,6 @@ const MicroAppStatus: React.FC<never> = (props: {
   error?: React.FC;
   loading?: React.FC;
   config?: React.FC;
-  isHideErrorTip: boolean;
-  _reloadApp: Function;
-  setIsHideErrorTip: Function;
 }) => {
   if (isSubApp) {
     if (!props.subAppSettting) {
@@ -329,35 +317,11 @@ const MicroAppStatus: React.FC<never> = (props: {
         // 加载失败样式
         // @ts-ignore
         <div className="__content">
-          {!props.isHideErrorTip && props.error ? (
+          {props.error ? (
             <props.error></props.error>
           ) : (
             // @ts-ignore
-            <div className="__tip-msg __error">
-              {/* @ts-ignore */}
-              <span>模块加载失败</span>
-              {/* @ts-ignore */}
-              <span>&nbsp;&nbsp;</span>
-              {/* @ts-ignore */}
-              <span
-                className="__reload-btn"
-                onClick={props._reloadApp()}
-              >
-                重新加载
-                {/* @ts-ignore */}
-              </span>
-              {/* @ts-ignore */}
-              <span>&nbsp;&nbsp;</span>
-              {/* @ts-ignore */}
-              <span
-                className="__close-btn"
-                onClick={props.setIsHideErrorTip(true)}
-              >
-                点击关闭
-                {/* @ts-ignore */}
-              </span>
-              {/* @ts-ignore */}
-            </div>
+            <div className="__tip-msg __error">模块加载失败</div>
           )}
           {/* @ts-ignore */}
         </div>
