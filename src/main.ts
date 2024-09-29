@@ -1,4 +1,4 @@
-import { createApp, App, ref } from 'vue';
+import { createApp, App, ref, defineAsyncComponent } from 'vue';
 import AppVue from './App.vue';
 import router from './router';
 import microApp from '@micro-zoe/micro-app';
@@ -148,8 +148,10 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
   dataListener,
   subAppSettingList: window._subAppSettingList_,
   MicroComponentMap: {
+    /**
+     * 主应用组件
+     */
     SvgIcon: SvgIcon,
-    ElDialog: () => import('@/components/el-dialog/index.vue'),
     /**
      * 一些基础页面
      */
@@ -157,6 +159,29 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
     Page403: () => import('@/pages/403.vue'),
     PageEmpty: () => import('@/pages/empty.vue'),
     PageLogin: () => import('@/pages/login.vue'),
+    /**
+     * ElementPlus二开组件
+     */
+    ElDialog: () => import('@/components/el-dialog/index.vue'),
+    /**
+     * ElementPlus组件
+     */
+    ElScrollbar: defineAsyncComponent(() => {
+      import('element-plus/es/components/scrollbar/style/index');
+      return import('element-plus/es/components/scrollbar/index');
+    }),
+    ElTree: defineAsyncComponent(() => {
+      import('element-plus/es/components/tree/style/index');
+      return import('element-plus/es/components/tree/index');
+    }),
+    ElTreeV2: defineAsyncComponent(() => {
+      import('element-plus/es/components/tree-v2/style/index');
+      return import('element-plus/es/components/tree-v2/index');
+    }),
+    ElTreeSelect: defineAsyncComponent(() => {
+      import('element-plus/es/components/tree-select/style/index');
+      return import('element-plus/es/components/tree-select/index');
+    }),
   },
 });
 
@@ -212,7 +237,14 @@ if (isTopApp) {
   /**
    * 预加载子应用所需资源
    */
-  // microApp.preFetch([
-  //   { name: 'element-plus.css', url: '/kchadmin/element-plus.2.2.20.full.min.css', level: 1 }, // 加载资源并解析
-  // ], 2000);
+  // microApp.preFetch(
+  //   [
+  //     {
+  //       name: 'element-plus.css',
+  //       url: `/${CONSTS.PREFIX_URL}/element-plus.2.2.36.full.min.css`,
+  //       level: 1,
+  //     }, // 加载资源并解析
+  //   ],
+  //   2000
+  // );
 }
