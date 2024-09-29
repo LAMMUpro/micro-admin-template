@@ -291,7 +291,7 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
         errorSlot={props.error}
         loadingSlot={props.loading}
         isHideErrorTip={isHideErrorTip}
-        setIsHideErrorTip={setIsHideErrorTip}
+        setIsHideErrorTip={() => setIsHideErrorTip(true)}
         _reloadApp={_reloadApp}
       ></MicroAppStatus>
       {/* @ts-ignore */}
@@ -341,7 +341,7 @@ const MicroAppStatus: React.FC<never> = (props: {
               {/* @ts-ignore */}
               <span
                 className="__reload-btn"
-                onClick={props._reloadApp()}
+                onClick={() => props._reloadApp()}
               >
                 重新加载
                 {/* @ts-ignore */}
@@ -351,7 +351,7 @@ const MicroAppStatus: React.FC<never> = (props: {
               {/* @ts-ignore */}
               <span
                 className="__close-btn"
-                onClick={props.setIsHideErrorTip(true)}
+                onClick={() => props.setIsHideErrorTip()}
               >
                 点击关闭
                 {/* @ts-ignore */}
