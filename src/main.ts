@@ -152,6 +152,7 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
      * 主应用组件
      */
     SvgIcon: SvgIcon,
+    UseTinymce: () => import('@/components/use-tinymce/index.vue'),
     /**
      * 一些基础页面
      */
