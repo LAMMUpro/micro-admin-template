@@ -12,16 +12,16 @@
 
       <!-- 登录弹窗, 只在菜单模式下使用 -->
       <template v-if="isSubApp">
-        <BaseSuspense v-model:visible="dataLoginDialog.show">
+        <UseSuspense v-model:visible="dataLoginDialog.show">
           <LoginDialog v-model:show="dataLoginDialog.show"></LoginDialog>
-        </BaseSuspense>
+        </UseSuspense>
       </template>
     </div>
   </el-config-provider>
 </template>
 
 <script lang="ts" setup>
-import BaseSuspense from '@/components/base-suspense/index.vue';
+import UseSuspense from '@/components/use-suspense/index.vue';
 import LoginDialog from '@/pages/components/LoginDialog.vue';
 import { shallowReactive } from 'vue';
 import { isSubApp } from 'micro-app-utils';

@@ -5,7 +5,7 @@
 <script lang="ts">
 /** 延时挂载组件 */
 defineComponent({
-  name: 'BaseSuspense',
+  name: 'UseSuspense',
 });
 </script>
 
