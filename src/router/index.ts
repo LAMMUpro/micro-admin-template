@@ -42,6 +42,12 @@ export const baseRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/demo/micromainComponent.vue'),
         meta: { title: '派发组件源测试' },
       },
+      {
+        path: '/demo/lottie',
+        name: 'lottie',
+        component: () => import('@/pages/demo/lottie.vue'),
+        meta: { title: 'lottie源测试' },
+      },
     ],
   },
   {
