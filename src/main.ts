@@ -28,6 +28,7 @@ import { initRouteInterceptor } from './router/interceptor';
 import { ElConfigProvider } from 'element-plus';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import { Vue3Lottie } from 'vue3-lottie';
 
 /** microApp数据监听回调 */
 const dataListener = generateDataListener({
@@ -151,6 +152,7 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
     /**
      * 主应用组件
      */
+    Lottie: Vue3Lottie,
     UseSvg: UseSvg,
     UseTinymce: () => import('@/components/use-tinymce/index.vue'),
     /**
