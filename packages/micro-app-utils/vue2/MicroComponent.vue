@@ -122,6 +122,9 @@ export default {
               ...Object.keys(this.$listeners).reduce((result, eventKey) => {
                 result[`on${eventKey[0].toUpperCase()}${eventKey.slice(1)}`] =
                   this.$listeners[eventKey];
+                /** 单独处理v-model的更新事件 */
+                if (eventKey === 'input')
+                  result['onUpdate:modelValue'] = this.$listeners[eventKey];
                 return result;
               }, {}),
             });
