@@ -74,18 +74,19 @@ export function MicroAppInit<Envs extends string>(options: {
        * MicroComponent是组件
        */
       if (
-        Object.prototype.toString.call(MicroComponent.name) === '[object String]' &&
         Object.prototype.toString.call((<any>MicroComponent)?.setup) ===
-          '[object Function]'
+        '[object Function]'
       ) {
         MicroComponentMap[componentName] = MicroComponent;
-      } else {
+      } else if (Object.prototype.toString.call(MicroComponent) === '[object Function]') {
         /**
          * MicroComponent是导入函数, 需要使用defineAsyncComponent转一下 // TODO判断逻辑
          */
         MicroComponentMap[componentName] = defineAsyncComponent(
           MicroComponent as () => Promise<any>
         );
+      } else {
+        console.warn(`派发组件${componentName}的注册类型无法识别`);
       }
     });
   }
