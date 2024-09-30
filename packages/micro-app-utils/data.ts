@@ -8,8 +8,8 @@ import {
 
 /**
  * 主应用派发组件暂存
- * @example { SvgIcon: SvgIcon }
- * @example { SvgIcon: () => import('@/components/svg-icon/index.vue') }
+ * @example { UseSvg: UseSvg }
+ * @example { UseSvg: () => import('@/components/use-svg/index.vue') }
  */
 export const MicroComponentMap: { [key: string]: MicroComponentType } = {};
 

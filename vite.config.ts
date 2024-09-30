@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import CONSTS from './src/utils/CONSTS';
-import { svgBuilder } from './src/components/svg-icon/loader';
+import { svgBuilder } from './src/components/use-svg/loader';
 
 export default defineConfig({
   base: `/${CONSTS.PREFIX_URL}/`,

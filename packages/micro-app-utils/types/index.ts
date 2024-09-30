@@ -25,7 +25,7 @@ export interface MicroAppPropsType {
 /**
  * 派发组件列表
  */
-export type MicroComponents = 'SvgIcon' | 'ElDialog';
+export type MicroComponents = 'UseSvg' | 'ElDialog';
 
 /**
  * 派发组件类型（注册时支持的类型）

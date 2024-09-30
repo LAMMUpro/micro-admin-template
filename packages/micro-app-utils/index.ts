@@ -30,8 +30,8 @@ export function MicroAppInit<Envs extends string>(options: {
   subAppSettingList: Array<SubAppSetting<Envs>>;
   /**
    * 派发组件注册（主应用需要传）
-   * @example { SvgIcon: SvgIcon }
-   * @example { SvgIcon: () => import('@/components/svg-icon/index.vue') }
+   * @example { UseSvg: UseSvg }
+   * @example { UseSvg: () => import('@/components/use-svg/index.vue') }
    */
   MicroComponentMap?: {
     [key: string]: MicroComponentType;

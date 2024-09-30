@@ -3,7 +3,7 @@ import AppVue from './App.vue';
 import router from './router';
 import microApp from '@micro-zoe/micro-app';
 import { isTopApp } from 'micro-app-utils';
-import SvgIcon from '@/components/svg-icon/index.vue';
+import UseSvg from '@/components/use-svg/index.vue';
 import CONSTS from './utils/CONSTS';
 /** 样式 */
 import '@/style/index.scss';
@@ -151,7 +151,7 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
     /**
      * 主应用组件
      */
-    SvgIcon: SvgIcon,
+    UseSvg: UseSvg,
     UseTinymce: () => import('@/components/use-tinymce/index.vue'),
     /**
      * 一些基础页面
@@ -214,8 +214,8 @@ app.use(pinia);
 /** 初始化路由拦截器 */
 initRouteInterceptor(router);
 
-// 注册全局组件: `svg-icon`
-app.component('svg-icon', SvgIcon);
+// 注册全局组件: `use-svg`
+app.component('use-svg', UseSvg);
 app.mount('#__micro-app-main');
 
 /** microApp全局数据监听回调 */

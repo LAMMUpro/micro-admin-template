@@ -52,7 +52,7 @@ pnpm dev
 - sass ✔
 - router ✔
 - 公共组件 ✔
-  - svg-icon ✔
+  - UseSvg ✔
 - Prettier 文件格式化(需要 vscode 安装 Prettier) ✔
 - eslint 代码规范(需要 vscode 安装 ESLint 2.4.4) ✔
 - (暂时禁用)husky / commitlint git 提交校验 ✔

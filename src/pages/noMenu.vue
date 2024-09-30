@@ -2,7 +2,7 @@
   <div class="noMenu">
     <div class="svg-container">
       <img
-        class="svg-icon"
+        class="use-svg"
         src="@/assets/noRoleMenu.svg"
       />
     </div>
@@ -47,7 +47,7 @@ onUnmounted(() => {
   .svg-container {
     flex: 1;
     text-align: center;
-    .svg-icon {
+    .use-svg {
       width: auto;
       height: 100%;
     }

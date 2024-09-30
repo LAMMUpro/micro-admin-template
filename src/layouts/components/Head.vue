@@ -14,20 +14,20 @@
           class="action-item"
           @click="openDocsLink()"
         >
-          <svg-icon
+          <use-svg
             name="docs-question"
             size="24px"
-          ></svg-icon>
+          ></use-svg>
           <span>项目文档</span>
         </div>
         <div
           class="action-item"
           @click="openGithubLink()"
         >
-          <svg-icon
+          <use-svg
             name="Github"
             size="24px"
-          ></svg-icon>
+          ></use-svg>
           <span>源码</span>
         </div>
       </div>
@@ -39,7 +39,7 @@
       <el-dropdown>
         <div class="__nickname">
           <span>{{ globalStore.userInfo.name }}</span>
-          <svg-icon name="arrow-bottom" />
+          <use-svg name="arrow-bottom" />
         </div>
         <template #dropdown>
           <el-dropdown-menu>
@@ -145,10 +145,10 @@ function openGithubLink() {
       cursor: pointer;
       display: flex;
       align-items: center;
-      .svg-icon {
+      .use-svg {
         margin-top: 2px;
       }
-      &:hover .svg-icon {
+      &:hover .use-svg {
         transition: all 0.2s;
         transform: rotate(180deg);
       }

@@ -10,7 +10,7 @@
 
 <script lang="ts">
 export default defineComponent({
-  name: 'SvgIcon',
+  name: 'UseSvg',
 });
 </script>
 
@@ -37,13 +37,13 @@ const iconName = computed(() => `#icon-${props.name}`);
 
 /** 类名 */
 const svgClass = computed(() => {
-  if (props.name) return `svg-icon icon-${props.name}`;
-  return 'svg-icon';
+  if (props.name) return `use-svg icon-${props.name}`;
+  return 'use-svg';
 });
 </script>
 
 <style lang="scss">
-.svg-icon {
+.use-svg {
   display: inline-block;
   width: 1em;
   height: 1em;
