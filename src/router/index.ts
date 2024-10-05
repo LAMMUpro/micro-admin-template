@@ -48,6 +48,12 @@ export const baseRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/demo/lottie.vue'),
         meta: { title: 'lottie源测试' },
       },
+      {
+        path: '/demo/reactComponent',
+        name: 'reactComponent',
+        component: () => import('@/pages/demo/reactComponent.vue'),
+        meta: { title: 'reactComponent测试' },
+      },
     ],
   },
   {
