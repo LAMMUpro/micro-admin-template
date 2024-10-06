@@ -15,6 +15,7 @@
     "./vue3/MicroApp.vue": "./vue3/MicroApp.vue",
     "./vue3/MicroComponent.vue": "./vue3/MicroComponent.vue",
     "./vue3/renderComponent": "./vue3/renderComponent.js",
+    "./vue2/ReactComponent.vue": "./vue2/ReactComponent.vue",
     "./vue2/MicroApp.vue": "./vue2/MicroApp.vue",
     "./vue2/MicroComponent.vue": "./vue2/MicroComponent.vue",
     "./react18/MicroComponent": "./react18/MicroComponent.js",
