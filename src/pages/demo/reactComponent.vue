@@ -2,7 +2,7 @@
   <div>
     <section class="-m-card lightcoral">
       <span className="-m-title">这是一个react原生组件(.tsx)</span>
-      <UseReactComponent :_is="reactCompDemo"></UseReactComponent>
+      <ReactComponent :_is="reactCompDemo"></ReactComponent>
     </section>
 
     <section class="-m-card lightcoral">
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import UseReactComponent from '@/components/use-react-component/index.vue';
+import ReactComponent from 'micro-app-utils/vue3/ReactComponent.vue';
 import reactCompDemo from './reactCompDemo';
 </script>
 

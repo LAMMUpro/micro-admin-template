@@ -8,7 +8,7 @@ import {
   reactComponentMountCallback,
   reactComponentUnMountCallback,
   reactComponentUpdateCallback,
-} from './utils.tsx';
+} from './utils';
 
 const props = defineProps({
   _is: {
