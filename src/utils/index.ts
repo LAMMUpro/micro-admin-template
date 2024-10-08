@@ -1,3 +1,5 @@
+import CONSTS from './CONSTS';
+
 /** 检查是否移动端 */
 export let isMobile = () => {
   const pattern = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i;
@@ -93,4 +95,14 @@ export function modifyData<T>(
  */
 export function isExternal(path: string) {
   return /^(https|http?:|mailto:|tel:)/.test(path);
+}
+
+/**
+ * 获取lottie文件链接
+ */
+export function getLottieJsonLink(
+  /**  lottie文件名称，不用带.json后缀 */
+  name: string
+) {
+  return `/${CONSTS.PREFIX_URL}/lottie/${name}.json`;
 }
