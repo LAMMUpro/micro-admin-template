@@ -1,9 +1,9 @@
 <template>
   <div class="login">
-    <KchLoginCardAsync
+    <LoginCard
       class="login-card"
       @success="loginSuccess"
-    ></KchLoginCardAsync>
+    ></LoginCard>
     <div class="placehoder">
       <img
         class="image"
@@ -19,11 +19,7 @@
 import { routerTo } from '@/router';
 import { useRouter } from 'vue-router';
 import microApp from '@micro-zoe/micro-app';
-import { defineAsyncComponent } from 'vue';
-
-const KchLoginCardAsync = defineAsyncComponent(
-  () => import('./components/LoginCard.vue')
-);
+import LoginCard from './components/LoginCard.vue';
 
 const router = useRouter();
 
