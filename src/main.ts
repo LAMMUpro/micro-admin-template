@@ -1,4 +1,4 @@
-import { createApp, App, ref, defineAsyncComponent } from 'vue';
+import { createApp, App, ref } from 'vue';
 import AppVue from './App.vue';
 import router from './router';
 import microApp from '@micro-zoe/micro-app';
@@ -7,11 +7,22 @@ import UseSvg from '@/components/use-svg/index.vue';
 import CONSTS from './utils/CONSTS';
 /** 样式 */
 import '@/style/index.scss';
+import {
+  ElConfigProvider,
+  ElScrollbar,
+  ElTree,
+  ElTreeV2,
+  ElTreeSelect,
+} from 'element-plus';
 /**
  * 用到的element组件在这里手动导入css样式
  */
 import 'element-plus/es/components/message/style/index';
 import 'element-plus/es/components/scrollbar/style/index';
+import 'element-plus/es/components/tree/style/index';
+import 'element-plus/es/components/tree-v2/style/index';
+import 'element-plus/es/components/tree-select/style/index';
+
 import { MicroAppInit } from 'micro-app-utils';
 import {
   generateDataListener,
@@ -25,10 +36,10 @@ import {
 import { MicroComponentPropsMap } from 'micro-app-utils/data';
 import { renderComponent } from 'micro-app-utils/vue3/renderComponent';
 import { initRouteInterceptor } from './router/interceptor';
-import { ElConfigProvider } from 'element-plus';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { Vue3Lottie } from 'vue3-lottie';
+import ElDialog from '@/components/el-dialog/index.vue';
 
 /** microApp数据监听回调 */
 const dataListener = generateDataListener({
@@ -165,26 +176,14 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
     /**
      * ElementPlus二开组件
      */
-    ElDialog: () => import('@/components/el-dialog/index.vue'),
+    ElDialog: ElDialog,
     /**
      * ElementPlus组件
      */
-    ElScrollbar: defineAsyncComponent(() => {
-      import('element-plus/es/components/scrollbar/style/index');
-      return import('element-plus/es/components/scrollbar/index');
-    }),
-    ElTree: defineAsyncComponent(() => {
-      import('element-plus/es/components/tree/style/index');
-      return import('element-plus/es/components/tree/index');
-    }),
-    ElTreeV2: defineAsyncComponent(() => {
-      import('element-plus/es/components/tree-v2/style/index');
-      return import('element-plus/es/components/tree-v2/index');
-    }),
-    ElTreeSelect: defineAsyncComponent(() => {
-      import('element-plus/es/components/tree-select/style/index');
-      return import('element-plus/es/components/tree-select/index');
-    }),
+    ElScrollbar: ElScrollbar,
+    ElTree: ElTree,
+    ElTreeV2: ElTreeV2,
+    ElTreeSelect: ElTreeSelect,
   },
 });
 

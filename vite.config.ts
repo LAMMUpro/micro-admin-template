@@ -44,7 +44,7 @@ export default defineConfig({
     /** 配置资源打包目录 */
     assetsDir: './js',
     /** 分包后警告大小（未压缩大小） */
-    chunkSizeWarningLimit: 300,
+    chunkSizeWarningLimit: 800,
     /**
      * 启用/禁用 CSS 代码拆分
      * 除去element.css，其它所有css加起来gzip后大约是30kb（工作台加载20个css大小约是20kb）
