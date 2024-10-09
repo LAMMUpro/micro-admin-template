@@ -81,7 +81,14 @@
 
 <script lang="ts" setup>
 import microApp from '@micro-zoe/micro-app';
-import { PropType, getCurrentInstance, onBeforeUnmount, ref, useSlots } from 'vue';
+import {
+  PropType,
+  getCurrentInstance,
+  onBeforeUnmount,
+  ref,
+  useSlots,
+  onUnmounted,
+} from 'vue';
 import { watch } from 'vue';
 import { computed, useAttrs } from 'vue';
 import { getSubAppPrefixFromRouteUrl, isSubApp, sendDataDown } from '../index';
@@ -370,6 +377,11 @@ onBeforeUnmount(() => {
   /** 不清除，会导致子应用重新挂载时监听到2次数值变化 */
   microApp.clearData(nameWithPrefix.value);
   clearTimeout(timer);
+});
+
+/** 销毁组件时销毁应用 */
+onUnmounted(() => {
+  microApp.unmountApp(nameWithPrefix.value);
 });
 </script>
 

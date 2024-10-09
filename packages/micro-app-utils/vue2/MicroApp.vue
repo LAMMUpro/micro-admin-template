@@ -355,6 +355,10 @@ export default {
     microApp.clearData(this.nameWithPrefix);
     clearTimeout(this.timer);
   },
+  /** 销毁组件时销毁应用 */
+  destroyed() {
+    microApp.unmountApp(this.nameWithPrefix);
+  },
 };
 </script>
 
