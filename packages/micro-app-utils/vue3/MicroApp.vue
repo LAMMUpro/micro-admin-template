@@ -321,8 +321,8 @@ function toSubAppPathSafe() {
      * 目标路径和当前路径一致，先跳中转再跳目标
      * 可能的场景：子应用嵌套，路径不变，参数变化
      */
+    toDefaultPage();
     timer = setTimeout(() => {
-      toDefaultPage();
       toSubAppPath({ mode: 'replace' });
     }, 4);
   }
