@@ -54,6 +54,12 @@ export const baseRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/demo/reactComponent.vue'),
         meta: { title: 'reactComponent测试' },
       },
+      {
+        path: '/demo/vueFlow',
+        name: 'vueFlow',
+        component: () => import('@/pages/demo/vueFlow/index.vue'),
+        meta: { title: 'vueFlow测试' },
+      },
     ],
   },
   {

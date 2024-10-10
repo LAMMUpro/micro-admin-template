@@ -305,8 +305,8 @@ export default {
          * 目标路径和当前路径一致，先跳中转再跳目标
          * 可能的场景：子应用嵌套，路径不变，参数变化
          */
+        this.toDefaultPage();
         this.timer = setTimeout(() => {
-          this.toDefaultPage();
           this.toSubAppPath({ mode: 'replace' });
         }, 4);
       }
@@ -354,6 +354,10 @@ export default {
     /** 不清除，会导致子应用重新挂载时监听到2次数值变化 */
     microApp.clearData(this.nameWithPrefix);
     clearTimeout(this.timer);
+  },
+  /** 销毁组件时销毁应用 */
+  destroyed() {
+    microApp.unmountApp(this.nameWithPrefix);
   },
 };
 </script>
