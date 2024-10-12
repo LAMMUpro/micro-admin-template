@@ -42,6 +42,9 @@ import { Vue3Lottie } from 'vue3-lottie';
 import ElDialog from '@/components/el-dialog/index.vue';
 import Config from './utils/Config';
 
+/**
+ * 启动共享Worker来检测版本更新
+ */
 function startSharedWorkerForVersionUpdateCheck() {
   const sharedWorker = new SharedWorker(
     new URL('./versionUpdateCheck.js', import.meta.url),
@@ -51,25 +54,40 @@ function startSharedWorkerForVersionUpdateCheck() {
   );
   const port = sharedWorker.port;
 
-  port.onmessage = function (e) {
-    console.log('来自 SharedWorker 的结果: ', e.data);
-    if (e.data === '版本变化了') {
+  /** 接收SharedWorker事件 */
+  port.onmessage = function (event) {
+    const eventType: 'version-change' = event.data.type;
+    if (eventType === 'version-change') {
+      // TODO
       alert('版本有更新，点击刷新页面');
-      document.removeEventListener('visibilitychange', visibilitychange);
+      document.removeEventListener('visibilitychange', visibilitychangeCallback);
+    } else if (eventType === 'console') {
+      console.log(event.data.msg);
     }
   };
 
-  function visibilitychange() {
+  /** 当前页面刷新不会触发page-visible事件，需要手动调一次 */
+  port.postMessage({ type: 'page-visible' });
+
+  /**
+   * 页面显示、隐藏事件回调函数
+   */
+  function visibilitychangeCallback() {
     if (document.visibilityState === 'hidden') {
-      // 页面进入后台
       port.postMessage({ type: 'page-hidden' });
     } else if (document.visibilityState === 'visible') {
-      // 页面重新进入前台
       port.postMessage({ type: 'page-visible' });
     }
   }
 
-  document.addEventListener('visibilitychange', visibilitychange);
+  /** 监听页面显示/隐藏 */
+  document.addEventListener('visibilitychange', visibilitychangeCallback);
+
+  /** 监听页面显示/隐藏 */
+  window.addEventListener('beforeunload', () => {
+    port.postMessage({ type: 'page-unload' });
+    port.close();
+  });
 }
 
 /**
