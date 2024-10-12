@@ -40,6 +40,44 @@ import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { Vue3Lottie } from 'vue3-lottie';
 import ElDialog from '@/components/el-dialog/index.vue';
+import Config from './utils/Config';
+
+function startSharedWorkerForVersionUpdateCheck() {
+  const sharedWorker = new SharedWorker(
+    new URL('./versionUpdateCheck.js', import.meta.url),
+    {
+      type: 'module',
+    }
+  );
+  const port = sharedWorker.port;
+
+  port.onmessage = function (e) {
+    console.log('来自 SharedWorker 的结果: ', e.data);
+    if (e.data === '版本变化了') {
+      alert('版本有更新，点击刷新页面');
+      document.removeEventListener('visibilitychange', visibilitychange);
+    }
+  };
+
+  function visibilitychange() {
+    if (document.visibilityState === 'hidden') {
+      // 页面进入后台
+      port.postMessage({ type: 'page-hidden' });
+    } else if (document.visibilityState === 'visible') {
+      // 页面重新进入前台
+      port.postMessage({ type: 'page-visible' });
+    }
+  }
+
+  document.addEventListener('visibilitychange', visibilitychange);
+}
+
+/**
+ * 线上环境启动版本更新检测
+ */
+if (!Config.isLocalhost) {
+  startSharedWorkerForVersionUpdateCheck();
+}
 
 /** microApp数据监听回调 */
 const dataListener = generateDataListener({
