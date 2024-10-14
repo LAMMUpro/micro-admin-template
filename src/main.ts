@@ -13,11 +13,14 @@ import {
   ElTree,
   ElTreeV2,
   ElTreeSelect,
+  ElMessageBox,
+  ElMessage,
 } from 'element-plus';
 /**
  * 用到的element组件在这里手动导入css样式
  */
 import 'element-plus/es/components/message/style/index';
+import 'element-plus/es/components/message-box/style/index';
 import 'element-plus/es/components/scrollbar/style/index';
 import 'element-plus/es/components/tree/style/index';
 import 'element-plus/es/components/tree-v2/style/index';
@@ -58,8 +61,18 @@ function startSharedWorkerForVersionUpdateCheck() {
   port.onmessage = function (event) {
     const eventType: 'version-change' = event.data.type;
     if (eventType === 'version-change') {
-      // TODO
-      alert('版本有更新，点击刷新页面');
+      ElMessageBox.confirm('版本有更新，是否立即刷新页面?', '更新提示', {
+        confirmButtonText: '立即刷新',
+        cancelButtonText: '稍后手动刷新',
+        type: 'warning',
+        closeOnClickModal: false,
+      })
+        .then(() => {
+          location.reload();
+        })
+        .catch(() => {
+          ElMessage.info('您已取消更新, 之后请手动刷新该页面');
+        });
       document.removeEventListener('visibilitychange', visibilitychangeCallback);
     } else if (eventType === 'console') {
       console.log(event.data.msg);

@@ -16,7 +16,8 @@ let indexHtml = '';
  * 获取应用入口html
  */
 async function getIndexHtml() {
-  const res = await fetch(`/${CONSTS.PREFIX_URL}/index.html`);
+  /** 不加随机参数会使用disk cache */
+  const res = await fetch(`/${CONSTS.PREFIX_URL}/index.html?ts=${Date.now()}`);
   return await res.text();
 }
 
@@ -71,7 +72,7 @@ self.onconnect = async function (event) {
           // portList.forEach((port) =>
           //   port.postMessage({ type: 'console', msg: `连接数：${portList.length}` })
           // );
-        }, 2000);
+        }, 5000);
       }
     } else if (eventType === 'page-unload') {
       /** 应用卸载，清空port缓存 */
