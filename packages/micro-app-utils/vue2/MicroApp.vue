@@ -224,6 +224,7 @@ export default {
     },
   },
   methods: {
+    getAppIsInConfig,
     /**
      * 重新渲染该组件
      */
