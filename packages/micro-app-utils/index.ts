@@ -92,6 +92,18 @@ export function MicroAppInit<Envs extends string>(options: {
   }
 }
 
+/**
+ * 当前app的name是否在微前端配置当中，用于判断是否前两层应用
+ */
+export const getAppIsInConfig = () => {
+  return (
+    isTopApp ||
+    !!MicroAppConfig.subAppSettingList.find(
+      (item) => item.name === window.__MICRO_APP_NAME__
+    )
+  );
+};
+
 /** 是否是顶级应用 */
 export const isTopApp = !window.__MICRO_APP_ENVIRONMENT__;
 
