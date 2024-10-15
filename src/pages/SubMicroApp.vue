@@ -3,6 +3,7 @@
     <MicroApp
       :_name="subAppName"
       :_path="subAppPath"
+      _prefix=""
       _default-page="/#/empty"
     ></MicroApp>
   </section>

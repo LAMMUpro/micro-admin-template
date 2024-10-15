@@ -1,5 +1,8 @@
 <template>
-  <div class="__micro-app-container __content">
+  <div
+    class="__micro-app-container __content"
+    v-if="getAppIsInConfig()"
+  >
     <!-- micro-app子应用 -->
     <component
       class="__micro-app"
@@ -77,7 +80,13 @@
       </div>
     </template>
   </div>
+  <span v-else>嵌套多层显示省略</span>
 </template>
+
+<script lang="ts">
+/** 递增顺序 */
+let microAppIndex = 0;
+</script>
 
 <script lang="ts" setup>
 import microApp from '@micro-zoe/micro-app';
@@ -91,7 +100,12 @@ import {
 } from 'vue';
 import { watch } from 'vue';
 import { computed, useAttrs } from 'vue';
-import { getSubAppPrefixFromRouteUrl, isSubApp, sendDataDown } from '../index';
+import {
+  getAppIsInConfig,
+  getSubAppPrefixFromRouteUrl,
+  isSubApp,
+  sendDataDown,
+} from '../index';
 import { MicroAppConfig, dataListener } from '../data';
 
 /**
@@ -99,16 +113,6 @@ import { MicroAppConfig, dataListener } from '../data';
  * 推导属性不用传：url, inline
  */
 const props = defineProps({
-  /** 指定应用环境 */
-  _env: {
-    type: String,
-    default: '',
-  },
-  /** 子应用名称前缀, name不能重复，所以需要加前缀，可根据根据业务名称区分 */
-  _prefix: {
-    type: String,
-    default: '',
-  },
   /** 子应用名称 */
   _name: {
     type: String,
@@ -121,6 +125,16 @@ const props = defineProps({
   _path: {
     type: String,
     required: true,
+  },
+  /** 指定应用环境 */
+  _env: {
+    type: String,
+    default: '',
+  },
+  /** 子应用名称前缀, name不能重复, 不传则自动生成前缀, 如果不需要前缀传个空字符串过来 */
+  _prefix: {
+    type: String,
+    required: false,
   },
   /** 默认路由，一般用`前缀/#/empty`做中转路由（hash模式），对应子应用需要添加这个路由 */
   _defaultPage: {
@@ -168,7 +182,7 @@ const slots = useSlots();
 
 /** 子应用真实name（连前缀） */
 const nameWithPrefix = computed(() => {
-  return props._prefix + props._name;
+  return (props._prefix ?? `M${microAppIndex++}_`) + props._name;
 });
 
 /** 子应用真实name（旧的），用于判断当前跳转是否跨子应用跳转 */
@@ -232,9 +246,8 @@ function reloadApp() {
 function microAppMounted() {
   if (dataListener) microApp.addDataListener(nameWithPrefix.value, dataListener);
   timer = setTimeout(() => {
-    const subAppName = `${props._prefix}${props._name}`;
     /** 确保子应用真的渲染成功了 */
-    if (microApp.getAllApps().includes(subAppName)) {
+    if (microApp.getAllApps().includes(nameWithPrefix.value)) {
       const durationMS = Date.now() - appStartTimeStamp;
       function callback() {
         subAppStatus.value = 'mounted';
@@ -381,7 +394,8 @@ onBeforeUnmount(() => {
 
 /** 销毁组件时销毁应用 */
 onUnmounted(() => {
-  microApp.unmountApp(nameWithPrefix.value);
+  if (microApp.getAllApps().includes(nameWithPrefix.value))
+    microApp.unmountApp(nameWithPrefix.value);
 });
 </script>
 
