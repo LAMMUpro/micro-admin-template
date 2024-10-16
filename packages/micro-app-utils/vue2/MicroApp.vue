@@ -5,7 +5,7 @@
   >
     <!-- micro-app子应用 -->
     <component
-      class="__micro-app"
+      :class="[{ '__micro-app': subAppStatus === 'mounted' }]"
       :is="MicroAppConfig.tagName"
       v-if="subAppSettting"
       :default-page="defaultPage"
@@ -23,7 +23,7 @@
       @error="microAppError"
     ></component>
     <!-- 子应用环境下使用才显示状态，顶层应用有额外的状态UI -->
-    <template v-if="isSubApp">
+    <template v-if="isSubApp && subAppStatus !== 'mounted'">
       <!-- 应用未配置样式 -->
       <div
         v-if="!subAppSettting"
