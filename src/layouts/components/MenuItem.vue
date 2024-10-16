@@ -22,8 +22,10 @@
   <el-menu-item
     v-else
     :index="props.level"
-    >{{ props.menuInfo.name }}</el-menu-item
   >
+    <!-- //TODO 链接转换为主应用下的 -->
+    <a :href="props.menuInfo.path">{{ props.menuInfo.name }}</a>
+  </el-menu-item>
 </template>
 
 <script lang="ts">
