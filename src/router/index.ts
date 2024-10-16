@@ -82,7 +82,7 @@ export const baseRoutes: Array<RouteRecordRaw> = [
     path: '/empty',
     name: 'PageEmpty',
     component: () => import('@/pages/empty.vue'),
-    meta: { hidden: true },
+    meta: { hidden: true, firstRedirect: adminWorkbenchRoute },
   },
   {
     path: '/login',
