@@ -6,7 +6,10 @@
       <!-- 右边容器，包括面包屑 -->
       <div class="__right-container">
         <RouteInfoBar class="__route-info-bar"></RouteInfoBar>
-        <el-scrollbar class="__sub-app-container">
+        <el-scrollbar
+          class="__sub-app-container"
+          ref="subAppScrollRef"
+        >
           <div class="__inner-container">
             <router-view></router-view>
           </div>
@@ -26,12 +29,18 @@
   </div>
 </template>
 
+<script lang="ts">
+/** 子应用滚动容器ref */
+export const subAppScrollRef = ref<InstanceType<typeof ElScrollbar>>();
+</script>
+
 <script lang="ts" setup>
 import Menu from './components/Menu.vue';
 import Head from './components/Head.vue';
 import RouteInfoBar from './components/RouteInfoBar.vue';
 import { ElScrollbar } from 'element-plus';
 import 'element-plus/es/components/scrollbar/style/index';
+import { ref } from 'vue';
 </script>
 
 <style lang="scss" scoped>

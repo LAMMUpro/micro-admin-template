@@ -3,6 +3,7 @@ import { addAsyncRoute, isAddedAsyncRoutes } from '.';
 // import { menuActiveIndex } from '@/layouts/components/Menu.vue';
 import { subAppPath } from '@/pages/SubMicroApp.vue';
 import useGlobalStore from '@/store';
+import { subAppScrollRef } from '@/layouts/index.vue';
 
 /**
  * 初始化路由拦截器
@@ -45,5 +46,10 @@ export function initRouteInterceptor(router: Router) {
   router.afterEach((to) => {
     // TODO回显激活菜单
     // menuActiveIndex.value = '0-0';
+
+    /**
+     * 滚动到顶部，目前有些小瑕疵: 会先滚动原有页面(不管新页面有没有加载)
+     */
+    subAppScrollRef.value?.scrollTo(0, 0);
   });
 }
