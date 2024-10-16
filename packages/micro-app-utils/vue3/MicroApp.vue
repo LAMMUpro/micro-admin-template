@@ -80,7 +80,7 @@
       </div>
     </template>
   </div>
-  <span v-else>嵌套多层显示省略</span>
+  <span v-else>组件无法显示</span>
 </template>
 
 <script lang="ts">
@@ -180,7 +180,7 @@ const otherProps = useAttrs();
 /** 插槽列表，可以自定义加载中(loading)样式 / 失败(error)样式 / 无配置(config)样式 */
 const slots = useSlots();
 
-/** 子应用真实name（连前缀） */
+/** 子应用真实name（连前缀, 默认: M[序号]_[应用名]） */
 const nameWithPrefix = computed(() => {
   return (props._prefix ?? `M${microAppIndex++}_`) + props._name;
 });

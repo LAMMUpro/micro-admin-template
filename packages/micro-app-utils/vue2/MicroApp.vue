@@ -1,5 +1,8 @@
 <template>
-  <div class="__micro-app-container __content">
+  <div
+    class="__micro-app-container __content"
+    v-if="getAppIsInConfig()"
+  >
     <!-- micro-app子应用 -->
     <component
       class="__micro-app"
@@ -77,12 +80,21 @@
       </div>
     </template>
   </div>
+  <span v-else>组件无法显示</span>
 </template>
 
 <script>
 import microApp from '@micro-zoe/micro-app';
-import { getSubAppPrefixFromRouteUrl, isSubApp, sendDataDown } from '../index';
+import {
+  getAppIsInConfig,
+  getSubAppPrefixFromRouteUrl,
+  isSubApp,
+  sendDataDown,
+} from '../index';
 import { MicroAppConfig, dataListener } from '../data';
+
+/** 递增顺序 */
+let microAppIndex = 0;
 
 /** name_path_props子应用prefix_name和其它值的分隔标识 */
 const splitTag = '_____';
@@ -94,16 +106,6 @@ export default {
    * 推导属性不用传：url, inline
    */
   props: {
-    /** 指定应用环境 */
-    _env: {
-      type: String,
-      default: '',
-    },
-    /** 子应用名称前缀, name不能重复，所以需要加前缀，可根据根据业务名称区分 */
-    _prefix: {
-      type: String,
-      default: '',
-    },
     /** 子应用名称 */
     _name: {
       type: String,
@@ -116,6 +118,16 @@ export default {
     _path: {
       type: String,
       required: true,
+    },
+    /** 指定应用环境 */
+    _env: {
+      type: String,
+      default: '',
+    },
+    /** 子应用名称前缀, name不能重复, 不传则自动生成前缀, 如果不需要前缀传个空字符串过来 */
+    _prefix: {
+      type: String,
+      required: false,
     },
     /** 默认路由，一般用`前缀/#/empty`做中转路由（hash模式），对应子应用需要添加这个路由 */
     _defaultPage: {
@@ -167,9 +179,9 @@ export default {
     };
   },
   computed: {
-    /** 子应用真实name（连前缀） */
+    /** 子应用真实name（连前缀, 默认: M[序号]_[应用名]） */
     nameWithPrefix() {
-      return this._prefix + this._name;
+      return (this._prefix ?? `M${microAppIndex++}_`) + this._name;
     },
     /** 子应用配置 */
     subAppSettting() {
@@ -212,6 +224,7 @@ export default {
     },
   },
   methods: {
+    getAppIsInConfig,
     /**
      * 重新渲染该组件
      */
@@ -231,9 +244,8 @@ export default {
     microAppMounted() {
       if (dataListener) microApp.addDataListener(this.nameWithPrefix, dataListener);
       this.timer = setTimeout(() => {
-        const subAppName = `${this._prefix}${this._name}`;
         /** 确保子应用真的渲染成功了 */
-        if (microApp.getAllApps().includes(subAppName)) {
+        if (microApp.getAllApps().includes(this.nameWithPrefix)) {
           const durationMS = Date.now() - this.appStartTimeStamp;
           const callback = () => {
             this.subAppStatus = 'mounted';
@@ -357,7 +369,8 @@ export default {
   },
   /** 销毁组件时销毁应用 */
   destroyed() {
-    microApp.unmountApp(this.nameWithPrefix);
+    if (microApp.getAllApps().includes(this.nameWithPrefix))
+      microApp.unmountApp(this.nameWithPrefix);
   },
 };
 </script>
