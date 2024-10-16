@@ -24,7 +24,11 @@
     :index="props.level"
   >
     <!-- //TODO 链接转换为主应用下的 -->
-    <a :href="props.menuInfo.path">{{ props.menuInfo.name }}</a>
+    <a
+      :href="props.menuInfo.path"
+      @click="(e) => e.preventDefault()"
+      >{{ props.menuInfo.name }}</a
+    >
   </el-menu-item>
 </template>
 
