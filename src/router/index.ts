@@ -55,6 +55,12 @@ export const baseRoutes: Array<RouteRecordRaw> = [
         meta: { title: 'reactComponent测试' },
       },
       {
+        path: '/demo/lowcodeEngine',
+        name: 'lowcodeEngine',
+        component: () => import('@/pages/demo/lowcodeEngine.vue'),
+        meta: { title: '低代码渲染器测试' },
+      },
+      {
         path: '/demo/vueFlow',
         name: 'vueFlow',
         component: () => import('@/pages/demo/vueFlow/index.vue'),

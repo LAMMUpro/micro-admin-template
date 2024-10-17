@@ -14,24 +14,31 @@
     "deploy": "s deploy -t s.master.yaml --use-local"
   },
   "dependencies": {
+    "@alilc/lowcode-datasource-fetch-handler": "^1.1.4",
+    "@alilc/lowcode-plugin-inject": "^1.1.2",
+    "@alilc/lowcode-react-renderer": "^1.1.2",
+    "@alilc/lowcode-utils": "^1.1.10",
     "@micro-zoe/micro-app": "1.0.0-rc.8",
-    "micro-app-utils": "workspace:*",
+    "@vue-flow/core": "^1.41.2",
     "element-plus": "2.7.8",
     "js-cookie": "^3.0.5",
-    "vue": "^3.5.1",
-    "vue-router": "^4.4.3",
+    "micro-app-utils": "workspace:*",
     "pinia": "^2.2.2",
     "pinia-plugin-persistedstate": "^4.0.1",
-    "vue3-lottie": "^3.3.1",
-    "@vue-flow/core": "^1.41.2",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "vue": "^3.5.1",
+    "vue-router": "^4.4.3",
+    "vue3-lottie": "^3.3.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@types/js-cookie": "^3.0.5",
     "@types/node": "^20.14.10",
+    "@types/react": "^18.3.10",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.2",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/test-utils": "^2.4.6",
     "eslint": "^9.6.0",
@@ -44,10 +51,7 @@
     "typescript-eslint": "^7.15.0",
     "vite": "^5.3.1",
     "vitest": "^1.6.0",
-    "vue-tsc": "^2.0.21",
-    "@types/react": "^18.3.10",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.2"
+    "vue-tsc": "^2.0.21"
   },
   "husky": {
     "hooks": {

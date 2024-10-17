@@ -38,6 +38,13 @@ export default defineConfig({
     port: CONSTS.PORT,
     host: '0.0.0.0',
     cors: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:9000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
   build: {
     outDir: 'build',
