@@ -22,7 +22,7 @@
     "@vue-flow/core": "^1.41.2",
     "element-plus": "2.7.8",
     "js-cookie": "^3.0.5",
-    "micro-app-utils": "workspace:*",
+    "micro-app-tools": "workspace:*",
     "pinia": "^2.2.2",
     "pinia-plugin-persistedstate": "^4.0.1",
     "react": "^18.3.1",

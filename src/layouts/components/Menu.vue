@@ -47,7 +47,7 @@ import MenuItem from './MenuItem.vue';
 import { MenuItemType } from '@/types/common';
 import { useRoute, useRouter } from 'vue-router';
 import { getSubAppPrefixFromRouteUrl } from '@/router/helper';
-import { MicroAppConfig } from 'micro-app-utils/data';
+import { MicroAppConfig } from 'micro-app-tools/data';
 import { subAppPath } from '@/pages/SubMicroApp.vue';
 import CONSTS from '@/utils/CONSTS';
 import { currentRouteFullName } from './RouteInfoBar.vue';

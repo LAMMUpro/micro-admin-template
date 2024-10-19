@@ -2,7 +2,7 @@ import { createApp, App, ref } from 'vue';
 import AppVue from './App.vue';
 import router from './router';
 import microApp from '@micro-zoe/micro-app';
-import { isTopApp } from 'micro-app-utils';
+import { isTopApp } from 'micro-app-tools';
 import UseSvg from '@/components/use-svg/index.vue';
 import CONSTS from './utils/CONSTS';
 /** 样式 */
@@ -26,18 +26,18 @@ import 'element-plus/es/components/tree/style/index';
 import 'element-plus/es/components/tree-v2/style/index';
 import 'element-plus/es/components/tree-select/style/index';
 
-import { MicroAppInit } from 'micro-app-utils';
+import { MicroAppInit } from 'micro-app-tools';
 import {
   generateDataListener,
   generateGlobalDataListener,
-} from 'micro-app-utils/listener';
+} from 'micro-app-tools/listener';
 import {
   MicroComponentInstanceMap,
   MicroComponentMap,
   MicroComponentSlotMap,
-} from 'micro-app-utils/data';
-import { MicroComponentPropsMap } from 'micro-app-utils/data';
-import { renderComponent } from 'micro-app-utils/vue3/renderComponent';
+} from 'micro-app-tools/data';
+import { MicroComponentPropsMap } from 'micro-app-tools/data';
+import { renderComponent } from 'micro-app-tools/vue3/renderComponent';
 import { initRouteInterceptor } from './router/interceptor';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';

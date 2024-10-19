@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import ReactComponent from 'micro-app-utils/vue3/ReactComponent.vue';
+import ReactComponent from 'micro-app-tools/vue3/ReactComponent.vue';
 import reactCompDemo from './reactCompDemo';
 </script>
 

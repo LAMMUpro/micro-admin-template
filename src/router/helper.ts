@@ -1,6 +1,6 @@
 import { MenuItemType, MenuOriginType } from '@/types/common';
 import Config from '@/utils/Config';
-import { subAppLocation } from 'micro-app-utils';
+import { subAppLocation } from 'micro-app-tools';
 
 /**
  * 跳转到PC官网

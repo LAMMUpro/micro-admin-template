@@ -1,4 +1,4 @@
-import { subAppLocation } from 'micro-app-utils';
+import { subAppLocation } from 'micro-app-tools';
 
 /** 不同环境url包含的字符串, 用于判断当前是测试环境还是正式环境, 要求不能相互匹配!!! */
 const urlSubStringInfo = {

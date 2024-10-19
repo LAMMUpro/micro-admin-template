@@ -24,7 +24,7 @@
 import UseSuspense from '@/components/use-suspense/index.vue';
 import LoginDialog from '@/pages/components/LoginDialog.vue';
 import { shallowReactive } from 'vue';
-import { isSubApp } from 'micro-app-utils';
+import { isSubApp } from 'micro-app-tools';
 import { ElConfigProvider } from 'element-plus';
 
 const dataLoginDialog = shallowReactive({

@@ -1,7 +1,7 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
 import { ref } from 'vue';
 import CONSTS from '@/utils/CONSTS';
-import { MicroAppConfig } from 'micro-app-utils/data';
+import { MicroAppConfig } from 'micro-app-tools/data';
 
 /** 工作台路由(默认路由) */
 export const adminWorkbenchRoute = {

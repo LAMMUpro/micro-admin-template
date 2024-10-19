@@ -29,7 +29,7 @@
       "node",
       "element-plus/global",
       "vitest/globals",
-      "micro-app-utils/types/global.d.ts"
+      "micro-app-tools/types/global.d.ts"
     ],
     "baseUrl": "./",
     "paths": {
@@ -43,9 +43,9 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "micro-app-utils/**/*.vue",
-    "micro-app-utils/**/*.ts",
-    "micro-app-utils/**/*.tsx",
+    "micro-app-tools/**/*.vue",
+    "micro-app-tools/**/*.ts",
+    "micro-app-tools/**/*.tsx",
     "packages/**/*",
   ]
 }

@@ -57,7 +57,7 @@ apps/*
 !apps/README.md
 
 # 工具库tsc编译后的产物
-packages/micro-app-utils/**/*.js
+packages/micro-app-tools/**/*.js
 # 这个配置后续还需要优化
-packages/micro-app-utils/**/*.d.ts
-packages/micro-app-utils/**/*.jsx
+packages/micro-app-tools/**/*.d.ts
+packages/micro-app-tools/**/*.jsx

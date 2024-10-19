@@ -31,8 +31,8 @@ git clone https://github.com/LAMMUpro/subapp-vue2-template.git
 npm i pnpm -g
 # 安装依赖
 pnpm i
-# 手动tsc编译micro-app-utils库（后续会优化此步骤）
-cd ./micro-admin-template/packages/micro-app-utils
+# 手动tsc编译micro-app-tools库（后续会优化此步骤）
+cd ./micro-admin-template/packages/micro-app-tools
 npm run build # 如果提示tsc不存在则运行npm install -g typescript
 # 运行各个项目
 pnpm dev
@@ -47,7 +47,7 @@ pnpm dev
 
 - vitest 测试框架 ✔
 - monorepo 共享 microapp 工具 / shared ... ✔
-- micro-app-utils 基于 micro-app 的二次封装 ✔
+- micro-app-tools 基于 micro-app 的二次封装 ✔
 - shared 常用模块共享 ✔
 - sass ✔
 - router ✔
