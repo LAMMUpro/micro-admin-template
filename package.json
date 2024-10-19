@@ -13,6 +13,13 @@
     "prepare": "husky",
     "deploy": "s deploy -t s.master.yaml --use-local"
   },
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "apps/*"
+    ],
+    "nohoist": []
+  },
   "dependencies": {
     "@alilc/lowcode-datasource-fetch-handler": "^1.1.4",
     "@alilc/lowcode-plugin-inject": "^1.1.2",
@@ -22,7 +29,6 @@
     "@vue-flow/core": "^1.41.2",
     "element-plus": "2.7.8",
     "js-cookie": "^3.0.5",
-    "micro-app-tools": "workspace:*",
     "pinia": "^2.2.2",
     "pinia-plugin-persistedstate": "^4.0.1",
     "react": "^18.3.1",
@@ -32,6 +38,7 @@
     "vue3-lottie": "^3.3.1"
   },
   "devDependencies": {
+    "moment": "2.24.0",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@types/js-cookie": "^3.0.5",
@@ -47,7 +54,7 @@
     "husky": "^9.1.2",
     "less": "^4.2.0",
     "local-tool": "^1.1.2",
-    "sass": "^1.56.0",
+    "sass": "~1.56.0",
     "typescript": "^5.2.2",
     "typescript-eslint": "^7.15.0",
     "vite": "^5.3.1",
