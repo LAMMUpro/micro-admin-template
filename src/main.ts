@@ -233,6 +233,7 @@ MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
      * 主应用组件
      */
     Lottie: Vue3Lottie,
+    UseSchemaRender: () => import('@/components/use-schema-render/index.vue'),
     UseSvg: UseSvg,
     UseTinymce: () => import('@/components/use-tinymce/index.vue'),
     /**

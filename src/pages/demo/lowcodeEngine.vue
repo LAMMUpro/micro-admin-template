@@ -1,17 +1,15 @@
 <template>
   <div>
     <section>
-      <ReactComponent
-        :_is="UseSchemaRender"
+      <UseSchemaRender
         :nodeId="2"
-      ></ReactComponent>
+      ></UseSchemaRender>
     </section>
   </div>
 </template>
 
 <script lang="ts" setup>
-import ReactComponent from 'micro-app-tools/vue3/ReactComponent.vue';
-import UseSchemaRender from '@/components/use-schema-render';
+import UseSchemaRender from '@/components/use-schema-render/index.vue';
 </script>
 
 <style lang="scss" scoped></style>

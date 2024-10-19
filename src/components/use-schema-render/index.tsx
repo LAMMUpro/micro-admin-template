@@ -14,7 +14,7 @@ import { generateRemoteHandleMap } from './lowcode-utils/index.esm';
 /** 只赋值一次上下文! */
 let isSeted = false;
 
-const UseSchemaRender = (props: { nodeId: number }) => {
+const SchemaRender = (props: { nodeId: number }) => {
   useEffect(() => {
     init();
   }, []);
@@ -81,4 +81,4 @@ const UseSchemaRender = (props: { nodeId: number }) => {
   );
 };
 
-export default UseSchemaRender;
+export default SchemaRender;
