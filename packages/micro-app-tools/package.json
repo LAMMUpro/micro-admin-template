@@ -1,8 +1,8 @@
 {
   "name": "micro-app-tools",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "基于micro-app封装的工具函数",
-  "main": "index.ts",
+  "main": "index.js",
   "type": "module",
   "exports": {
     ".": "./index.js",
@@ -18,8 +18,8 @@
     "./vue2/ReactComponent.vue": "./vue2/ReactComponent.vue",
     "./vue2/MicroApp.vue": "./vue2/MicroApp.vue",
     "./vue2/MicroComponent.vue": "./vue2/MicroComponent.vue",
-    "./react18/MicroComponent": "./react18/MicroComponent.js",
-    "./react18/MicroApp": "./react18/MicroApp.js"
+    "./react18/MicroComponent": "./react18/MicroComponent.jsx",
+    "./react18/MicroApp": "./react18/MicroApp.jsx"
   },
   "scripts": {
     "build": "tsc",

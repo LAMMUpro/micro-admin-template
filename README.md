@@ -62,3 +62,13 @@ pnpm dev
 - vue2 子应用
 - MicroApp 封装
   - init 显式初始化 ✔
+
+
+## micro-app-tools发包
+
+```sh
+npm config set registry https://registry.npmjs.com
+npm login
+npm publish --access=public
+npm config set registry https://registry.npmmirror.com
+```
