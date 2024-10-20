@@ -1,6 +1,6 @@
 {
   "name": "micro-app-tools",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "基于micro-app封装的工具函数",
   "main": "index.ts",
   "type": "module",
