@@ -6,6 +6,19 @@ import {
   SubAppSetting,
 } from './types';
 
+/** 
+ * 微前端环境初始化函数
+ * 为了把初始化放到MicroApp使用时
+ */
+export let microAppInitFunction = () => {};
+
+/**
+ * 设置微前端环境初始化函数, 传入的函数将在MicroApp使用时条件执行
+ */
+export function setMicroAppInitFunction(func: () => void) {
+  microAppInitFunction = func;
+}
+
 /**
  * 主应用派发组件暂存
  * @example { UseSvg: UseSvg }

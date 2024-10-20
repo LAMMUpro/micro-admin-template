@@ -5,8 +5,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { MutableRefObject } from 'react';
 import microApp from '@micro-zoe/micro-app';
 
-import { MicroAppConfig, dataListener } from '../data';
-import { getSubAppPrefixFromRouteUrl, isSubApp, sendDataDown } from '../index';
+import { MicroAppConfig, dataListener, microAppInitFunction } from '../data';
+import { getAppIsInConfig, getSubAppPrefixFromRouteUrl, isSubApp, sendDataDown } from '../index';
 import { SubAppSetting } from '../types';
 
 interface MicroAppProps {
@@ -16,6 +16,8 @@ interface MicroAppProps {
   _prefix?: string;
   /** 子应用名称 */
   _name?: string;
+  /** 强制初始化微前端环境 (默认顶级、二级应用会自动初始化微前端环境) */
+  _forceInit?: boolean
   /**
    * 要跳转的路径, 一般不要带查询参数
    * @example /#/ExportComponent/contract/ContractDetailByUUID
@@ -49,10 +51,21 @@ interface MicroAppProps {
   config?: React.FC;
 }
 
+let isInited = false;
+
 const MicroApp: React.FC<never> = (props: MicroAppProps) => {
+  useMemo(() => {
+    if (isInited) return;
+    if (getAppIsInConfig() || props._forceInit) {
+      isInited = true;
+      microAppInitFunction();
+    }
+  }, []);
+
   const {
     _name = '',
     _prefix = '',
+    _forceInit = false,
     _destroy,
     _disableScopecss,
     _clearData,
@@ -61,10 +74,10 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
     _path = '',
     _keepAlive,
     _env,
-    _mounted = () => {},
-    _unmount = () => {},
-    _error = () => {},
-    _reloadApp = () => {},
+    _mounted = () => { },
+    _unmount = () => { },
+    _error = () => { },
+    _reloadApp = () => { },
     ...otherProps
   } = props;
 

@@ -1,7 +1,7 @@
 <template>
   <div
     class="__micro-app-container __content"
-    v-if="getAppIsInConfig()"
+    v-if="getAppIsInConfig() || _forceInit"
   >
     <!-- micro-app子应用 -->
     <component
@@ -91,10 +91,13 @@ import {
   isSubApp,
   sendDataDown,
 } from '../index';
-import { MicroAppConfig, dataListener } from '../data';
+import { MicroAppConfig, dataListener, microAppInitFunction } from '../data';
 
 /** 递增顺序 */
 let microAppIndex = 0;
+
+/** 微前端环境是否已经初始化 */
+let isInited = false;
 
 /** name_path_props子应用prefix_name和其它值的分隔标识 */
 const splitTag = '_____';
@@ -118,6 +121,11 @@ export default {
     _path: {
       type: String,
       required: true,
+    },
+    /** 强制初始化微前端环境 (默认顶级、二级应用会自动初始化微前端环境) */
+    _forceInit: {
+      type: Boolean,
+      default: false,
     },
     /** 指定应用环境 */
     _env: {
@@ -200,6 +208,18 @@ export default {
     name_path_props() {
       return this.nameWithPrefix + splitTag + this._path + JSON.stringify(this.$attrs);
     },
+  },
+  /**
+   * 初始化微前端环境
+   * 1. 前两层应用
+   * 2. 带_forceInit参数
+   */
+  beforeMount() {
+    if (isInited) return;
+    if (getAppIsInConfig() || this._forceInit) {
+      isInited = true;
+      microAppInitFunction();
+    }
   },
   mounted() {
     this.subAppStatus = this._name ? 'loading' : 'unMounted';
