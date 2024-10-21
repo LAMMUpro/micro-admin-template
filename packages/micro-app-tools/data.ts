@@ -1,12 +1,7 @@
-import { App, ref } from 'vue';
-import {
-  BaseObj,
-  MicroAppComponentProps,
-  MicroComponentType,
-  SubAppSetting,
-} from './types';
+import { App } from 'vue';
+import { BaseObj, MicroComponentType, SubAppSetting } from './types';
 
-/** 
+/**
  * 微前端环境初始化函数
  * 为了把初始化放到MicroApp使用时
  */
@@ -83,32 +78,3 @@ export const ReactMicroComponentSlotInfoMap: BaseObj<{
  * 派发组件所有props数据暂存（主应用使用）
  */
 export const MicroComponentPropsMap: BaseObj<any> = {};
-
-/**
- * 主应用传递过来的组件参数，可当作props用（包括事件）
- * 【数据暂存(应用以公共组件模式打开)】
- */
-function getDefaultMicroAppComponentProps(): MicroAppComponentProps {
-  return {
-    subAppPath: '',
-    eventType: '',
-    props: {},
-  };
-}
-export const microAppComponentProps = ref<MicroAppComponentProps>(
-  getDefaultMicroAppComponentProps()
-);
-
-/**
- * 组件对应的path
- * 【数据暂存(应用以公共组件模式打开)】
- */
-export const microAppComponentPath = ref('');
-
-/**
- * 清除数据缓存
- */
-export function resetMicroAppData() {
-  microAppComponentProps.value = getDefaultMicroAppComponentProps();
-  microAppComponentPath.value = '';
-}

@@ -26,11 +26,11 @@ import 'element-plus/es/components/tree/style/index';
 import 'element-plus/es/components/tree-v2/style/index';
 import 'element-plus/es/components/tree-select/style/index';
 
-import { MicroAppInit } from 'micro-app-tools';
 import {
+  TopMicroAppInit,
   generateDataListener,
   generateGlobalDataListener,
-} from 'micro-app-tools/listener';
+} from 'micro-app-tools/vue3/index';
 import {
   MicroComponentInstanceMap,
   MicroComponentMap,
@@ -222,7 +222,7 @@ window._subAppSettingList_ = [
 ];
 
 /** 初始化微前端配置 */
-MicroAppInit<'localhost' | 'test' | 'pre' | 'master'>({
+TopMicroAppInit({
   env: process.env.NODE_ENV === 'development' ? 'localhost' : 'master',
   tagName: CONSTS.microAppTagName,
   ElConfigProvider,
