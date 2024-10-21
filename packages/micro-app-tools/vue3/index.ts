@@ -3,10 +3,9 @@
  */
 
 import { SubMicroAppInit, isTopApp } from '../index';
-import { MicroAppComponentProps, MicroComponentType } from 'types';
 import { defineAsyncComponent, defineComponent, h, ref } from 'vue';
-import { BaseObj, GlobalListenerCallbacks, ListenerCallbacks } from '../types';
-import { MicroComponentMap, setElConfigProvider } from 'data';
+import { MicroAppComponentProps, MicroComponentType, BaseObj, GlobalListenerCallbacks, ListenerCallbacks } from '../types';
+import { MicroComponentMap, setElConfigProvider } from '../data';
 
 /**
  * 主应用传递过来的组件参数，可当作props用（包括事件）
