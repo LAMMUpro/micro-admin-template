@@ -18,7 +18,9 @@
       "packages/*",
       "apps/*"
     ],
-    "nohoist": []
+    "nohoist": [
+      "subapp-vue2-webpack-template/strip-ansi"
+    ]
   },
   "dependencies": {
     "@alilc/lowcode-datasource-fetch-handler": "^1.1.4",
