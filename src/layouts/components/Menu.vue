@@ -1,5 +1,5 @@
 <template>
-  <div class="__menu">
+  <div class="__menu" v-loading="globalStore.menusLoading">
     <div class="__search-btn">
       <el-input
         clearable

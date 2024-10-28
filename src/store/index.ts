@@ -10,11 +10,13 @@ const useGlobalStore = defineStore({
   id: 'Store_Global',
   state: (): {
     menus: Array<MenuItemType>;
+    menusLoading: Boolean;
     permissions: Array<string>;
     userInfo: UserInfoType;
   } => ({
     /** 菜单 */
     menus: [],
+    menusLoading: false,
     /** 权限 */
     permissions: [],
     /** 用户信息 */
@@ -43,7 +45,9 @@ const useGlobalStore = defineStore({
 
     /** 加载菜单 */
     async loadMenu() {
+      this.menusLoading = true;
       const res = await getMenuTree();
+      this.menusLoading = false;
       // const res = await getUserMenus();
       if (res.code == 1 && res.data) {
         const _menus = res.data || [];
