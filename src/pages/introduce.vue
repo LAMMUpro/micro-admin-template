@@ -10,6 +10,16 @@
     </section>
 
     <section class="-m-card">
+      <h2 className="-m-title">模版特色功能</h2>
+      <p>
+        模版目前开发了几个比较`"超前"`的功能:<br/>
+        1. 派发组件<b>MicroComponent</b>支持主应用<b>下发组件</b>给子应用使用, <b>兼容vue3/vue2/react</b>, 同时<b>支持作用域插槽</b><br/>
+        2. 封装的<b>ReactComponent</b>支持在<b>vue的环境下直接使用React组件</b>, 包括阿里<b>低代码渲染器</b>这样复杂的React组件<br/>
+        3. 微前端和低代码<b>混合开发</b>, 在代码中使用低代码渲染器渲染低代码页面, 再低代码中可以反向通过<b>MicroApp</b>加载子应用
+      </p>
+    </section>
+
+    <section class="-m-card">
       <span className="-m-title">项目组成</span>
       <p>
         该demo由5个独立的项目仓库组成，其中一个主应用，4个不同技术栈的子应用<br />
