@@ -142,7 +142,7 @@ function openGithubLink() {
       .action-item {
         padding-top: 4px;
         font-size: 10px;
-        margin-left: 12px;
+        margin: 0 6px;
         cursor: pointer;
         display: flex;
         flex-direction: column;
