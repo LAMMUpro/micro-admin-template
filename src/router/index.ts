@@ -15,6 +15,8 @@ export const adminWorkbenchRoute = {
 export const baseRoutes: Array<RouteRecordRaw> = [
   {
     path: '/',
+    // 访问根路径，重定向到/introduce（必须配在第一个）
+    redirect: '/introduce',
     name: 'Layout_common',
     component: () => import('@/layouts/index.vue'),
     children: [
