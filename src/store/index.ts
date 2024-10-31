@@ -10,7 +10,7 @@ const useGlobalStore = defineStore({
   id: 'Store_Global',
   state: (): {
     menus: Array<MenuItemType>;
-    menusLoading: Boolean;
+    menusLoading: boolean;
     permissions: Array<string>;
     userInfo: UserInfoType;
   } => ({
@@ -45,9 +45,17 @@ const useGlobalStore = defineStore({
 
     /** 加载菜单 */
     async loadMenu() {
+      console.log('menusLoading', this.menusLoading);
       this.menusLoading = true;
+      console.log('menusLoading', this.menusLoading);
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true);
+        }, 3000);
+      });
       const res = await getMenuTree();
       this.menusLoading = false;
+      console.log('menusLoading', this.menusLoading);
       // const res = await getUserMenus();
       if (res.code == 1 && res.data) {
         const _menus = res.data || [];

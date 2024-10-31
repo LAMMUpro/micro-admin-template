@@ -1,5 +1,5 @@
 <template>
-  <div class="__menu" v-loading="globalStore.menusLoading">
+  <div class="__menu">
     <div class="__search-btn">
       <el-input
         clearable
@@ -40,6 +40,7 @@ import { ElScrollbar, ElMenu, ElInput, ElMessage } from 'element-plus';
 import 'element-plus/es/components/scrollbar/style/index';
 import 'element-plus/es/components/menu/style/index';
 import 'element-plus/es/components/input/style/index';
+import 'element-plus/es/components/loading/style/index';
 import MenuItem from './MenuItem.vue';
 import { MenuItemType } from '@/types/common';
 import { useRoute, useRouter } from 'vue-router';
@@ -50,6 +51,8 @@ import CONSTS from '@/utils/CONSTS';
 import { currentRouteFullName } from './RouteInfoBar.vue';
 import useGlobalStore from '@/store';
 import { tourStepsRefs } from '@/layouts/hook';
+import { ElLoading } from 'element-plus';
+import { nextTick } from 'vue';
 
 const globalStore = useGlobalStore();
 const route = useRoute();
@@ -60,6 +63,26 @@ const menuKeyWord = ref('');
 
 /** 默认展开的父级菜单 */
 const defaultOpenMenuList = ref(['0', '2']);
+
+/** loading实例, v-loading没生效，不知道怎么手动注册 */
+let loadingInstance: ReturnType<typeof ElLoading.service> | undefined;
+
+watch(
+  () => globalStore.menusLoading,
+  () => {
+    if (globalStore.menusLoading) {
+      nextTick(() => {
+        /** 不加nextTick对应的dom还没渲染 */
+        loadingInstance = ElLoading.service({
+          target: '.__menu',
+        });
+      });
+    } else {
+      loadingInstance?.close();
+    }
+  },
+  { immediate: true }
+);
 
 watch(
   () => menuKeyWord.value,
