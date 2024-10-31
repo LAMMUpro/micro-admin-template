@@ -1,24 +1,19 @@
-import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
-import { forwardRefWrap } from 'micro-app-tools/react18/utils';
+import React, { useState, useEffect, useRef, RefObject } from 'react';
 
-const reactCompDemo = forwardRef(function Comp(props: any, ref: any) {
+const reactCompDemo = () => {
 
-  useImperativeHandle(ref, () => {
-    return {
-      // 暴露的方法
-    };
-  });
+  const divRef = useRef<HTMLDivElement | undefined>(null);
 
   return (
     <>
-      <div style={{ height: '500px', position: 'relative' }}>
-        <Canvas></Canvas>
+      <div ref={divRef as any} style={{ height: '360px', position: 'relative' }}>
+        <Canvas divRef={divRef}></Canvas>
       </div>
     </>
   );
-})
+}
 
-export default forwardRefWrap(reactCompDemo);
+export default reactCompDemo;
 
 
 interface Position {
@@ -26,8 +21,8 @@ interface Position {
   y: number
 }
 
-function Canvas() {
-  const pos1 = usePointerPosition();
+function Canvas({ divRef }: any) {
+  const pos1 = usePointerPosition(divRef);
   const pos2 = useDelayedValue(pos1, 100);
   const pos3 = useDelayedValue(pos2, 200);
   const pos4 = useDelayedValue(pos3, 100);
@@ -60,14 +55,19 @@ function Dot({ position, opacity }: { position: Position, opacity: number }) {
   );
 }
 
-function usePointerPosition() {
+function usePointerPosition(divRef: RefObject<HTMLDivElement | undefined>) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   useEffect(() => {
+
     function handleMove(e: any) {
-      setPosition({ x: e.clientX, y: e.clientY });
+      setPosition({ x: e.offsetX, y: e.offsetY });
     }
-    window.addEventListener('pointermove', handleMove);
-    return () => window.removeEventListener('pointermove', handleMove);
+
+    divRef.current?.addEventListener('pointermove', handleMove);
+
+    return () => {
+      divRef.current?.removeEventListener('pointermove', handleMove);
+    }
   }, []);
   return position;
 }
