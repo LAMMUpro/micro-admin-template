@@ -12,6 +12,14 @@
         placeholder="请输入菜单关键词"
         size="small"
       ></el-input>
+      <el-button
+        class="hidden lt-md:(flex m-l-2)"
+        type="default"
+        size="small"
+        :disabled="!menuKeyWord"
+        @click="menuKeyWord = ''"
+        >重置输入框</el-button
+      >
     </div>
     <el-scrollbar>
       <el-menu
@@ -41,7 +49,7 @@ export const menuActiveIndex = ref('');
 
 <script lang="ts" setup>
 import { ref, watch, computed } from 'vue';
-import { ElScrollbar, ElMenu, ElInput, ElMessage } from 'element-plus';
+import { ElScrollbar, ElMenu, ElInput, ElMessage, ElButton } from 'element-plus';
 import 'element-plus/es/components/scrollbar/style/index';
 import 'element-plus/es/components/menu/style/index';
 import 'element-plus/es/components/input/style/index';
