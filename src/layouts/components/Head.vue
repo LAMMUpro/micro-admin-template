@@ -11,7 +11,8 @@
       <span class="m-l-1.5 font-size-4.75 font-600">MicroAdmin</span>
     </div>
     <div class="__right flex items-center">
-      <LinkCardList class="lt-md:(hidden)"></LinkCardList>
+      <!-- 设备小于xs时隐藏 -->
+      <LinkCardList class="lt-xs:(hidden)"></LinkCardList>
       <img
         class="w-7.5 h-7.5 m-r-2.5 b-rd-1/2"
         :src="globalStore.userInfo.avatar"

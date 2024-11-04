@@ -1,7 +1,7 @@
 <template>
   <div class="__menu b-r-#dcdfe6 b-r-1 b-r-solid">
     <div class="hidden lt-md:(block p-x-6 p-t-4 p-b-1)">
-      <LinkCardList></LinkCardList>
+      <LinkCardList direction="row"></LinkCardList>
     </div>
     <div
       class="sticky top-0 bg-white p-y-1.5 p-x-2 z-1 shadow-[0_10px_20px_#9d9d9d1f] lt-md:(flex p-x-6 p-y-4)"
