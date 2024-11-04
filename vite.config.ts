@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import CONSTS from './src/utils/CONSTS';
 import { svgBuilder } from './src/components/use-svg/loader';
+import UnoCSS from 'unocss/vite';
 
 export default defineConfig({
   base: `/${CONSTS.PREFIX_URL}/`,
@@ -17,6 +18,7 @@ export default defineConfig({
       },
     }),
     react(),
+    UnoCSS(),
     /** svg处理 */
     svgBuilder('./src/assets/svg/'),
   ],

@@ -65,6 +65,7 @@ yarn dev
 - vue2 子应用 ✔
 - MicroApp 封装 ✔
   - init 显式初始化 ✔
+- UnoCSS ✔
 
 ## micro-app-tools 发包
 

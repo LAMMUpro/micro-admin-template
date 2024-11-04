@@ -7,6 +7,9 @@ import UseSvg from '@/components/use-svg/index.vue';
 import CONSTS from './utils/CONSTS';
 /** 样式 */
 import '@/style/index.scss';
+import 'virtual:uno.css';
+import '@unocss/reset/tailwind.css';
+import '@unocss/reset/tailwind-compat.css';
 import {
   ElConfigProvider,
   ElScrollbar,
@@ -57,12 +60,18 @@ import { copyText, isMobile } from './utils';
         cancelButtonText: '我就看看',
         type: 'warning',
         closeOnClickModal: false,
-      }).then(() => {
-        copyText(location.href, () => ElMessage.success('已复制网站链接，请用电脑或平板观看'), () =>  ElMessage.error('复制失败，请手动复制'));
-      }).catch(() => {
-        ElMessage.warning('移动端竖屏观看效果更佳');
       })
-    })
+        .then(() => {
+          copyText(
+            location.href,
+            () => ElMessage.success('已复制网站链接，请用电脑或平板观看'),
+            () => ElMessage.error('复制失败，请手动复制')
+          );
+        })
+        .catch(() => {
+          ElMessage.warning('移动端竖屏观看效果更佳');
+        });
+    });
   }
 })();
 
