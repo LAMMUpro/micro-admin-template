@@ -139,6 +139,30 @@ if (!Config.isLocalhost) {
   startSharedWorkerForVersionUpdateCheck();
 }
 
+window
+  .matchMedia('(min-width: 320px) and (max-width: 640px)')
+  .addEventListener('change', (event) => {
+    if (event.matches) {
+      console.log('当前是xs');
+    }
+  });
+
+window
+  .matchMedia('(min-width: 640px) and (max-width: 768px)')
+  .addEventListener('change', (event) => {
+    if (event.matches) {
+      console.log('当前是sm');
+    }
+  });
+
+window
+  .matchMedia('(min-width: 768px) and (max-width: 1024px)')
+  .addEventListener('change', (event) => {
+    if (event.matches) {
+      console.log('当前是lg');
+    }
+  });
+
 /** microApp数据监听回调 */
 const dataListener = generateDataListener({
   micro_component_request: ({

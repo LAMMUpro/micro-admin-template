@@ -113,19 +113,24 @@ export function getLottieJsonLink(
  * @param success 成功回调
  * @param fail 出错回调
  */
-export function copyText(text: string, success?: () => void, fail?: (res: string) => void) {
+export function copyText(
+  text: string,
+  success?: () => void,
+  fail?: (res: string) => void
+) {
   text = text.replace(/(^\s*)|(\s*$)/g, '');
   if (!text) {
     fail && fail('复制的内容不能为空！');
     return;
   }
   const id = 'the-clipboard';
-  let clipboard = (document.getElementById(id) as HTMLTextAreaElement);
+  let clipboard = document.getElementById(id) as HTMLTextAreaElement;
   if (!clipboard) {
     clipboard = document.createElement('textarea');
     clipboard.id = id;
     clipboard.readOnly = true;
-    clipboard.style.cssText = 'font-size: 15px; position: fixed; top: -1000%; left: -1000%;';
+    clipboard.style.cssText =
+      'font-size: 15px; position: fixed; top: -1000%; left: -1000%;';
     document.body.appendChild(clipboard);
   }
   clipboard.value = text;
@@ -137,4 +142,59 @@ export function copyText(text: string, success?: () => void, fail?: (res: string
   } else {
     fail && fail('复制失败');
   }
+}
+
+/**
+ * 防抖函数
+ * @param fn 执行函数
+ * @param delay 延时（ms）
+ * @returns 防抖后的函数
+ */
+export function debounce(fn: Function, delay: number = 500) {
+  let timer: number | undefined;
+  return function (this: any, ...args: Array<any>) {
+    const context = this;
+    window.clearTimeout(timer);
+    timer = window.setTimeout(function () {
+      fn.apply(context, args);
+      timer = undefined;
+    }, delay);
+  };
+}
+
+/**
+ * 节流函数
+ * @param fn 执行函数
+ * @param delay 延时（ms）
+ */
+export function throttle(fn: Function, delay: number = 500) {
+  let currentTime = Date.now();
+  return function (this: any, ...args: Array<any>) {
+    const context = this;
+    const nowTime = Date.now();
+    if (nowTime - currentTime > delay) {
+      fn.apply(context, args);
+      currentTime = Date.now();
+    }
+  };
+}
+
+/**
+ * 添加window.resize监听事件
+ */
+export function addResizeEventListener(
+  /** 回调函数，内部自动做了防抖 */
+  cb: (event: Event) => void,
+  options?: {
+    /** 防抖间隔 */
+    delay: number;
+  }
+) {
+  const { delay } = { ...options, delay: 300 };
+  const func = debounce(cb, delay);
+  window.addEventListener('resize', func);
+
+  return () => {
+    window.removeEventListener('resize', func);
+  };
 }
