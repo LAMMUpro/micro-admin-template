@@ -56,6 +56,8 @@
 <script lang="ts">
 /** 子应用滚动容器ref */
 export const subAppScrollRef = ref<InstanceType<typeof ElScrollbar>>();
+/** 是否显示侧边菜单，移动端用 */
+export const isShowMenu = ref(false);
 </script>
 
 <script lang="ts" setup>
@@ -65,9 +67,6 @@ import RouteInfoBar from './components/RouteInfoBar.vue';
 import { ElScrollbar } from 'element-plus';
 import 'element-plus/es/components/scrollbar/style/index';
 import { ref } from 'vue';
-
-/** 是否显示侧边菜单，移动端用 */
-const isShowMenu = ref(false);
 </script>
 
 <style lang="scss" scoped>

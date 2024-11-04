@@ -5,6 +5,7 @@
   >
     <div
       class="action-item"
+      v-show="isShowIntroduceLink"
       @click="toIntroducePage()"
     >
       <use-svg
@@ -40,11 +41,21 @@
 </template>
 
 <script lang="ts" setup>
+import { isPhone } from '@/hook';
 import { tourStepsRefs } from '@/layouts/hook';
 import router from '@/router';
+import { isShowMenu } from '../index.vue';
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
+
+/** 是否显示跳转介绍页链接 */
+const isShowIntroduceLink = computed(() => {
+  return useRoute().name !== 'introduce';
+});
 
 /** 跳到介绍页 */
 function toIntroducePage() {
+  if (isPhone) isShowMenu.value = false;
   router.push('/introduce');
 }
 
@@ -63,7 +74,6 @@ function openGithubLink() {
 .action-list {
   .action-item {
     --uno: p-t-1 font-size-2.5 m-x-1.5 cursor-pointer flex flex-col items-center c-gray lt-md:(flex-row font-size-4 m-x-2);
-
     &:hover {
       --uno: font-800 c-#2b87ff scale-112;
     }
