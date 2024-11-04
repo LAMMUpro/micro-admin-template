@@ -1,5 +1,5 @@
 <template>
-  <section class="__route-info-bar">
+  <section>
     <el-breadcrumb
       separator="/"
       separator-class="el-icon-arrow-right"
@@ -31,8 +31,3 @@ const nameList = computed(() => {
   return currentRouteFullName.value.slice(1).split('/');
 });
 </script>
-
-<style lang="scss" scoped>
-.__route-info-bar {
-}
-</style>

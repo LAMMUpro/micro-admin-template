@@ -1,16 +1,18 @@
 <template>
-  <div class="__head">
-    <div class="__logo-div">
+  <div
+    class="__head h-12.5 bg-white w-full z-2 flex items-center justify-between p-r-5 shadow-[0_1px_4px_rgb(169_169_169/50%)]"
+  >
+    <div class="m-l-2 flex justify-center items-center">
       <img
-        class="__logo"
+        class="w-10 h-10"
         src="/favicon.ico"
         alt="logo"
       />
-      <span class="__name">MicroAdmin</span>
+      <span class="m-l-1.5 font-size-4.75 font-600">MicroAdmin</span>
     </div>
-    <div class="__right">
+    <div class="__right flex items-center">
       <div
-        class="action-list"
+        class="action-list flex m-r-7.5 lt-md:(hidden)"
         :ref="(ref: any) => tourStepsRefs[0] = ref"
       >
         <div
@@ -18,6 +20,7 @@
           @click="toIntroducePage()"
         >
           <use-svg
+            class="m-t-.5"
             name="docs-question"
             size="18px"
           ></use-svg>
@@ -28,6 +31,7 @@
           @click="openDocsLink()"
         >
           <use-svg
+            class="m-t-.5"
             name="docs-question"
             size="18px"
           ></use-svg>
@@ -38,6 +42,7 @@
           @click="openGithubLink()"
         >
           <use-svg
+            class="m-t-.5"
             name="Github"
             size="18px"
           ></use-svg>
@@ -45,12 +50,12 @@
         </div>
       </div>
       <img
-        class="__avatar"
+        class="w-7.5 h-7.5 m-r-2.5 b-rd-1/2"
         :src="globalStore.userInfo.avatar"
         alt="avatar"
       />
       <el-dropdown>
-        <div class="__nickname">
+        <div class="__nickname cursor-pointer flex items-center font-size-3.5">
           <span>{{ globalStore.userInfo.name }}</span>
           <use-svg name="arrow-bottom" />
         </div>
@@ -108,68 +113,18 @@ function openGithubLink() {
 
 <style lang="scss" scoped>
 .__head {
-  height: 50px;
-  background-color: white;
-  width: 100%;
-  box-shadow: 0 1px 4px rgb(169 169 169 / 50%);
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-right: 20px;
-  .__logo-div {
-    width: 180px;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    padding: 0 20px 0 10px;
-    .__logo {
-      width: 40px;
-      height: 40px;
-    }
-    .__name {
-      margin-left: 6px;
-      font-size: 19px;
-      font-weight: 600;
-    }
-  }
   .__right {
-    display: flex;
-    align-items: center;
     .action-list {
-      display: flex;
-      margin-right: 30px;
       .action-item {
-        padding-top: 4px;
-        font-size: 10px;
-        margin: 0 6px;
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        color: gray;
+        --uno: p-t-1 font-size-2.5 m-x-1.5 cursor-pointer flex flex-col items-center
+          c-gray;
 
         &:hover {
-          transform: scale(1.12);
-          font-weight: bold;
-          color: #2b87ff;
+          --uno: font-800 c-#2b87ff scale-112;
         }
       }
     }
-    .__avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
     .__nickname {
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      .use-svg {
-        margin-top: 2px;
-      }
       &:hover .use-svg {
         transition: all 0.2s;
         transform: rotate(180deg);

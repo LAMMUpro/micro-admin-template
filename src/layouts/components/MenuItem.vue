@@ -9,14 +9,14 @@
         <!-- 外链 -->
         <img
           v-if="isExternal(menuInfo.icon) || menuInfo.icon.startsWith('/')"
-          class="__menu-icon"
+          class="w-4 h-4 m-r-1.25"
           :src="menuInfo.icon"
           alt="icon"
         />
         <!-- svg图标 -->
         <use-svg
           v-else
-          class="__menu-icon"
+          class="w-4 h-4 m-r-1.25"
           :name="menuInfo.icon"
         />
       </template>
@@ -70,11 +70,3 @@ const props = defineProps({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.__menu-icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 5px;
-}
-</style>

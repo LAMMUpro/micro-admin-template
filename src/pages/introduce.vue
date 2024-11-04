@@ -1,5 +1,5 @@
 <template>
-  <div class="introduce">
+  <div class="introduce font-size-3.75">
     <section class="-m-card">
       <h2 className="-m-title">项目介绍</h2>
       <p>
@@ -57,11 +57,11 @@
       <span className="-m-title">低代码介绍</span>
       <p>
         <span class="block title">为什么要集成低代码？</span>
-        <span class="inline-block indent">1. 团队之前低代码选型的时候收到技术栈制约，vue3项目一直找不到合适的开源低代码框架，但有了微前端，让vue项目使用react低代码成为了可能，集成低代码可以解锁微前端更多用法</span><br />
-        <span class="inline-block indent">2. 我认为低代码开发和源代码开发不应该对立，应该各取所长，才能应对更多的场景，例如简单的页面业务/产品就可以可以通过低代码的方式进行开发，对于复杂的页面，前端开发者可以使用他们最擅长的源代码本地开发，同时我们还在致力支持源代码中使用低代码组件、低代码中使用源代码组件</span><br />
+        <span class="inline-block indent-1em">1. 团队之前低代码选型的时候收到技术栈制约，vue3项目一直找不到合适的开源低代码框架，但有了微前端，让vue项目使用react低代码成为了可能，集成低代码可以解锁微前端更多用法</span><br />
+        <span class="inline-block indent-1em">2. 我认为低代码开发和源代码开发不应该对立，应该各取所长，才能应对更多的场景，例如简单的页面业务/产品就可以可以通过低代码的方式进行开发，对于复杂的页面，前端开发者可以使用他们最擅长的源代码本地开发，同时我们还在致力支持源代码中使用低代码组件、低代码中使用源代码组件</span><br />
         <span class="block title">为什么选择阿里低代码引擎？</span>
-        <span class="inline-block indent">1. 在开源的框架里，我们对比了lowcode-engine、amis、VForm3等低代码框架</span><br />
-        <span class="inline-block indent">2. 我觉得目前的低代码如果要应对多变的场景，少不了需要前端开发人员的介入，而很多框架封装得过于复杂，这虽然可以降低非前端开发人员的使用门槛，但却提高了前端开发人员的学习成本，也降低了灵活性，而低代码引擎是我见过比较贴合前端开发逻辑的低代码框架，可以基于这个引擎进行二开，降低一点使用门槛</span>
+        <span class="inline-block indent-1em">1. 在开源的框架里，我们对比了lowcode-engine、amis、VForm3等低代码框架</span><br />
+        <span class="inline-block indent-1em">2. 我觉得目前的低代码如果要应对多变的场景，少不了需要前端开发人员的介入，而很多框架封装得过于复杂，这虽然可以降低非前端开发人员的使用门槛，但却提高了前端开发人员的学习成本，也降低了灵活性，而低代码引擎是我见过比较贴合前端开发逻辑的低代码框架，可以基于这个引擎进行二开，降低一点使用门槛</span>
       </p>
     </section>
 
@@ -69,19 +69,19 @@
       <span className="-m-title">相关项目介绍</span>
       <div>
         <b>低代码设计器</b><br />
-        <span class="inline-block indent">
+        <span class="inline-block indent-1em">
           <a href="https://ali-lowcode.lammu.cn/" target="_blank">demo</a>
           <span>&nbsp;&nbsp;待开源...</span>
         </span><br />
 
         <b>低代码预览器</b><br />
-        <span class="inline-block indent">
+        <span class="inline-block indent-1em">
           <a href="https://ali-lowcode.lammu.cn/preview/?nodeId=3" target="_blank">demo</a>
           <span>&nbsp;&nbsp;待开源...</span>
         </span><br />
 
         <b>nest后端(目前包括低代码存储 / 菜单管理)</b><br />
-        <span class="inline-block indent">
+        <span class="inline-block indent-1em">
           待开源...
         </span><br />
       </div>
@@ -97,29 +97,12 @@ const router = useRouter();
 
 <style lang="scss" scoped>
 .introduce {
-  font-size: 15px;
-  .bg-white {
-    background-color: white;
-  }
   a,
   .link {
-    color: #409eff;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  .block {
-    display: block;
-  }
-  .inline-block {
-    display: inline-block;
-  }
-  .indent {
-    text-indent: 1em;
+    --uno: c-#409eff cursor-pointer underline;
   }
   .title {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 0.3em;
+    --uno: font-size-4 font-600 m-b-.3em;
   }
 }
 </style>

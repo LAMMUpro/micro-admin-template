@@ -1,6 +1,6 @@
 <template>
-  <div class="__menu">
-    <div class="__search-btn">
+  <div class="__menu b-r-#dcdfe6 b-r-1 b-r-solid">
+    <div class="sticky top-0 bg-white p-y-1.5 p-x-2 z-1 shadow-[0_10px_20px_#9d9d9d1f]">
       <el-input
         clearable
         v-model="menuKeyWord"
@@ -210,17 +210,8 @@ function filterMenuByKeyWord(menuList: Array<MenuItemType>): Array<MenuItemType>
 
 <style lang="scss" scoped>
 .__menu {
-  border-right: 1px solid #dcdfe6;
   :deep(.main-el-menu) {
     border-right: none;
-  }
-  .__search-btn {
-    position: sticky;
-    top: 0;
-    background-color: white;
-    padding: 6px 8px;
-    box-shadow: 0 10px 20px #9d9d9d1f;
-    z-index: 1;
   }
 }
 </style>

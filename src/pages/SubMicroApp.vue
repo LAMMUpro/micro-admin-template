@@ -1,5 +1,5 @@
 <template>
-  <section class="SubMicroApp">
+  <section class="h-full">
     <MicroApp
       :_name="subAppName"
       :_path="subAppPath"
@@ -26,9 +26,3 @@ const subAppName = computed(() => {
   return route.path.slice(1);
 });
 </script>
-
-<style lang="scss" scoped>
-.SubMicroApp {
-  height: 100%;
-}
-</style>
