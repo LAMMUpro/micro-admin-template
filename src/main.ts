@@ -8,8 +8,7 @@ import CONSTS from './utils/CONSTS';
 /** 样式 */
 import '@/style/index.scss';
 import 'virtual:uno.css';
-import '@unocss/reset/tailwind.css';
-import '@unocss/reset/tailwind-compat.css';
+
 import {
   ElConfigProvider,
   ElScrollbar,
