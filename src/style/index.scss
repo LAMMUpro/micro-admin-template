@@ -4,7 +4,7 @@ html {
 
 @screen lt-md {
   html {
-    --uno: font-size-12px;
+    --uno: font-size-14px;
   }
 }
 
@@ -23,7 +23,6 @@ micro-app-body,
 
   // 路由组件样式
   .__micro-app-container {
-
     &.__content,
     .__content {
       display: contents;
@@ -44,11 +43,13 @@ micro-app-body,
       &.__error,
       &.__config,
       &.__loading {
-        background: repeating-linear-gradient(45deg,
-            white,
-            white 5px,
-            #d9d9d9 5px,
-            #d9d9d9 10px);
+        background: repeating-linear-gradient(
+          45deg,
+          white,
+          white 5px,
+          #d9d9d9 5px,
+          #d9d9d9 10px
+        );
       }
 
       &.__error {
