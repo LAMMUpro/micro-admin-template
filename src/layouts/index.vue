@@ -1,10 +1,26 @@
 <template>
   <div class="__layout h-full flex flex-col">
     <Head class="shrink-0"></Head>
-    <div class="flex-1">
-      <Menu
-        class="w-180px h-[calc(100vh-50px)] float-left bg-white lt-md:(hidden)"
-      ></Menu>
+    <div class="flex-1 relative">
+      <div
+        class="hidden lt-md:(z-2 block absolute m-10 p-1 bg-#eee b-rd-6px cursor-pointer)"
+        @click="isShowMenu = !isShowMenu"
+      >
+        <use-svg
+          name="menu"
+          size="30px"
+        ></use-svg>
+      </div>
+      <div
+        class="w-180px h-[calc(100vh-50px)] float-left bg-white lt-md:(hidden w-full h-full fixed top-0 z-2 bg-#0009)"
+        :style="`${isShowMenu ? 'display: block' : ''}`"
+        @click="isShowMenu = !isShowMenu"
+      >
+        <Menu
+          class="w-full h-full lt-md:(bg-white w-[calc(100%-70px)])"
+          @click.stop
+        ></Menu>
+      </div>
       <!-- 右边容器，包括面包屑 -->
       <div
         class="h-[calc(100vh-50px)] float-left flex flex-col w-[calc(100%-180px)] lt-md:(w-full)"
@@ -49,6 +65,9 @@ import RouteInfoBar from './components/RouteInfoBar.vue';
 import { ElScrollbar } from 'element-plus';
 import 'element-plus/es/components/scrollbar/style/index';
 import { ref } from 'vue';
+
+/** 是否显示侧边菜单，移动端用 */
+const isShowMenu = ref(false);
 </script>
 
 <style lang="scss" scoped>

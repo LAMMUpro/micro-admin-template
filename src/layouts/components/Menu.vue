@@ -1,12 +1,26 @@
 <template>
   <div class="__menu b-r-#dcdfe6 b-r-1 b-r-solid">
-    <div class="sticky top-0 bg-white p-y-1.5 p-x-2 z-1 shadow-[0_10px_20px_#9d9d9d1f]">
+    <div class="hidden lt-md:(block p-t-4 p-x-6)">
+      <span>介绍页</span>
+      <span>项目文档</span>
+      <span>源码</span>
+    </div>
+    <div
+      class="sticky top-0 bg-white p-y-1.5 p-x-2 z-1 shadow-[0_10px_20px_#9d9d9d1f] lt-md:(flex p-x-6 p-y-4)"
+    >
       <el-input
         clearable
         v-model="menuKeyWord"
         placeholder="请输入菜单关键词"
         size="small"
       ></el-input>
+      <el-button
+        class="hidden lt-md:(flex m-l-2)"
+        type="primary"
+        size="small"
+        @click=""
+        >搜索</el-button
+      >
     </div>
     <el-scrollbar>
       <el-menu
@@ -36,11 +50,12 @@ export const menuActiveIndex = ref('');
 
 <script lang="ts" setup>
 import { ref, watch, computed } from 'vue';
-import { ElScrollbar, ElMenu, ElInput, ElMessage } from 'element-plus';
+import { ElScrollbar, ElMenu, ElInput, ElMessage, ElButton } from 'element-plus';
 import 'element-plus/es/components/scrollbar/style/index';
 import 'element-plus/es/components/menu/style/index';
 import 'element-plus/es/components/input/style/index';
 import 'element-plus/es/components/loading/style/index';
+import 'element-plus/es/components/button/style/index';
 import MenuItem from './MenuItem.vue';
 import { MenuItemType } from '@/types/common';
 import { useRoute, useRouter } from 'vue-router';
