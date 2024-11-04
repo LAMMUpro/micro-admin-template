@@ -53,9 +53,10 @@ import { isPhone } from './hook';
  * 移动端提示
  */
 (function checkIsMobile() {
-  if (isMobile()) {
+  // 样式做了兼容, 暂时先不提示了
+  if (false && isMobile()) {
     setTimeout(() => {
-      ElMessageBox.confirm('后台管理系统建议电脑或平板打开?', '设备兼容提示', {
+      ElMessageBox.confirm('后台管理系统建议电脑或平板打开!', '设备兼容提示', {
         confirmButtonText: '复制网站链接',
         cancelButtonText: '我就看看',
         type: 'warning',

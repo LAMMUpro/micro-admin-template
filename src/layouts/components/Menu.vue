@@ -12,13 +12,6 @@
         placeholder="请输入菜单关键词"
         size="small"
       ></el-input>
-      <el-button
-        class="hidden lt-md:(flex m-l-2)"
-        type="primary"
-        size="small"
-        @click=""
-        >搜索</el-button
-      >
     </div>
     <el-scrollbar>
       <el-menu
@@ -48,7 +41,7 @@ export const menuActiveIndex = ref('');
 
 <script lang="ts" setup>
 import { ref, watch, computed } from 'vue';
-import { ElScrollbar, ElMenu, ElInput, ElMessage, ElButton } from 'element-plus';
+import { ElScrollbar, ElMenu, ElInput, ElMessage } from 'element-plus';
 import 'element-plus/es/components/scrollbar/style/index';
 import 'element-plus/es/components/menu/style/index';
 import 'element-plus/es/components/input/style/index';
@@ -67,6 +60,8 @@ import { tourStepsRefs } from '@/layouts/hook';
 import { ElLoading } from 'element-plus';
 import { nextTick } from 'vue';
 import LinkCardList from './LinkCardList.vue';
+import { isPhone } from '@/hook';
+import { isShowMenu } from '../index.vue';
 
 const globalStore = useGlobalStore();
 const route = useRoute();
@@ -188,6 +183,10 @@ function handleMenuChange(key: string) {
     } else if (menuInfo.openMode == 1) {
       // 新窗口打开外链
     }
+  }
+
+  if (isPhone && menuInfo.targetType < 2) {
+    isShowMenu.value = false;
   }
 
   // TODO触发时机改为路由跳转后，兼容首次进入及代码跳转情况

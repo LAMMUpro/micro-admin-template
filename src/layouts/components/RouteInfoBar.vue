@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="lt-md:(m-l-16)">
     <el-breadcrumb
       separator="/"
       separator-class="el-icon-arrow-right"

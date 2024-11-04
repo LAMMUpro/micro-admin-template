@@ -55,7 +55,7 @@ const props = defineProps({
 
 /** 是否显示跳转介绍页链接 */
 const isShowIntroduceLink = computed(() => {
-  return useRoute().name !== 'introduce';
+  return useRoute()?.name !== 'introduce';
 });
 
 /** 跳到介绍页 */
