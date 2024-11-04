@@ -47,6 +47,7 @@ import { Vue3Lottie } from 'vue3-lottie';
 import ElDialog from '@/components/el-dialog/index.vue';
 import Config from './utils/Config';
 import { copyText, isMobile } from './utils';
+import { isPhone } from './hook';
 
 /**
  * 移动端提示
@@ -139,29 +140,20 @@ if (!Config.isLocalhost) {
   startSharedWorkerForVersionUpdateCheck();
 }
 
-window
-  .matchMedia('(min-width: 320px) and (max-width: 640px)')
-  .addEventListener('change', (event) => {
-    if (event.matches) {
-      console.log('当前是xs');
-    }
-  });
+/**
+ * 监控媒体查询变化, 大于768px(md尺寸)应用pc样式, 否则应用移动端样式
+ */
+window.matchMedia('(max-width: 768px)').addEventListener('change', (event) => {
+  isPhone.value = event.matches;
+});
 
-window
-  .matchMedia('(min-width: 640px) and (max-width: 768px)')
-  .addEventListener('change', (event) => {
-    if (event.matches) {
-      console.log('当前是sm');
-    }
-  });
-
-window
-  .matchMedia('(min-width: 768px) and (max-width: 1024px)')
-  .addEventListener('change', (event) => {
-    if (event.matches) {
-      console.log('当前是lg');
-    }
-  });
+// window
+//   .matchMedia('(min-width: 640px) and (max-width: 768px)')
+//   .addEventListener('change', (event) => {
+//     if (event.matches) {
+//       console.log('当前是sm');
+//     }
+//   });
 
 /** microApp数据监听回调 */
 const dataListener = generateDataListener({
