@@ -11,44 +11,7 @@
       <span class="m-l-1.5 font-size-4.75 font-600">MicroAdmin</span>
     </div>
     <div class="__right flex items-center">
-      <div
-        class="action-list flex m-r-7.5 lt-md:(hidden)"
-        :ref="(ref: any) => tourStepsRefs[0] = ref"
-      >
-        <div
-          class="action-item"
-          @click="toIntroducePage()"
-        >
-          <use-svg
-            class="m-t-.5"
-            name="docs-question"
-            size="18px"
-          ></use-svg>
-          <span>介绍页</span>
-        </div>
-        <div
-          class="action-item"
-          @click="openDocsLink()"
-        >
-          <use-svg
-            class="m-t-.5"
-            name="docs-question"
-            size="18px"
-          ></use-svg>
-          <span>项目文档</span>
-        </div>
-        <div
-          class="action-item"
-          @click="openGithubLink()"
-        >
-          <use-svg
-            class="m-t-.5"
-            name="Github"
-            size="18px"
-          ></use-svg>
-          <span>源码</span>
-        </div>
-      </div>
+      <LinkCardList class="lt-md:(hidden)"></LinkCardList>
       <img
         class="w-7.5 h-7.5 m-r-2.5 b-rd-1/2"
         :src="globalStore.userInfo.avatar"
@@ -79,8 +42,7 @@ import 'element-plus/es/components/dropdown/style/index';
 import 'element-plus/es/components/dropdown-menu/style/index';
 import 'element-plus/es/components/dropdown-item/style/index';
 import useGlobalStore from '@/store';
-import { tourStepsRefs } from '@/layouts/hook';
-import router from '@/router';
+import LinkCardList from './LinkCardList.vue';
 
 const globalStore = useGlobalStore();
 
@@ -94,36 +56,11 @@ function clearCache() {
 
 /** //TODO: 跳转用户中心页面 */
 function toUserCenterPage() {}
-
-/** 跳到介绍页 */
-function toIntroducePage() {
-  router.push('/introduce');
-}
-
-/** 打开项目文档 */
-function openDocsLink() {
-  window.open('https://micro-admin-docs.lammu.cn/');
-}
-
-/** 打开项目源码 */
-function openGithubLink() {
-  window.open('https://github.com/LAMMUpro/micro-admin-template');
-}
 </script>
 
 <style lang="scss" scoped>
 .__head {
   .__right {
-    .action-list {
-      .action-item {
-        --uno: p-t-1 font-size-2.5 m-x-1.5 cursor-pointer flex flex-col items-center
-          c-gray;
-
-        &:hover {
-          --uno: font-800 c-#2b87ff scale-112;
-        }
-      }
-    }
     .__nickname {
       &:hover .use-svg {
         transition: all 0.2s;
