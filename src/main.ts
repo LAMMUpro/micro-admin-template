@@ -144,17 +144,12 @@ if (!Config.isLocalhost) {
 /**
  * 监控媒体查询变化, 大于768px(md尺寸)应用pc样式, 否则应用移动端样式
  */
-window.matchMedia('(max-width: 768px)').addEventListener('change', (event) => {
+function mediaChangeCb(event: MediaQueryListEvent | MediaQueryList) {
   isPhone.value = event.matches;
-});
-
-// window
-//   .matchMedia('(min-width: 640px) and (max-width: 768px)')
-//   .addEventListener('change', (event) => {
-//     if (event.matches) {
-//       console.log('当前是sm');
-//     }
-//   });
+}
+const MM = window.matchMedia('(max-width: 768px)');
+mediaChangeCb(MM);
+MM.addEventListener('change', mediaChangeCb);
 
 /** microApp数据监听回调 */
 const dataListener = generateDataListener({
