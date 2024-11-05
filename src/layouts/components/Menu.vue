@@ -94,6 +94,7 @@ watch(
       nextTick(() => {
         /** 不加nextTick对应的dom还没渲染 */
         loadingInstance = ElLoading.service({
+          text: '菜单加载中...',
           target: '.__menu',
         });
       });
