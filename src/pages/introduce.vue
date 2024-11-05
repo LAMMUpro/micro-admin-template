@@ -12,7 +12,7 @@
     <section class="-m-card">
       <h2 className="-m-title">响应式布局</h2>
       <p>
-        该项目集成了<b>UnoCSS</b>。对移动端做了一些样式上的兼容。🆕
+        该项目集成了<b>UnoCSS</b>。以桌面端为主, 同时对<b>移动端</b>做了一些样式上的兼容🆕。您可以对比移动端和PC端的布局/样式。
       </p>
     </section>
 
