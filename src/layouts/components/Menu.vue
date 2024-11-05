@@ -71,7 +71,7 @@ import { tourStepsRefs } from '@/layouts/hook';
 import { ElLoading } from 'element-plus';
 import { nextTick } from 'vue';
 import LinkCardList from './LinkCardList.vue';
-import { isPhone } from '@/hook';
+import { isPhone } from '@/hooks';
 import { isShowMenu } from '../index.vue';
 
 const globalStore = useGlobalStore();

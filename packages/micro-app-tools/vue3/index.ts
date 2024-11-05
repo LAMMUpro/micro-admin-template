@@ -62,6 +62,7 @@ export function generateExportComponent(component: any) {
  */
 export function generateDataListener(callBacks?: Partial<ListenerCallbacks>) {
   return function dataListener(data: BaseObj<any>) {
+    console.log('data', data)
     if (data.emitName) {
       /** 参数列表 */
       const parameters = data.parameters || [];

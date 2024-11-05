@@ -45,9 +45,9 @@ import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { Vue3Lottie } from 'vue3-lottie';
 import ElDialog from '@/components/el-dialog/index.vue';
-import Config from './utils/Config';
-import { copyText, isMobile } from './utils';
-import { isPhone } from './hook';
+import Config from '@/utils/Config';
+import { copyText, isMobile } from '@/utils';
+import { isPhone } from '@/hooks';
 
 /**
  * 往注入html元素注入css变量：--screen-height
@@ -160,6 +160,13 @@ if (!Config.isLocalhost) {
  */
 function mediaChangeCb(event: MediaQueryListEvent | MediaQueryList) {
   isPhone.value = event.matches;
+  window._isPhone_ = isPhone.value;
+  microApp.getActiveApps().forEach((name) => {
+    microApp.setData(name, {
+      emitName: 'mediaChange',
+      parameters: [window._isPhone_],
+    });
+  });
 }
 const MM = window.matchMedia('(max-width: 768px)');
 mediaChangeCb(MM);

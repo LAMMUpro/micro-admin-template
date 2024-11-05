@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { isPhone } from '@/hook';
+import { isPhone } from '@/hooks';
 import { tourStepsRefs } from '@/layouts/hook';
 import router from '@/router';
 import { isShowMenu } from '../index.vue';

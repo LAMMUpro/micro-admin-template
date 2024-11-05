@@ -104,6 +104,8 @@ export interface ListenerCallbacks {
   micro_component_destroy: (elementId: string) => void;
   /** 派发组件清除属性/插槽缓存(主应用监听) */
   micro_component_clear_props_slots: (elementId: string) => void;
+  /** 媒体查询改变(子应用监听) */
+  mediaChange: (isPhone: boolean) => void;
 }
 
 /**

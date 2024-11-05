@@ -23,7 +23,7 @@ import { ElDialog } from 'element-plus';
 import 'element-plus/es/components/dialog/style/index';
 import { ElScrollbar } from 'element-plus';
 import 'element-plus/es/components/scrollbar/style/index';
-import { isPhone } from '@/hook';
+import { isPhone } from '@/hooks';
 
 const props = defineProps({
   maxHeight: {
