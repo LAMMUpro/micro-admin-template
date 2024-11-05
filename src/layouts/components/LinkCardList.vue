@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="['action-list', props.direction, 'flex m-r-4']"
+    :class="['action-list', props.direction, props.size, 'flex m-r-4']"
     :ref="(ref: any) => props.direction==='column' && (tourStepsRefs[0] = ref)"
   >
     <div
@@ -8,31 +8,22 @@
       v-show="isShowIntroduceLink"
       @click="toIntroducePage()"
     >
-      <use-svg
-        class="m-t-.5 w-4.5 h-4.5"
-        name="docs-question"
-      ></use-svg>
-      <span class="font-size-2.5">介绍页</span>
+      <use-svg name="docs-question"></use-svg>
+      <span>介绍页</span>
     </div>
     <div
       class="action-item"
       @click="openDocsLink()"
     >
-      <use-svg
-        class="m-t-.5 w-4.5 h-4.5"
-        name="docs-question"
-      ></use-svg>
-      <span class="font-size-2.5">项目文档</span>
+      <use-svg name="docs-question"></use-svg>
+      <span>项目文档</span>
     </div>
     <div
       class="action-item"
       @click="openGithubLink()"
     >
-      <use-svg
-        class="m-t-.5 w-4.5 h-4.5"
-        name="Github"
-      ></use-svg>
-      <span class="font-size-2.5">源码</span>
+      <use-svg name="Github"></use-svg>
+      <span>源码</span>
     </div>
   </div>
 </template>
@@ -50,6 +41,11 @@ const props = defineProps({
   direction: {
     type: String as PropType<'column' | 'row'>,
     default: 'column',
+  },
+  /** 尺寸 */
+  size: {
+    type: String as PropType<'small' | 'large'>,
+    default: 'small',
   },
 });
 
@@ -82,8 +78,12 @@ function openGithubLink() {
     &:hover {
       --uno: font-800 c-#2b87ff scale-112;
     }
+    .use-svg {
+      --uno: m-t-.5;
+    }
   }
 }
+
 .action-list.column {
   .action-item {
     --uno: flex-col;
@@ -92,6 +92,27 @@ function openGithubLink() {
 .action-list.row {
   .action-item {
     --uno: flex-row;
+  }
+}
+
+.action-list.small {
+  .action-item {
+    .use-svg {
+      --uno: w-4.5 h-4.5;
+    }
+    span {
+      --uno: font-size-2.5;
+    }
+  }
+}
+.action-list.large {
+  .action-item {
+    .use-svg {
+      --uno: w-6 h-6;
+    }
+    span {
+      --uno: font-size-4.6;
+    }
   }
 }
 </style>
