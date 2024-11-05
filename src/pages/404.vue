@@ -1,7 +1,10 @@
 <template>
   <div class="page-404">
     <div class="center-box">
-      <span class="font-404">404</span>
+      <span
+        class="font-404 font-size-[calc((100vw-200px)/2.2)] lt-md:font-size-[calc(100vw/2.2)]"
+        >404</span
+      >
       <p class="tip">
         当前访问的页面不存在！请检查访问的链接是否正确，如有疑问，请<b class="underline"
           >联系管理员</b
@@ -22,7 +25,6 @@
   .center-box {
     text-align: center;
     .font-404 {
-      font-size: 250px;
       font-style: oblique;
       font-weight: bold;
       color: #ffcc99;
