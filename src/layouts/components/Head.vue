@@ -19,7 +19,7 @@
         alt="avatar"
       />
       <el-dropdown>
-        <div class="__nickname cursor-pointer flex items-center font-size-3.5">
+        <div class="__nickname cursor-pointer flex shrink-0 items-center font-size-3.5">
           <span>{{ globalStore.userInfo.name }}</span>
           <use-svg name="arrow-bottom" />
         </div>

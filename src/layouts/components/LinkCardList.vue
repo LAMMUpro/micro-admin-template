@@ -74,7 +74,7 @@ function openGithubLink() {
 <style lang="scss" scoped>
 .action-list {
   .action-item {
-    --uno: p-t-1 font-size-2.5 m-x-1.5 cursor-pointer flex items-center c-gray lt-md:(font-size-4 m-x-2);
+    --uno: p-t-1 font-size-2.5 m-x-1.5 cursor-pointer flex shrink-0 items-center c-gray lt-md:(font-size-4 m-x-2);
     &:hover {
       --uno: font-800 c-#2b87ff scale-112;
     }
@@ -90,6 +90,7 @@ function openGithubLink() {
   }
 }
 .action-list.row {
+  --uno: flex-wrap;
   .action-item {
     --uno: flex-row;
   }
