@@ -50,6 +50,20 @@ import { copyText, isMobile } from './utils';
 import { isPhone } from './hook';
 
 /**
+ * 往注入html元素注入css变量：--screen-height
+ */
+(function insertCSSvar2html() {
+  setTimeout(() => {
+    document.documentElement.setAttribute(
+      'style',
+      `${document.documentElement.getAttribute('style') ?? ''} --screen-height: ${
+        window.innerHeight
+      }px`
+    );
+  });
+})();
+
+/**
  * 移动端提示
  */
 (function checkIsMobile() {

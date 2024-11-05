@@ -15,7 +15,7 @@
       </div>
       <!-- 侧边栏菜单 -->
       <div
-        class="w-180px h-[calc(100vh-50px)] float-left bg-white lt-md:(hidden w-full h-full fixed top-0 z-2 bg-#0009)"
+        class="w-180px h-[calc(var(--screen-height)-50px)] float-left bg-white lt-md:(hidden w-full h-full fixed top-0 z-2 bg-#0009)"
         :style="`${isShowMenu ? 'display: block' : ''}`"
         @click="isShowMenu = !isShowMenu"
       >
@@ -26,7 +26,7 @@
       </div>
       <!-- 右边容器，包括面包屑 -->
       <div
-        class="h-[calc(100vh-3.125rem)] float-left flex flex-col w-[calc(100%-180px)] lt-md:(w-full)"
+        class="h-[calc(var(--screen-height)-3.125rem)] float-left flex flex-col w-[calc(100%-180px)] lt-md:(w-full)"
       >
         <RouteInfoBar
           class="shrink-0 h-7 bg-white font-size-3.75 c-gray flex items-center p-l-1.5 b-b-#ededed b-b-1 b-b-solid"
