@@ -4,7 +4,13 @@
 
 import { SubMicroAppInit, isTopApp } from '../index';
 import { defineAsyncComponent, defineComponent, h, ref } from 'vue';
-import { MicroAppComponentProps, MicroComponentType, BaseObj, GlobalListenerCallbacks, ListenerCallbacks } from '../types';
+import {
+  MicroAppComponentProps,
+  MicroComponentType,
+  BaseObj,
+  GlobalListenerCallbacks,
+  ListenerCallbacks,
+} from '../types';
 import { MicroComponentMap, setElConfigProvider } from '../data';
 
 /**
@@ -62,7 +68,6 @@ export function generateExportComponent(component: any) {
  */
 export function generateDataListener(callBacks?: Partial<ListenerCallbacks>) {
   return function dataListener(data: BaseObj<any>) {
-    console.log('data', data)
     if (data.emitName) {
       /** 参数列表 */
       const parameters = data.parameters || [];

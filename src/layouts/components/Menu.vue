@@ -109,7 +109,6 @@ watch(
   () => menuKeyWord.value,
   () => {
     // TODO菜单过滤
-    console.log(menuKeyWord.value);
     if (menuKeyWord.value) {
       ElMessage({
         type: 'success',

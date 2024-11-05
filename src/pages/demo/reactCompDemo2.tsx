@@ -35,13 +35,11 @@ const App: React.FC = () => {
   const [expandedKeys] = useState(['0-0', '0-0-0', '0-0-0-0']);
 
   const onDragEnter: TreeProps['onDragEnter'] = (info) => {
-    console.log(info);
     // expandedKeys, set it when controlled is needed
     // setExpandedKeys(info.expandedKeys)
   };
 
   const onDrop: TreeProps['onDrop'] = (info) => {
-    console.log(info);
     const dropKey = info.node.key;
     const dragKey = info.dragNode.key;
     const dropPos = info.node.pos.split('-');
