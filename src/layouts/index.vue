@@ -15,7 +15,7 @@
       </div>
       <!-- 侧边栏菜单 -->
       <div
-        class="w-180px h-[calc(var(--screen-height)-50px)] float-left bg-white lt-md:(hidden w-full h-full fixed top-0 z-2 bg-#0009)"
+        class="w-180px h-[calc(var(--screen-height)-50px)] float-left bg-white lt-md:(hidden w-full h-full fixed top-0 z-3 bg-#0009)"
         :style="`${isShowMenu ? 'display: block' : ''}`"
         @click="isShowMenu = !isShowMenu"
       >

@@ -23,15 +23,16 @@ import { ElDialog } from 'element-plus';
 import 'element-plus/es/components/dialog/style/index';
 import { ElScrollbar } from 'element-plus';
 import 'element-plus/es/components/scrollbar/style/index';
+import { isPhone } from '@/hook';
 
 const props = defineProps({
   maxHeight: {
     type: String,
-    default: '80vh',
+    default: 'calc(var(--screen-height) - 180px)', // 兼容移动端(不能用vh)
   },
   width: {
     type: String,
-    default: '60%',
+    default: () => (isPhone ? '88%' : '60%'), // 兼容移动端(两边留白更少一些)
   },
 });
 
