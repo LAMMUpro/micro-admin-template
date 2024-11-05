@@ -10,6 +10,13 @@
     </section>
 
     <section class="-m-card">
+      <h2 className="-m-title">响应式布局</h2>
+      <p>
+        该项目集成了<b>UnoCSS</b>。对移动端做了一些样式上的兼容。🆕
+      </p>
+    </section>
+
+    <section class="-m-card">
       <h2 className="-m-title">模版特色功能</h2>
       <p>
         模版目前开发了几个比较`"超前"`的功能:<br/>
