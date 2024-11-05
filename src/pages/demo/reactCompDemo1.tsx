@@ -1,3 +1,4 @@
+import { isMobile } from '@/utils';
 import React, { useState, useEffect, useRef, RefObject } from 'react';
 
 interface Position {
@@ -73,13 +74,18 @@ function usePointerPosition(containerRef: RefObject<HTMLDivElement>) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   useEffect(() => {
     function handleMove(e: any) {
-      setPosition({ x: e.offsetX, y: e.offsetY });
+      /** 兼容移动端/桌面端 */
+      const position = isMobile() ? { x: e.touches[0]?.clientX, y: e.touches[0]?.clientY - containerTop } : { x: e.offsetX, y: e.offsetY }
+      setPosition(position);
     }
 
-    containerRef.current?.addEventListener('pointermove', handleMove);
+    const containerTop = containerRef.current?.getClientRects()?.[0].top || 0;
+
+    /** 兼容移动端/桌面端 */
+    containerRef.current?.addEventListener(isMobile() ? 'touchmove' : 'pointermove', handleMove);
 
     return () => {
-      containerRef.current?.removeEventListener('pointermove', handleMove);
+      containerRef.current?.removeEventListener(isMobile() ? 'touchmove' : 'pointermove', handleMove);
     };
   }, []);
   return position;
