@@ -14,5 +14,5 @@ export function usezIndex() {
 /** 是否移动端尺寸(小于等于768px) */
 export const isPhone = ref(false);
 
-/** 是否pc端尺寸(大于768px) */
-export const isPc = computed(() => !isPhone.value);
+/** 是否桌面端尺寸(大于768px) */
+export const isDesktop = computed(() => !isPhone.value);
