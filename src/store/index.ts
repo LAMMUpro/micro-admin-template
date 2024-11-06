@@ -11,12 +11,17 @@ const useGlobalStore = defineStore({
   state: (): {
     menus: Array<MenuItemType>;
     menusLoading: boolean;
+    menusInited: boolean;
     permissions: Array<string>;
+
     userInfo: UserInfoType;
+    userInfoLoading: boolean;
+    userInfoInited: boolean;
   } => ({
     /** 菜单 */
     menus: [],
     menusLoading: false,
+    menusInited: false,
     /** 权限 */
     permissions: [],
     /** 用户信息 */
@@ -27,6 +32,8 @@ const useGlobalStore = defineStore({
       name: '',
       phone: '',
     },
+    userInfoLoading: false,
+    userInfoInited: false,
   }),
   getters: {},
   actions: {
@@ -46,12 +53,8 @@ const useGlobalStore = defineStore({
     /** 加载菜单 */
     async loadMenu() {
       this.menusLoading = true;
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true);
-        }, 3000);
-      });
       const res = await getMenuTree();
+      this.menusInited = true;
       this.menusLoading = false;
       // const res = await getUserMenus();
       if (res.code == 1 && res.data) {
@@ -70,8 +73,11 @@ const useGlobalStore = defineStore({
 
     async loadUserInfo() {
       if (Cookies.get(Config.tokenKey) || true) {
+        this.userInfoLoading = true;
         /** token存在 */
         const res = await getUserInfo();
+        this.userInfoInited = true;
+        this.userInfoLoading = false;
         if (res.code == 1 && res.data) {
           /** 登录成功, 更新Global.user.info */
           this.updateUserInfo(res.data);
