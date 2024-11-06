@@ -11,6 +11,6 @@ import Head from './components/Head.vue';
 
 <style lang="scss" scoped>
 .__head-layout {
-  --sub-app-container-height: calc(100vh - 25px);
+  --sub-app-container-height: calc(var(--screen-height) - 25px);
 }
 </style>

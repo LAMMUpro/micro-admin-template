@@ -74,6 +74,8 @@ import { ref } from 'vue';
 
 <style lang="scss" scoped>
 .__layout {
-  --sub-app-container-height: calc(100vh - 20px - 24px - 25px - 50px);
+  --sub-app-container-height: calc(
+    var(--screen-height) - 1.25rem - 1.5rem - 1.75rem - 3.125rem
+  );
 }
 </style>

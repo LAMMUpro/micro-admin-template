@@ -1,5 +1,5 @@
 <template>
-  <div class="login h-100vh relative flex items-center justify-center">
+  <div class="login h-[var(--screen-height)] relative flex items-center justify-center">
     <LoginCard
       class="login-card w-100"
       @success="loginSuccess"

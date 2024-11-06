@@ -3,7 +3,7 @@
     namespace="main-el"
     :locale="zhCn"
   >
-    <div class="w-100vw h-100vh">
+    <div class="w-100vw h-[var(--screen-height)]">
       <router-view></router-view>
 
       <!-- 登录弹窗, 只在菜单模式下使用 -->
