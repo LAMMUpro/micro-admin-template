@@ -7,7 +7,7 @@ export default {
   /** 必须以micro-app-开头，不允许大写字母 */
   microAppTagName: 'micro-app-admin',
   /** 文档标题前缀 */
-  PREFIX_DOCUMENT_TITLE: '管理后台',
+  PREFIX_DOCUMENT_TITLE: '微后台',
   /** 启动端口号 */
   PORT: 1314,
   /** 子应用路由name前缀, 子应用路由name统一为`${前缀}${子应用name}` */

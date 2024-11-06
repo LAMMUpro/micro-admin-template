@@ -4,6 +4,7 @@ import { addAsyncRoute, isAddedAsyncRoutes } from '.';
 import { subAppPath } from '@/pages/SubMicroApp.vue';
 import useGlobalStore from '@/store';
 import { subAppScrollRef } from '@/layouts/index.vue';
+import CONSTS from '@/utils/CONSTS';
 
 /**
  * 初始化路由拦截器
@@ -44,8 +45,15 @@ export function initRouteInterceptor(router: Router) {
   });
 
   router.afterEach((to) => {
-    // TODO回显激活菜单
-    // menuActiveIndex.value = '0-0';
+    /**
+     * 根据路由名动态设置文档的标题
+     * 主应用和子应用的设置逻辑不一样
+     */
+    if (to.meta.title) {
+      document.title = `${CONSTS.PREFIX_DOCUMENT_TITLE} - ${
+        (to.meta.title as string) || 'MicroAdmin'
+      }`;
+    }
 
     /**
      * 滚动到顶部，目前有些小瑕疵: 会先滚动原有页面(不管新页面有没有加载)
