@@ -50,6 +50,36 @@ import { copyText, isMobile } from '@/utils';
 import { isPhone } from '@/hooks';
 
 /**
+ * 移动端禁止放大
+ */
+(function () {
+  if (!isMobile()) return;
+  /**
+   * 阻止双击放大
+   */
+  document.addEventListener('touchstart', function (event) {
+    if (event.touches.length > 1) event.preventDefault();
+  });
+  let lastTouchEnd = 0;
+  document.addEventListener(
+    'touchend',
+    function (event) {
+      var now = new Date().getTime();
+      if (now - lastTouchEnd <= 300) event.preventDefault();
+      lastTouchEnd = now;
+    },
+    false
+  );
+
+  /**
+   * 阻止双指方法
+   */
+  document.addEventListener('gesturestart', function (event) {
+    event.preventDefault();
+  });
+})();
+
+/**
  * 往注入html元素注入css变量：--screen-height
  */
 (function insertCSSvar2html() {
