@@ -11,6 +11,7 @@
     >
       <el-input
         clearable
+        :style="isPhone ? { 'font-size': '16px' } : ''"
         v-model="menuKeyWord"
         placeholder="请输入菜单关键词"
         :size="isPhone ? 'large' : 'small'"
