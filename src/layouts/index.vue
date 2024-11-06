@@ -4,7 +4,7 @@
     <div class="flex-1 relative">
       <!-- 显示菜单按钮(移动端可见) -->
       <div
-        class="hidden lt-md:(block flex) shadow-[0_1px_4px_rgb(169_169_169/50%)] z-3 absolute m-6 py-1 px-2 bg-#eee b-rd-6px cursor-pointer flex-col items-center"
+        class="hidden lt-md:(flex!) shadow-[0_1px_4px_rgb(169_169_169/50%)] z-3 absolute m-6 py-1 px-2 bg-#eee b-rd-6px cursor-pointer flex-col items-center"
         @click="isShowMenu = !isShowMenu"
       >
         <use-svg
