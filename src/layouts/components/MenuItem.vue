@@ -21,7 +21,7 @@
         />
       </template>
 
-      <span class="-m-ellipsis">{{ menuInfo.name }}</span>
+      <span class="ellipsis">{{ menuInfo.name }}</span>
     </template>
     <MenuItem
       v-for="(item, index) in props.menuInfo.children.filter((menu: any) => !menu.hidden)"
