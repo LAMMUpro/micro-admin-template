@@ -31,7 +31,11 @@
 .-m-card {
   border-radius: 4px;
   padding: 18px;
-  margin-bottom: 14px;
+
+  &:not(:last-child) {
+    margin-bottom: 14px;
+  }
+
   overflow: hidden;
   color: #1C1E21;
   background-color: white;
