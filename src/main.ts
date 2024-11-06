@@ -48,6 +48,9 @@ import ElDialog from '@/components/el-dialog/index.vue';
 import Config from '@/utils/Config';
 import { copyText, isMobile } from '@/utils';
 import { isPhone } from '@/hooks';
+import Cookies from 'js-cookie';
+
+Cookies.set(Config.tokenKey, Date.now().toString());
 
 /**
  * 移动端禁止放大

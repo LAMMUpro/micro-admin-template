@@ -35,7 +35,7 @@ export default {
   originMap: originMap,
   /** token名称 */
   get tokenKey() {
-    return '';
+    return 'tokenKey';
   },
   /** 运行环境 */
   get env(): 'localhost' | 'test' | 'pre' | 'master' {

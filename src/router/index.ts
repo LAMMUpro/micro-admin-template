@@ -3,14 +3,6 @@ import { ref } from 'vue';
 import CONSTS from '@/utils/CONSTS';
 import { MicroAppConfig } from 'micro-app-tools/data';
 
-/** 工作台路由(默认路由) */
-export const adminWorkbenchRoute = {
-  path: '/vue3',
-  query: {
-    admin: '/#/xxx',
-  },
-};
-
 /** 基础路由 */
 export const baseRoutes: Array<RouteRecordRaw> = [
   {
@@ -30,13 +22,13 @@ export const baseRoutes: Array<RouteRecordRaw> = [
         path: '/404',
         name: 'Page404',
         component: () => import('@/pages/404.vue'),
-        meta: { title: '页面不存在', firstRedirect: adminWorkbenchRoute },
+        meta: { title: '页面不存在', firstRedirect: true },
       },
       {
         path: '/403',
         name: 'Page403',
         component: () => import('@/pages/403.vue'),
-        meta: { title: '无权限', firstRedirect: adminWorkbenchRoute },
+        meta: { title: '无权限', firstRedirect: true },
       },
       {
         path: '/onlinePreview',
@@ -87,7 +79,7 @@ export const baseRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/noMenu.vue'),
         meta: {
           title: '账号未配置菜单',
-          firstRedirect: adminWorkbenchRoute,
+          firstRedirect: true,
         },
       },
     ],
@@ -96,26 +88,13 @@ export const baseRoutes: Array<RouteRecordRaw> = [
     path: '/empty',
     name: 'PageEmpty',
     component: () => import('@/pages/empty.vue'),
-    meta: { hidden: true, firstRedirect: adminWorkbenchRoute },
+    meta: { hidden: true, firstRedirect: true },
   },
   {
     path: '/login',
     name: 'PageLogin',
     component: () => import('@/pages/login.vue'),
-    meta: { title: '登录页', firstRedirect: adminWorkbenchRoute },
-  },
-  {
-    path: '/',
-    name: 'Layout_menu',
-    component: () => import('@/layouts/index.vue'),
-    children: [
-      {
-        path: '/:catchAll(.*)',
-        name: '_noMatch_',
-        component: () => import('@/pages/404.vue'),
-        meta: { title: '页面不存在' },
-      },
-    ],
+    meta: { title: '登录页', firstRedirect: true },
   },
 ];
 
@@ -141,10 +120,17 @@ function generateUserRoutes(): Array<RouteRecordRaw> {
       ],
     },
     {
-      path: '/:catchAll(.*)',
-      name: '_noMatch_',
-      component: () => import('@/pages/404.vue'),
-      meta: { title: '页面不存在' },
+      path: '/',
+      name: 'Layout_menu',
+      component: () => import('@/layouts/index.vue'),
+      children: [
+        {
+          path: '/:catchAll(.*)',
+          name: '_noMatch_',
+          component: () => import('@/pages/404.vue'),
+          meta: { title: '页面不存在' },
+        },
+      ],
     },
   ];
 }
