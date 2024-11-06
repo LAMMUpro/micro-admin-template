@@ -51,9 +51,10 @@ import { isPhone } from '@/hooks';
 
 /**
  * 移动端禁止放大
+ * 目前还是有bug，点击el-input和弹窗里面的输入框，会自动缩放，居中显示，导致缩放过后无法手动还原
  */
 (function () {
-  if (!isMobile()) return;
+  if (true || !isMobile()) return;
   /**
    * 阻止双击放大
    */
