@@ -87,7 +87,7 @@
 import microApp from '@micro-zoe/micro-app';
 import {
   getAppIsInConfig,
-  getSubAppPrefixFromRouteUrl,
+  getSubAppNameFromRouteUrl,
   isSubApp,
   sendDataDown,
 } from '../index';
@@ -199,9 +199,7 @@ export default {
     defaultPage() {
       return (
         this._defaultPage ||
-        (this.subAppSettting?.prefix
-          ? `/${this.subAppSettting?.prefix}/#/empty`
-          : '/#/empty')
+        (this.subAppSettting?.name ? `/${this.subAppSettting?.name}/#/empty` : '/#/empty')
       );
     },
     /** 由prefix\name\path\参数组成的唯一字符串 */
@@ -317,7 +315,7 @@ export default {
        */
       if (
         !this._name ||
-        this.subAppSettting?.prefix !== getSubAppPrefixFromRouteUrl(this._path)
+        this.subAppSettting?.name !== getSubAppNameFromRouteUrl(this._path)
       )
         return;
       if (this.activePath === this.defaultPage) {

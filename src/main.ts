@@ -153,8 +153,6 @@ function startSharedWorkerForVersionUpdateCheck() {
           ElMessage.info('您已取消更新, 之后请手动刷新该页面');
         });
       document.removeEventListener('visibilitychange', visibilitychangeCallback);
-    } else if (eventType === 'console') {
-      console.log(event.data.msg);
     }
   };
 
@@ -253,7 +251,6 @@ const localDevIp = import.meta.env.VITE_local_ipv6 || '127.0.0.1';
 window._subAppSettingList_ = [
   {
     name: 'micromain',
-    prefix: 'micromain',
     routerMode: 'history',
     urlMap: {
       localhost: `http://${localDevIp}:1314/micromain/`,
@@ -267,7 +264,6 @@ window._subAppSettingList_ = [
   },
   {
     name: 'vue3',
-    prefix: 'vue3',
     routerMode: 'hash',
     urlMap: {
       localhost: `http://${localDevIp}:1320/vue3/`,
@@ -281,7 +277,6 @@ window._subAppSettingList_ = [
   },
   {
     name: 'vue2',
-    prefix: 'vue2',
     routerMode: 'hash',
     urlMap: {
       localhost: `http://${localDevIp}:1330/vue2/`,
@@ -295,7 +290,6 @@ window._subAppSettingList_ = [
   },
   {
     name: 'react18',
-    prefix: 'react18',
     routerMode: 'hash',
     urlMap: {
       localhost: `http://${localDevIp}:1340/react18/`,
@@ -309,7 +303,6 @@ window._subAppSettingList_ = [
   },
   {
     name: 'vue2v',
-    prefix: 'vue2v',
     routerMode: 'hash',
     urlMap: {
       localhost: `http://${localDevIp}:1350/vue2v/`,

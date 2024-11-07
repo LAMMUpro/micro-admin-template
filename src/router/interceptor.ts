@@ -1,4 +1,9 @@
-import { NavigationGuardNext, RouteLocationRaw, Router } from 'vue-router';
+import {
+  NavigationGuardNext,
+  RouteLocationNormalizedGeneric,
+  RouteLocationRaw,
+  Router,
+} from 'vue-router';
 import { addAsyncRoute, currentRouteInfo, isAddedAsyncRoutes, routerTo } from '.';
 // import { menuActiveIndex } from '@/layouts/components/Menu.vue';
 import { subAppPath } from '@/pages/SubMicroApp.vue';
@@ -23,6 +28,24 @@ import { modifyData } from '@/utils';
 let isFirstJump = true;
 
 /**
+ * 尝试通过token初始化全局状态
+ */
+async function tryInitGlobalStoreByToken(
+  to: RouteLocationNormalizedGeneric,
+  next: NavigationGuardNext | ((route?: RouteLocationRaw) => void)
+) {
+  if (!Cookies.get(Config.tokenKey)) return;
+  /**
+   * 尝试获取用户信息，获取失败，跳到登录页
+   */
+  if (!(await initUserInfo(to))) return toLoginPage(next);
+  /**
+   * 尝试加载菜单，获取失败，跳到无菜单页
+   */
+  if (!(await initMenus())) return next({ path: '/noMenu', replace: true });
+}
+
+/**
  * 初始化路由拦截器
  */
 export function initRouteInterceptor(router: Router) {
@@ -37,18 +60,16 @@ export function initRouteInterceptor(router: Router) {
       : _next;
 
     /**
-     * 调试代码
+     * 调试代码, 首次进入先调一次用户/菜单接口
      */
     if (isFirstJump) {
-      await initUserInfo(to);
-      await initMenus();
+      await tryInitGlobalStoreByToken(to, next);
     }
 
     /**
-     * 如果token不存在，Global重置、记录路由、跳到/login
+     * 如果token不存在，全局状态重置、记录路由、跳到/login
      */
     if (!Cookies.get(Config.tokenKey) && to.path !== '/login') {
-      // resetAllInfo();
       modifyData(routerTo, to);
       return toLoginPage(next);
     }
@@ -65,15 +86,7 @@ export function initRouteInterceptor(router: Router) {
      * 未添加动态路由  => 初始化用户信息/菜单
      */
     if (isUnknownRoute) {
-      /**
-       * 尝试获取用户信息
-       */
-      if (!(await initUserInfo(to))) return toLoginPage(next);
-      /**
-       * 尝试加载菜单
-       */
-      if (!(await initMenus())) return next({ path: '/noMenu', replace: true });
-
+      await tryInitGlobalStoreByToken(to, next);
       /**
        * 如果未添加动态路由 => 暂存路由
        * (走到这里除了匹配上不带firstRedirect的路由，都是已经【尝试】初始化过用户信息/菜单的了)
@@ -81,51 +94,80 @@ export function initRouteInterceptor(router: Router) {
       if (!isAddedAsyncRoutes) {
         modifyData(routerTo, to);
       }
-    } else if (isFirstJump) {
-      /**
-       * 匹配上路由 && 是第一次跳转 && meta配置了firstRedirect => 跳到第一个有效菜单
-       */
-      /** 首次进入且路由匹配上（baseRoutes内） */
-      if (to.meta.firstRedirect) {
-        handleRedirectFromRoot(next);
-      }
     }
 
     /**
-     * 如果用户信息已获取 && 未添加动态路由 => 动态添加路由、【跳转】目标页或当前页(添加完后需要重新跳)
+     * 是第一次跳转 && meta配置了firstRedirect => 尝试获取用户信息、跳到第一个有效菜单（如果没有有效菜单，就跳到无菜单页）
+     * 首次进入且路由匹配上（baseRoutes内）
      */
-    if (!isAddedAsyncRoutes && globalStore.userInfo.id) {
+    if (isFirstJump && to.meta.firstRedirect) {
+      await tryInitGlobalStoreByToken(to, next);
+      handleRedirectFromRoot(next);
+    }
+
+    /**
+     * 如果用户菜单已获取 && 未添加动态路由 => 动态添加路由、【跳转】目标页或当前页(添加完后需要重新跳)
+     */
+    if (globalStore.menusInited && !isAddedAsyncRoutes) {
       addAsyncRoute();
       return next(routerTo.path ? routerTo : { path: to.path, query: to.query });
     }
 
     /**
-     * 如果是子应用路由 且 链接未处于编码状态（处于编码状态是以%2F开头的） => 取消之前菜单的激活状态/记录/激活目标菜单
+     * 如果path是/ => 【跳转】第一个有效路由或/noMenu
      */
+    if (to.path === '/') {
+      handleRedirectFromRoot(next);
+    }
+
+    /**
+     * 如果是主应用菜单路由(主应用路由的name统一用topApp_为前缀)，取消之前菜单的激活状态/记录/激活目标菜单
+     */
+    if ((<string>to.name)?.startsWith('topApp_')) {
+      /**
+       * 取消之前的路由
+       */
+      setCurrentRouteUnActive(currentRouteInfo.value);
+      /** 激活目标路由 */
+      const targetRoute = findMenuBy('path', to.path);
+
+      if (targetRoute?.path) {
+        currentRouteInfo.value = targetRoute!;
+        /** 激活目标页面对应的菜单 */
+        activeRoute(currentRouteInfo.value!);
+      }
+    }
+
+    /**
+     * 如果是子应用路由(子应用路由的name统一用subApp_为前缀) 且 链接未处于编码状态（处于编码状态是以%2F开头的） => 取消之前菜单的激活状态/记录/激活目标菜单
+     * ps: 处于编码状态to.fullPath => /vue3?vue3=%2F%23%2FmenuManage
+     *   处于半编码状态to.fullPath => /vue3?vue3=/%23/menuManage
+     */
+    const subAppName = to.path.slice(1); // 例: `vue3`
     if (
       (<string>to.name)?.startsWith('subApp_') &&
-      (<string>to.query[to.path.slice(1)])?.startsWith?.('/')
+      to.fullPath.split(`/${subAppName}?${subAppName}=`)?.[1].startsWith('%2F')
     ) {
-      const subAppName = to.path.slice(1);
-      /** 子应用path, 例：/admin/#/activity/activityList/index */
+      /** 子应用目标页path, 例: `/vue3/#/menu/list?a=1` */
       const _subAppPath = to.query[subAppName] as string;
       /**
        * 记录当前页面的菜单路由
-       * ps：这里from.fullPath !== to.fullPath去重同页面跳转
+       * ps：这里from.fullPath !== to.fullPath用于去重同页面跳转
        */
       if (_subAppPath && from.fullPath !== to.fullPath) {
         /**
          * 取消之前的路由
          */
         setCurrentRouteUnActive(currentRouteInfo.value);
-        /**
-         * 激活目标路由
-         */
-        const tempRoute = findMenuBy('path', _subAppPath.split('?')[0]);
 
-        if (tempRoute?.path) {
-          currentRouteInfo.value = tempRoute!;
-          /** 激活目标页面 */
+        /** 子应用path（不带query查询参数的） */
+        const subAppPathWithoutQuery = _subAppPath.split('?')[0];
+        /** 激活目标路由 */
+        const targetRoute = findMenuBy('path', subAppPathWithoutQuery);
+
+        if (targetRoute?.path) {
+          currentRouteInfo.value = targetRoute!;
+          /** 激活目标页面对应的菜单 */
           activeRoute(currentRouteInfo.value!);
           /** 更新子应用菜单信息，//TODO，只在子应用首次加载的时候更新 */
           updateSubAppMenuInfo(subAppName, currentRouteInfo.value!);
@@ -140,20 +182,12 @@ export function initRouteInterceptor(router: Router) {
       }
     }
 
-    /**
-     * 如果path是/ => 【跳转】第一个有效路由或/noMenu
-     */
-    if (to.path === '/') {
-      handleRedirectFromRoot(next);
-    }
-
     next();
   });
 
   router.afterEach((to) => {
     /**
-     * 根据路由名动态设置文档的标题
-     * 主应用和子应用的设置逻辑不一样
+     * 动态设置文档的标题
      */
     if (to.meta.title) {
       document.title = `${CONSTS.PREFIX_DOCUMENT_TITLE} - ${

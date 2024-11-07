@@ -62,11 +62,10 @@ import 'element-plus/es/components/button/style/index';
 import MenuItem from './MenuItem.vue';
 import { MenuItemType } from '@/types/common';
 import { useRoute, useRouter } from 'vue-router';
-import { getSubAppPrefixFromRouteUrl } from '@/router/helper';
+import { getSubAppNameFromRouteUrl } from '@/router/helper';
 import { MicroAppConfig } from 'micro-app-tools/data';
 import { subAppPath } from '@/pages/SubMicroApp.vue';
 import CONSTS from '@/utils/CONSTS';
-import { currentRouteFullName } from './RouteInfoBar.vue';
 import useGlobalStore from '@/store';
 import { tourStepsRefs } from '@/layouts/hook';
 import { ElLoading } from 'element-plus';
@@ -157,11 +156,11 @@ function handleMenuChange(key: string) {
     });
   } else if (menuInfo.targetType === 1) {
     /** 子应用前缀(目标) */
-    const subAppPrefix_target = getSubAppPrefixFromRouteUrl(menuInfo.path);
+    const subAppPrefix_target = getSubAppNameFromRouteUrl(menuInfo.path);
 
     /** 子应用名称(目标) */
     const subAppName_target = MicroAppConfig.subAppSettingList.find(
-      (item) => item.prefix === subAppPrefix_target
+      (item) => item.name === subAppPrefix_target
     )?.name;
 
     if (!subAppName_target) return console.error(`未配置${subAppPrefix_target}`);
@@ -200,10 +199,6 @@ function handleMenuChange(key: string) {
   if (isPhone && menuInfo.targetType < 2) {
     isShowMenu.value = false;
   }
-
-  // TODO触发时机改为路由跳转后，兼容首次进入及代码跳转情况
-  if ([0, 1].includes(menuInfo.targetType))
-    currentRouteFullName.value = `${menuInfo.prefixName}/${menuInfo.name}`;
 }
 
 /**

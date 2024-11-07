@@ -14,7 +14,7 @@ export const baseRoutes: Array<RouteRecordRaw> = [
     children: [
       {
         path: '/introduce',
-        name: 'introduce',
+        name: 'topApp_introduce',
         component: () => import('@/pages/introduce.vue'),
         meta: { title: '介绍页' },
       },
@@ -32,37 +32,37 @@ export const baseRoutes: Array<RouteRecordRaw> = [
       },
       {
         path: '/onlinePreview',
-        name: 'onlinePreview',
+        name: 'topApp_onlinePreview',
         component: () => import('@/pages/onlinePreview.vue'),
         meta: { title: '在线预览网站' },
       },
       {
         path: '/demo/micromainComponent',
-        name: 'micromainComponent',
+        name: 'topApp_micromainComponent',
         component: () => import('@/pages/demo/micromainComponent.vue'),
         meta: { title: '派发组件源测试' },
       },
       {
         path: '/demo/lottie',
-        name: 'lottie',
+        name: 'topApp_lottie',
         component: () => import('@/pages/demo/lottie.vue'),
         meta: { title: 'lottie源测试' },
       },
       {
         path: '/demo/reactComponent',
-        name: 'reactComponent',
+        name: 'topApp_reactComponent',
         component: () => import('@/pages/demo/reactComponent.vue'),
         meta: { title: 'reactComponent测试' },
       },
       {
         path: '/demo/lowcodeEngine',
-        name: 'lowcodeEngine',
+        name: 'topApp_lowcodeEngine',
         component: () => import('@/pages/demo/lowcodeEngine.vue'),
         meta: { title: '低代码渲染器测试' },
       },
       {
         path: '/demo/vueFlow',
-        name: 'vueFlow',
+        name: 'topApp_vueFlow',
         component: () => import('@/pages/demo/vueFlow/index.vue'),
         meta: { title: 'vueFlow测试' },
       },

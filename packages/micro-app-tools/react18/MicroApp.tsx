@@ -8,7 +8,7 @@ import microApp from '@micro-zoe/micro-app';
 import { MicroAppConfig, dataListener, microAppInitFunction } from '../data';
 import {
   getAppIsInConfig,
-  getSubAppPrefixFromRouteUrl,
+  getSubAppNameFromRouteUrl,
   isSubApp,
   sendDataDown,
 } from '../index';
@@ -110,7 +110,7 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
   const defaultPage: string = useMemo(() => {
     return (
       _defaultPage ||
-      (subAppSettting?.prefix ? `/${subAppSettting?.prefix}/#/empty` : '/#/empty')
+      (subAppSettting?.name ? `/${subAppSettting?.name}/#/empty` : '/#/empty')
     );
   }, [_path]);
 
@@ -217,7 +217,7 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
      * _name为空时不允许跳转
      * 前缀不匹配时时不允许跳转
      */
-    if (!_name || subAppSettting?.prefix !== getSubAppPrefixFromRouteUrl(_path)) return;
+    if (!_name || subAppSettting?.name !== getSubAppNameFromRouteUrl(_path)) return;
     if (activePath.current === defaultPage) {
       /** 如果当前是中转路由，直接替换 */
       timer = setTimeout(() => {

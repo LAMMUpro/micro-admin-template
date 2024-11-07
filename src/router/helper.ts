@@ -97,9 +97,9 @@ function getMenusNamePathCounter(menus: MenuOriginType[]) {
 }
 
 /**
- * 从path中提取子应用前缀
+ * 从path中提取子应用名称
  */
-export function getSubAppPrefixFromRouteUrl(url: string) {
+export function getSubAppNameFromRouteUrl(url: string) {
   return url?.match?.(/(?<=^\/).*?(?=\/)/)?.[0];
 }
 
@@ -116,10 +116,10 @@ export function findFirstEffectRoute(
       const result = findFirstEffectRoute(menu.children);
       if (result) return result;
     } else if (menu.targetType === 1 && !menu.hidden) {
-      const subAppPrefix = getSubAppPrefixFromRouteUrl(menu.path);
+      const subAppName = getSubAppNameFromRouteUrl(menu.path);
       if (
-        subAppPrefix &&
-        window._subAppSettingList_?.find((item) => item.prefix === subAppPrefix)
+        subAppName &&
+        window._subAppSettingList_?.find((item) => item.name === subAppName)
       ) {
         return menu;
       }
@@ -136,16 +136,14 @@ export function handleRedirectFromRoot(
   const globalStore = useGlobalStore();
   /** 第一个有效路由 */
   const firstRoute = findFirstEffectRoute(globalStore.menus);
-  console.log('menus', globalStore.menus);
-  console.log('firstRoute', firstRoute);
   /** 该账户没有一个有效路由 */
   if (!firstRoute) return next({ path: '/noMenu' });
   /** 子应用前缀 */
-  const subAppPrefix = getSubAppPrefixFromRouteUrl(firstRoute.path)!;
+  const subAppName = getSubAppNameFromRouteUrl(firstRoute.path)!;
   return next({
-    path: `/${subAppPrefix}`,
+    path: `/${subAppName}`,
     query: {
-      [subAppPrefix]: encodeURIComponent(firstRoute.path.replace(`/${subAppPrefix}`, '')),
+      [subAppName]: encodeURIComponent(firstRoute.path),
     },
   });
 }
@@ -229,17 +227,11 @@ export async function initUserInfo(to?: RouteLocationNormalizedGeneric) {
         return false; // 网络错误，获取不到用户登录信息
       }
     } else {
-      /** 不存在token，弹出登录弹窗 */
       // globalStore.$reset();
       modifyData(routerTo, to!);
       return false;
     }
   }
-  !globalStore.userInfoInited &&
-    sendGlobalData({
-      emitName: 'reload_global_user',
-      parameters: [globalStore.userInfo],
-    });
   return true;
 }
 
@@ -250,19 +242,14 @@ export async function initMenus() {
   const globalStore = useGlobalStore();
 
   if (!globalStore.menusInited && !globalStore.menusLoading) {
-    await globalStore.loadMenu(); /** 更新Global.menu.info */
+    await globalStore.loadMenu();
     /**
-     * 账号未配置菜单, 跳到对应提示页
+     * 账号未配置菜单
      */
     if (globalStore.menus.length == 0) {
       return false;
     }
   }
-  !globalStore.menusInited &&
-    sendGlobalData({
-      emitName: 'reload_global_menu',
-      parameters: [globalStore.menus],
-    });
   return true;
 }
 

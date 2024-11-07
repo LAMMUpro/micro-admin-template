@@ -48,10 +48,8 @@ export type MicroComponentType = Component | (() => Promise<any>);
  * 子应用配置
  */
 export interface SubAppSetting<Envs extends string = string> {
-  /** 唯一应用名 */
+  /** 唯一应用名(也是路由前缀) */
   name: string;
-  /** url前缀, 可以和name不一样 */
-  prefix: string;
   /** 路由模式 */
   routerMode: 'hash' | 'history';
   /**
