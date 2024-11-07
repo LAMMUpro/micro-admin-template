@@ -2,7 +2,7 @@ import useGlobalStore from '@/store';
 import { MenuItemType, MenuOriginType } from '@/types/common';
 import { modifyData } from '@/utils';
 import Config from '@/utils/Config';
-import { sendGlobalData, subAppLocation } from 'micro-app-tools';
+import { subAppLocation } from 'micro-app-tools';
 import {
   NavigationGuardNext,
   RouteLocationNormalizedGeneric,
@@ -42,12 +42,12 @@ export function parseMenus(
         const result: MenuItemType = {
           ...originMenuItem,
 
-          path: originMenuItem.path,
-          component: originMenuItem.componentStr as any,
+          path: (originMenuItem as any).path,
+          component: (originMenuItem as any).componentStr as any,
           children: parseMenus(originMenuItem.children, key),
 
           // link: isExternal(originMenuItem.path) ? originMenuItem.path : '',
-          // key: key,
+          _key_: key,
           redirect: '',
         };
         return result;
@@ -88,10 +88,20 @@ function getMenusNamePathCounter(menus: MenuOriginType[]) {
         }
       } else {
         result[0][menuItem.name] = (result[0][menuItem.name] || 0) + 1;
-        result[1][menuItem.path] = (result[1][menuItem.path] || 0) + 1;
+        if (
+          menuItem.targetType === 0 ||
+          menuItem.targetType === 1 ||
+          menuItem.targetType === 2
+        ) {
+          result[1][menuItem.path!] = (result[1][menuItem.path!] || 0) + 1;
+        }
       }
       return result;
     },
+    /**
+     * result[0] = { '菜单管理': 2 }
+     * result[1] = { '/menu-manage': 1 }
+     */
     [{}, {}] as [BaseObj<number>, BaseObj<number>]
   );
 }
@@ -171,43 +181,6 @@ export function findMenuBy(
     menu = findMenuBy(key, value, children);
   }
   return menu;
-}
-
-/**
- * 激活路由
- */
-export function activeRoute(currentRouteInfo: MenuItemType) {
-  currentRouteInfo._isActive_ = true;
-  const globalStore = useGlobalStore();
-
-  const menuIndexList = currentRouteInfo.key?.split('-').map((iStr) => +iStr);
-  let menuItem: MenuItemType | undefined = {
-    children: globalStore.menus,
-  } as any;
-  menuIndexList?.slice(0, -1).forEach((i) => {
-    menuItem = menuItem?.children?.[i];
-    menuItem!._hasActive_ = true;
-    menuItem!._isOpen_ = true;
-  });
-}
-
-/**
- * 取消当前路由激活状态
- */
-export function setCurrentRouteUnActive(currentRouteInfo?: MenuItemType) {
-  if (currentRouteInfo?._isActive_) {
-    const globalStore = useGlobalStore();
-
-    currentRouteInfo._isActive_ = false; // 之前菜单的active取消
-    const menuIndexList = currentRouteInfo.key?.split('-').map((iStr) => +iStr);
-    let menuItem: MenuItemType | undefined = {
-      children: globalStore.menus,
-    } as any;
-    menuIndexList?.slice(0, -1).forEach((i) => {
-      menuItem = menuItem?.children?.[i];
-      if (menuItem) menuItem._hasActive_ = false;
-    });
-  }
 }
 
 /** 初始化用户信息 */

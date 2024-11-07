@@ -36,7 +36,7 @@
   >
     <!-- //TODO 链接转换为主应用下的 -->
     <a
-      style="color: #303133"
+      class="c-#303133"
       :href="props.menuInfo.path"
       @click="(e) => e.preventDefault()"
       >{{ props.menuInfo.name }}

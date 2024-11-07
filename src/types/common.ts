@@ -98,7 +98,7 @@ export type MenuItemType = MenuOriginType & {
    * @example 0-0
    * @example 1-0-1
    */
-  key?: string;
+  _key_?: string;
   /**
    * 额外状态值(不会保存到localStorage)
    */

@@ -11,10 +11,8 @@ import useGlobalStore from '@/store';
 import { subAppScrollRef } from '@/layouts/index.vue';
 import CONSTS from '@/utils/CONSTS';
 import {
-  activeRoute,
   findMenuBy,
   handleRedirectFromRoot,
-  setCurrentRouteUnActive,
   initUserInfo,
   initMenus,
   toLoginPage,
@@ -23,6 +21,7 @@ import { updateSubAppMenuInfo } from 'micro-app-tools';
 import Cookies from 'js-cookie';
 import Config from '@/utils/Config';
 import { modifyData } from '@/utils';
+import { menuActiveIndex } from '@/layouts/components/Menu.vue';
 
 /** 是否首次跳转, 用于首次重定向跳转菜单配置了firstRedirect的路由 */
 let isFirstJump = true;
@@ -121,25 +120,21 @@ export function initRouteInterceptor(router: Router) {
     }
 
     /**
-     * 如果是主应用菜单路由(主应用路由的name统一用topApp_为前缀)，取消之前菜单的激活状态/记录/激活目标菜单
+     * 如果是主应用菜单路由(主应用路由的name统一用topApp_为前缀) => 记录/激活目标菜单
      */
     if ((<string>to.name)?.startsWith('topApp_')) {
-      /**
-       * 取消之前的路由
-       */
-      setCurrentRouteUnActive(currentRouteInfo.value);
       /** 激活目标路由 */
       const targetRoute = findMenuBy('path', to.path);
 
       if (targetRoute?.path) {
         currentRouteInfo.value = targetRoute!;
         /** 激活目标页面对应的菜单 */
-        activeRoute(currentRouteInfo.value!);
+        menuActiveIndex.value = currentRouteInfo.value._key_;
       }
     }
 
     /**
-     * 如果是子应用路由(子应用路由的name统一用subApp_为前缀) 且 链接未处于编码状态（处于编码状态是以%2F开头的） => 取消之前菜单的激活状态/记录/激活目标菜单
+     * 如果是子应用路由(子应用路由的name统一用subApp_为前缀) 且 链接未处于编码状态（处于编码状态是以%2F开头的） => 记录/激活目标菜单
      * ps: 处于编码状态to.fullPath => /vue3?vue3=%2F%23%2FmenuManage
      *   处于半编码状态to.fullPath => /vue3?vue3=/%23/menuManage
      */
@@ -155,11 +150,6 @@ export function initRouteInterceptor(router: Router) {
        * ps：这里from.fullPath !== to.fullPath用于去重同页面跳转
        */
       if (_subAppPath && from.fullPath !== to.fullPath) {
-        /**
-         * 取消之前的路由
-         */
-        setCurrentRouteUnActive(currentRouteInfo.value);
-
         /** 子应用path（不带query查询参数的） */
         const subAppPathWithoutQuery = _subAppPath.split('?')[0];
         /** 激活目标路由 */
@@ -168,7 +158,7 @@ export function initRouteInterceptor(router: Router) {
         if (targetRoute?.path) {
           currentRouteInfo.value = targetRoute!;
           /** 激活目标页面对应的菜单 */
-          activeRoute(currentRouteInfo.value!);
+          menuActiveIndex.value = currentRouteInfo.value._key_;
           /** 更新子应用菜单信息，//TODO，只在子应用首次加载的时候更新 */
           updateSubAppMenuInfo(subAppName, currentRouteInfo.value!);
           if (to.path !== from.path) {
