@@ -9,6 +9,9 @@
 - [vue2+vite 子应用模板](https://github.com/LAMMUpro/subapp-vue2-vite-template.git)
 - [react18 子应用模板](https://github.com/LAMMUpro/subapp-react18-template.git)
 
+- [nest 后端](https://gitee.com/LAMMUpro/ali-lowcode-nest.git)
+- [低代码](https://gitee.com/LAMMUpro/ali-lowcode-designer.git)
+
 ## 下载项目模板
 
 ```sh
