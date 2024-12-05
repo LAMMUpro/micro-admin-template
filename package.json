@@ -19,7 +19,7 @@
       "apps/*"
     ],
     "nohoist": [
-      "subapp-vue2-webpack-template/strip-ansi"
+      "subapp-vue2-webpack-template/*"
     ]
   },
   "dependencies": {
@@ -71,6 +71,7 @@
     }
   },
   "resolutions": {
-    "strip-ansi": "6.0.1"
+    "strip-ansi": "6.0.0",
+    "string-width": "4.2.3"
   }
 }
