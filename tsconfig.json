@@ -29,6 +29,7 @@
       "node",
       "element-plus/global",
       "vitest/globals",
+      "frame-less-ui/global.d.ts",
       "micro-app-tools/types/global.d.ts"
     ],
     "baseUrl": "./",

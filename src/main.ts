@@ -5,6 +5,8 @@ import microApp from '@micro-zoe/micro-app';
 import { isTopApp } from 'micro-app-tools';
 import UseSvg from '@/components/use-svg/index.vue';
 import CONSTS from './utils/CONSTS';
+// frame-less-ui组件全局注册
+import 'frame-less-ui';
 /** 样式 */
 import '@/style/index.scss';
 import 'virtual:uno.css';
@@ -68,7 +70,7 @@ Cookies.set(Config.tokenKey, Date.now().toString());
   document.addEventListener(
     'touchend',
     function (event) {
-      var now = new Date().getTime();
+      const now = new Date().getTime();
       if (now - lastTouchEnd <= 300) event.preventDefault();
       lastTouchEnd = now;
     },
