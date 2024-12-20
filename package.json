@@ -4,7 +4,7 @@
   "version": "1.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --force",
     "tsc": "vue-tsc -b",
     "build": "vite build",
     "preview": "vite preview",
@@ -39,7 +39,7 @@
     "vue": "^3.5.1",
     "vue-router": "^4.4.3",
     "vue3-lottie": "^3.3.1",
-    "frame-less-ui": "1.0.9-alpha.4"
+    "frame-less-ui": "1.0.9-alpha.7"
   },
   "devDependencies": {
     "moment": "2.24.0",
