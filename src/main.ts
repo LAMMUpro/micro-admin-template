@@ -130,6 +130,10 @@ Cookies.set(Config.tokenKey, Date.now().toString());
  * 启动共享Worker来检测版本更新
  */
 function startSharedWorkerForVersionUpdateCheck() {
+  /**
+   * 安卓浏览器不支持SharedWorker
+   */
+  if (!window?.SharedWorker) return console.warn('当前环境不支持SharedWorker');
   const sharedWorker = new SharedWorker(
     new URL('./versionUpdateCheck.js', import.meta.url),
     {
