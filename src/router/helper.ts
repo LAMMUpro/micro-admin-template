@@ -298,12 +298,12 @@ export function parseRoutesMetaParentComponent(
   /** 是否强制添加Layout(条件匹配下) */
   forceAdd: boolean = false
 ) {
-  if (Config.isLocalhost && isTopApp) {
+  if (Config.isLocalhost || isTopApp) {
     return routes.map((item) => {
       if (forceAdd || item.meta?.parentComponent) {
         return {
           path: '/',
-          name: 'LayoutDevAutoAdd' + Date.now() + Math.random().toString(36).substring(2),
+          name: 'Layout_AutoAdd_' + Date.now() + Math.random().toString(36).substring(2),
           component: forceAdd
             ? () => import('@/layouts/index.vue')
             : item.meta?.parentComponent!,
