@@ -130,20 +130,49 @@ Cookies.set(Config.tokenKey, Date.now().toString());
  * 启动共享Worker来检测版本更新
  */
 function startSharedWorkerForVersionUpdateCheck() {
-  /**
-   * 安卓浏览器不支持SharedWorker
-   */
-  if (!window?.SharedWorker) return console.warn('当前环境不支持SharedWorker');
-  const sharedWorker = new SharedWorker(
-    new URL('./versionUpdateCheck.js', import.meta.url),
-    {
-      type: 'module',
-    }
-  );
-  const port = sharedWorker.port;
+  let port: MessagePort | Worker;
 
-  /** 接收SharedWorker事件 */
-  port.onmessage = function (event) {
+  if (window.SharedWorker) {
+    const sharedWorker = new SharedWorker(
+      new URL('./versionUpdateCheck.js', import.meta.url),
+      {
+        type: 'module',
+      }
+    );
+    port = sharedWorker.port;
+
+    /** 接收SharedWorker事件 */
+    port.onmessage = handlePostMessage;
+
+    /** 当前页面刷新不会触发page-visible事件，需要手动调一次 */
+    port.postMessage({ type: 'page-visible' });
+  } else if (window.Worker) {
+    /** 安卓浏览器不支持SharedWorker */
+    const worker = new Worker(
+      new URL('./versionUpdateCheck_worker.js', import.meta.url),
+      {
+        type: 'module',
+      }
+    );
+
+    /** 接收Worker事件 */
+    worker.onmessage = handlePostMessage;
+
+    /**
+     * 当前页面刷新不会触发page-visible事件，需要手动调一次
+     * 这里需要延迟一点执行！！！
+     */
+    setTimeout(() => {
+      worker.postMessage({ type: 'page-visible' });
+    }, 500);
+
+    port = worker;
+  } else {
+    console.warn('当前环境不支持SharedWorker/Worker');
+  }
+
+  /** 处理onmessage事件 */
+  function handlePostMessage(event: MessageEvent<any>) {
     const eventType: 'version-change' = event.data.type;
     if (eventType === 'version-change') {
       ElMessageBox.confirm('版本有更新，是否立即刷新页面?', '更新提示', {
@@ -160,10 +189,7 @@ function startSharedWorkerForVersionUpdateCheck() {
         });
       document.removeEventListener('visibilitychange', visibilitychangeCallback);
     }
-  };
-
-  /** 当前页面刷新不会触发page-visible事件，需要手动调一次 */
-  port.postMessage({ type: 'page-visible' });
+  }
 
   /**
    * 页面显示、隐藏事件回调函数
@@ -179,15 +205,21 @@ function startSharedWorkerForVersionUpdateCheck() {
   /** 监听页面显示/隐藏 */
   document.addEventListener('visibilitychange', visibilitychangeCallback);
 
-  /** 监听页面显示/隐藏 */
+  /**
+   * 监听页面卸载
+   */
   window.addEventListener('beforeunload', () => {
-    port.postMessage({ type: 'page-unload' });
-    port.close();
+    if (window.SharedWorker) {
+      port.postMessage({ type: 'page-unload' });
+      (port as MessagePort).close?.();
+    } else if (window.Worker) {
+      (port as Worker).terminate?.();
+    }
   });
 }
 
 /**
- * 线上环境启动版本更新检测
+ * 线上环境才启动版本更新检测
  */
 if (!Config.isLocalhost) {
   startSharedWorkerForVersionUpdateCheck();

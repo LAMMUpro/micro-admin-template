@@ -1,0 +1,61 @@
+import CONSTS from '@/utils/CONSTS';
+
+/** 定时器 */
+let timer;
+
+/** 取消定时器 */
+let timer_clear;
+
+/** 应用入口html */
+let indexHtml = '';
+
+/**
+ * 获取应用入口html
+ */
+async function getIndexHtml() {
+  /** 不加随机参数会使用disk cache */
+  const res = await fetch(`/${CONSTS.PREFIX_URL}/index.html?ts=${Date.now()}`);
+  return await res.text();
+}
+
+/**
+ * 接收到页面请求
+ */
+self.onmessage = async function (event) {
+  /** 首次进入先获取一次 */
+  indexHtml = await getIndexHtml();
+
+  /**
+   * 事件类型：
+   * 'page-hidden' - 页面隐藏
+   * 'page-visible' - 页面显示
+   */
+  const eventType = event.data.type;
+  if (eventType === 'page-hidden') {
+    /**
+     * 页面隐藏，取消轮询（延迟1s，如果再1s内重新切换回同源的标签页，可以取消这个定时器）
+     */
+    timer_clear = setTimeout(() => {
+      clearInterval(timer);
+      timer = undefined;
+    }, 1000);
+  } else if (eventType === 'page-visible') {
+    /**
+     * 页面显示
+     */
+    if (timer_clear) {
+      clearTimeout(timer_clear);
+      timer_clear = undefined;
+    }
+    if (!timer) {
+      timer = setInterval(async () => {
+        /** 版本改变了，清空定时器，给所有标签页发送事件 */
+        if ((await getIndexHtml()) !== indexHtml) {
+          clearInterval(timer);
+          timer = undefined;
+          postMessage({ type: 'version-change' });
+        }
+      }, 5000);
+    }
+  }
+};
