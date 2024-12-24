@@ -2,6 +2,9 @@ import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
 import { ref } from 'vue';
 import CONSTS from '@/utils/CONSTS';
 import { MicroAppConfig } from 'micro-app-tools/data';
+import useGlobalStore from '@/store';
+import { generateRoutes, parseRoutesMetaParentComponent } from './helper';
+import { updateAsyncRoutes, updateIsAddedAsyncRoutes } from '@/hooks/router';
 
 /** 基础路由 */
 export const baseRoutes: Array<RouteRecordRaw> = [
@@ -30,42 +33,48 @@ export const baseRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/403.vue'),
         meta: { title: '无权限', firstRedirect: true },
       },
-      {
-        path: '/onlinePreview',
-        name: 'topApp_onlinePreview',
-        component: () => import('@/pages/onlinePreview.vue'),
-        meta: { title: '在线预览网站' },
-      },
-      {
-        path: '/demo/micromainComponent',
-        name: 'topApp_micromainComponent',
-        component: () => import('@/pages/demo/micromainComponent.vue'),
-        meta: { title: '派发组件源测试' },
-      },
-      {
-        path: '/demo/lottie',
-        name: 'topApp_lottie',
-        component: () => import('@/pages/demo/lottie.vue'),
-        meta: { title: 'lottie源测试' },
-      },
-      {
-        path: '/demo/reactComponent',
-        name: 'topApp_reactComponent',
-        component: () => import('@/pages/demo/reactComponent.vue'),
-        meta: { title: 'reactComponent测试' },
-      },
-      {
-        path: '/demo/lowcodeEngine',
-        name: 'topApp_lowcodeEngine',
-        component: () => import('@/pages/demo/lowcodeEngine.vue'),
-        meta: { title: '低代码渲染器测试' },
-      },
-      {
-        path: '/demo/vueFlow',
-        name: 'topApp_vueFlow',
-        component: () => import('@/pages/demo/vueFlow/index.vue'),
-        meta: { title: 'vueFlow测试' },
-      },
+      // {
+      //   path: '/onlinePreview',
+      //   name: 'topApp_onlinePreview',
+      //   component: () => import('@/pages/onlinePreview.vue'),
+      //   meta: { title: '在线预览网站' },
+      // },
+      // {
+      //   path: '/demo/micromainComponent',
+      //   name: 'topApp_micromainComponent',
+      //   component: () => import('@/pages/demo/micromainComponent.vue'),
+      //   meta: { title: '派发组件源测试' },
+      // },
+      // {
+      //   path: '/demo/lottie',
+      //   name: 'topApp_lottie',
+      //   component: () => import('@/pages/demo/lottie.vue'),
+      //   meta: { title: 'lottie源测试' },
+      // },
+      // {
+      //   path: '/demo/reactComponent',
+      //   name: 'topApp_reactComponent',
+      //   component: () => import('@/pages/demo/reactComponent.vue'),
+      //   meta: { title: 'reactComponent测试' },
+      // },
+      // {
+      //   path: '/demo/lowcodeEngine',
+      //   name: 'topApp_lowcodeEngine',
+      //   component: () => import('@/pages/demo/lowcodeEngine.vue'),
+      //   meta: { title: '低代码渲染器测试' },
+      // },
+      // {
+      //   path: '/demo/vueFlow',
+      //   name: 'topApp_vueFlow',
+      //   component: () => import('@/pages/demo/vueFlow/index.vue'),
+      //   meta: { title: 'vueFlow测试' },
+      // },
+      // {
+      //   path: '/demo/frame-less-ui',
+      //   name: 'topApp_frameLessUI',
+      //   component: () => import('@/pages/demo/frameLessUI.vue'),
+      //   meta: { title: 'frame-less-ui组件库测试' },
+      // },
     ],
   },
   {
@@ -155,17 +164,35 @@ export const routerTo = {
   query: {},
 };
 
-/** 是否已添加动态路由 */
-export let isAddedAsyncRoutes = false;
-
 /**
  * 添加动态路由，最后添加通配指向404，并跳转到暂存页（如果存在）
  */
 export function addAsyncRoute() {
+  /**
+   * 处理动态菜单路由
+   * 根据全局菜单过滤出本应用的菜单
+   */
+  const globalStore = useGlobalStore();
+  const asyncRoutes = parseRoutesMetaParentComponent(
+    generateRoutes(globalStore.menus, true),
+    true
+  );
+  updateAsyncRoutes(asyncRoutes);
+  asyncRoutes.forEach((item: any) => {
+    if (!router.hasRoute(item.name!)) {
+      router.addRoute(item);
+    }
+  });
+
+  /**
+   * 处理用户路由
+   */
   generateUserRoutes().forEach((item) => {
     if (!router.hasRoute(item.name!)) {
       router.addRoute(item);
     }
   });
-  isAddedAsyncRoutes = true;
+
+  updateIsAddedAsyncRoutes(true);
+  return true;
 }

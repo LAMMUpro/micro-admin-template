@@ -4,7 +4,7 @@ import {
   RouteLocationRaw,
   Router,
 } from 'vue-router';
-import { addAsyncRoute, currentRouteInfo, isAddedAsyncRoutes, routerTo } from '.';
+import { addAsyncRoute, currentRouteInfo, routerTo } from '.';
 // import { menuActiveIndex } from '@/layouts/components/Menu.vue';
 import { subAppPath } from '@/pages/SubMicroApp.vue';
 import useGlobalStore from '@/store';
@@ -22,6 +22,7 @@ import Cookies from 'js-cookie';
 import Config from '@/utils/Config';
 import { modifyData } from '@/utils';
 import { menuActiveIndex } from '@/layouts/components/Menu.vue';
+import { isAddedAsyncRoutes } from '@/hooks/router';
 
 /** 是否首次跳转, 用于首次重定向跳转菜单配置了firstRedirect的路由 */
 let isFirstJump = true;

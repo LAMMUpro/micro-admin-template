@@ -2,7 +2,7 @@ import useGlobalStore from '@/store';
 import { MenuItemType, MenuOriginType } from '@/types/common';
 import { modifyData } from '@/utils';
 import Config from '@/utils/Config';
-import { subAppLocation } from 'micro-app-tools';
+import { isTopApp, subAppLocation } from 'micro-app-tools';
 import {
   NavigationGuardNext,
   RouteLocationNormalizedGeneric,
@@ -10,6 +10,8 @@ import {
 } from 'vue-router';
 import { routerTo } from '.';
 import Cookies from 'js-cookie';
+import CONSTS from '@/utils/CONSTS';
+import { defineComponent, h } from 'vue';
 
 /**
  * 跳转到PC官网
@@ -64,7 +66,7 @@ export function validateRoutes(menus: MenuOriginType[]) {
   const [nameCounter, pathCounter] = getMenusNamePathCounter(menus);
   for (const name in nameCounter) {
     if (nameCounter[name] > 1)
-      console.warn(`路由名称：${name}出现${nameCounter[name]}次`);
+      console.warn(`路由名称“${name}”出现${nameCounter[name]}次`);
   }
   for (const path in pathCounter) {
     if (pathCounter[path] > 1) console.warn(`路由：${path}出现${pathCounter[path]}次`);
@@ -233,4 +235,84 @@ export function toLoginPage(
   next: NavigationGuardNext | ((route?: RouteLocationRaw) => void)
 ) {
   return next({ path: '/login' });
+}
+
+const vueFiles = import.meta.glob<typeof import('*.vue')>('../pages/**/*.vue');
+/**
+ * 获取动态目录文件
+ */
+function getViewComponent(path: string) {
+  return (
+    vueFiles[`../pages${path}`] ??
+    defineComponent({
+      setup() {
+        return () => {
+          console.warn(`组件不存在: @/pages${path}.vue`);
+          return h('div', '页面不存在，请联系管理员');
+        };
+      },
+    })
+  );
+}
+
+/**
+ * 处理全局数据里面的菜单路由，过滤出本应用的菜单
+ */
+export function generateRoutes(
+  routes: Array<MenuItemType>,
+  isTopApp: boolean = false
+): Array<any> {
+  return routes.reduce((result, item) => {
+    if (item.children?.length) {
+      result.push(...generateRoutes(item.children, isTopApp));
+    } else {
+      /** 只考虑targetType为主应用页面或子应用页面的情况 */
+      if ((isTopApp && item.targetType === 0) || (!isTopApp && item.targetType === 1)) {
+        const pathWithoutPrefix = isTopApp
+          ? item.path
+          : item.path.replace(`/${CONSTS.PREFIX_URL}/#/`, '/');
+        result.push({
+          ...item,
+          /** 中文name很有可能重复，所以用id代替中文name */
+          name: '' + item.id,
+          /** 从item.url里面提取path */
+          path: pathWithoutPrefix,
+          component: getViewComponent(item.componentStr || ''),
+          meta: {
+            title: item.name,
+          },
+        } as MenuItemType);
+      }
+    }
+    return result;
+  }, [] as Array<any>);
+}
+
+/**
+ * 处理路由meta的parentComponent
+ * 如果路由meta存在parentComponent，在本地环境 + 主应用环境下打开，路由会包上一层Layout
+ */
+export function parseRoutesMetaParentComponent(
+  /** 路由 */
+  routes: Array<MenuItemType>,
+  /** 是否强制添加Layout(条件匹配下) */
+  forceAdd: boolean = false
+) {
+  if (Config.isLocalhost && isTopApp) {
+    return routes.map((item) => {
+      if (forceAdd || item.meta?.parentComponent) {
+        return {
+          path: '/',
+          name: 'LayoutDevAutoAdd' + Date.now() + Math.random().toString(36).substring(2),
+          component: forceAdd
+            ? () => import('@/layouts/index.vue')
+            : item.meta?.parentComponent!,
+          children: [item],
+        };
+      }
+      return item;
+    });
+  } else {
+    return routes;
+  }
 }
