@@ -274,7 +274,7 @@ export function generateRoutes(
         result.push({
           ...item,
           /** 中文name很有可能重复，所以用id代替中文name */
-          name: '' + item.id,
+          name: (isTopApp ? 'topApp_' : '') + item.id,
           /** 从item.url里面提取path */
           path: pathWithoutPrefix,
           component: getViewComponent(item.componentStr || ''),

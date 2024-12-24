@@ -180,11 +180,9 @@ export function initRouteInterceptor(router: Router) {
     /**
      * 动态设置文档的标题
      */
-    if (to.meta.title) {
-      document.title = `${CONSTS.PREFIX_DOCUMENT_TITLE} - ${
-        (to.meta.title as string) || 'MicroAdmin'
-      }`;
-    }
+    document.title = `${CONSTS.PREFIX_DOCUMENT_TITLE} - ${
+      (to.meta.title as string) || 'MicroAdmin'
+    }`;
 
     /**
      * 滚动到顶部，目前有些小瑕疵: 会先滚动原有页面(不管新页面有没有加载)
