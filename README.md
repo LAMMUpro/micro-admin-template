@@ -78,3 +78,10 @@ npm login
 npm publish --access=public
 npm config set registry https://registry.npmmirror.com
 ```
+
+## /public/js/micro-app.xxx_h.js 改造规则
+
+1. 复制 node_modules\@micro-zoe\micro-app\lib\index.esm.js
+2. 全局替换`process.env.NODE_ENV !== 'production'`为`true`
+3. 代码混淆/压缩
+4. [文件内容取 hash](https://www.lddgo.net/encrypt/hash)后四位作为文件部分

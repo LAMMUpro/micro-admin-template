@@ -74,7 +74,7 @@ export default defineConfig({
         paths: {
           vue: `/${CONSTS.PREFIX_URL}/js/vue.cd730000_h.js`,
           'vue-router': `/${CONSTS.PREFIX_URL}/js/vue-router.4bcc0000_h.js`,
-          '@micro-zoe/micro-app': `/${CONSTS.PREFIX_URL}/js/micro-app.4e9a0000_h.js`,
+          '@micro-zoe/micro-app': `/${CONSTS.PREFIX_URL}/js/micro-app.4e9a0001_h.js`,
         },
         /** 分包 */
         manualChunks: {
