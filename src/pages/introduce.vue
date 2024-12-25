@@ -1,7 +1,7 @@
 <template>
   <div class="introduce font-size-3.75">
     <section class="-m-card">
-      <h2 className="-m-title">项目介绍</h2>
+      <h2 class="-m-title">项目介绍</h2>
       <p>
         这是一个<b>后台模板</b>。
         它集成了<b><a href="https://micro-zoe.github.io/micro-app/docs.html#/" target="_blank">京东micro-app微前端框架</a></b>，
@@ -10,14 +10,14 @@
     </section>
 
     <section class="-m-card">
-      <h2 className="-m-title">响应式布局</h2>
+      <h2 class="-m-title">响应式布局</h2>
       <p>
         该项目集成了<b>UnoCSS</b>。以桌面端为主, 同时对<b>移动端</b>做了一些样式上的兼容🆕。您可以对比移动端和PC端的布局/样式。
       </p>
     </section>
 
     <section class="-m-card">
-      <h2 className="-m-title">模版特色功能</h2>
+      <h2 class="-m-title">模版特色功能</h2>
       <p>
         模版目前开发了几个比较`"超前"`的功能:<br/>
         1. 派发组件<b>MicroComponent</b>支持主应用<b>下发组件</b>给子应用使用, <b>兼容vue3/vue2/react</b>, 同时<b>支持作用域插槽</b><br/>
@@ -27,7 +27,7 @@
     </section>
 
     <section class="-m-card">
-      <span className="-m-title">项目组成</span>
+      <span class="-m-title">项目组成</span>
       <p>
         该demo由5个独立的项目仓库组成，其中一个主应用，4个不同技术栈的子应用<br />
         按设计主应用包括Layout布局(包括头部/侧边菜单)、
@@ -44,7 +44,7 @@
     </section>
 
     <section class="-m-card">
-      <h2 className="-m-title">菜单介绍</h2>
+      <h2 class="-m-title">菜单介绍</h2>
       <p>
         <span class="block title">主应用测试了以下功能：</span>
         <b class="link" @click="() => router.push('/onlinePreview')">在线预览网站</b>：可以通过url直接嵌入预览其他网站（目标网站需配置支持跨域）<br />
@@ -61,7 +61,7 @@
     </section>
 
     <section class="-m-card">
-      <span className="-m-title">低代码介绍</span>
+      <span class="-m-title">低代码介绍</span>
       <p>
         <span class="block title">为什么要集成低代码？</span>
         <span class="inline-block indent-1em">1. 团队之前低代码选型的时候收到技术栈制约，vue3项目一直找不到合适的开源低代码框架，但有了微前端，让vue项目使用react低代码成为了可能，集成低代码可以解锁微前端更多用法</span><br />
@@ -73,7 +73,7 @@
     </section>
 
     <section class="-m-card">
-      <span className="-m-title">相关项目介绍</span>
+      <span class="-m-title">相关项目介绍</span>
       <div>
         <b>低代码设计器</b><br />
         <span class="inline-block indent-1em">

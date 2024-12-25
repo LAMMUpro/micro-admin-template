@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <section class="-m-card">
-      <h2 className="-m-title">paging-select(分页选择器)</h2>
+      <h2 class="-m-title">paging-select(分页选择器)</h2>
       <fl-paging-select
         :id="info.id"
         @update-id="info.id = $event.detail[0]"
@@ -17,7 +17,7 @@
     </section>
 
     <section class="-m-card">
-      <h2 className="-m-title">button(按钮)</h2>
+      <h2 class="-m-title">button(按钮)</h2>
       <fl-button type="primary">普通按钮</fl-button>
       <fl-button
         class="ml-1"
