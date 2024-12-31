@@ -43,7 +43,8 @@ export default defineConfig({
     proxy: {
       /** request发起的请求都以/nest开头 */
       '/nest': {
-        target: 'http://localhost:9000',
+        // target: 'http://localhost:9000', // 本地后端
+        target: 'https://ali-lowcode.lammu.cn/nest/', // 后端直接连接线上测试环境
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/nest/, ''),
       },
