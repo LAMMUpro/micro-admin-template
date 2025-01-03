@@ -1,6 +1,22 @@
 <template>
   <div class="">
     <section class="-m-card">
+      <h2 class="-m-title">paging-select for vue3</h2>
+      <FlPagingSelectTest
+        :id="info.id"
+        @update-id="info.id = $event.detail[0]"
+        :label="info.name"
+        @update-label="info.name = $event.detail[0]"
+        :api="api"
+        immediate
+        :optionSetting="{ label: 'name', id: 'id' }"
+        style="width: 300px"
+      >
+      </FlPagingSelectTest>
+      <div class="mt-3">{{ info }}</div>
+    </section>
+
+    <section class="-m-card">
       <h2 class="-m-title">paging-select(分页选择器)</h2>
       <fl-paging-select
         :id="info.id"
@@ -40,6 +56,7 @@
 
 <script lang="ts" setup>
 import { reactive } from 'vue';
+import FlPagingSelectTest from 'frame-less-ui/vue3/paging-select';
 
 const info = reactive({
   id: '4',
