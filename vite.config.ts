@@ -13,7 +13,12 @@ export default defineConfig({
       template: {
         compilerOptions: {
           // 将micro-app-前缀的标签名都视为自定义元素
-          isCustomElement: (tag) => tag.startsWith('micro-app') || tag.startsWith('fl-'),
+          isCustomElement: (tag) =>
+            tag.startsWith('micro-app') ||
+            (tag.startsWith('fl-') &&
+              !tag.endsWith('-v3') &&
+              !tag.endsWith('-v2') &&
+              !tag.endsWith('-react')),
         },
       },
     }),
