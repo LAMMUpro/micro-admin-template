@@ -35,12 +35,16 @@ export function parseMenus(
 ): Array<MenuItemType> | undefined {
   if (!originMenuList || !originMenuList.length) return; // 假值或[]直接返回undefined
   const keyPrefix = _keyPrefix ? `${_keyPrefix}-` : '';
+  /** 去除hidden菜单后的真实下标 */
+  let kIndex = -1;
   return (
     originMenuList
       // 菜单为hidden的照样注册，hidden是为了不让用户直接点击菜单(比如工单详情)
       // .filter((item) => !item.hidden)
-      .map((originMenuItem, index) => {
-        const key = `${keyPrefix}${index}`;
+      .map((originMenuItem) => {
+        if (!originMenuItem.hidden) kIndex += 1;
+        // TODO, 隐藏的菜单的key会和正常的有重合！！！
+        const key = `${keyPrefix}${kIndex}`;
         const result: MenuItemType = {
           ...originMenuItem,
 

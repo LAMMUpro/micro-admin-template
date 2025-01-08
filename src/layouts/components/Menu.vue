@@ -132,7 +132,7 @@ const menus = computed(() => {
 
 /**
  * 菜单切换，路由跳转
- * @param key 菜单唯一标识, 例如: 0-2-1
+ * @param key 菜单唯一标识, 例如: 0-2-1 (注：这里的下标是筛选hidden后的下标)
  */
 function handleMenuChange(key: string) {
   menuActiveIndex.value = key;
@@ -142,9 +142,9 @@ function handleMenuChange(key: string) {
   let menuInfo: MenuItemType | undefined;
   key.split('-').forEach((index) => {
     if (menuInfo) {
-      menuInfo = menuInfo.children?.[+index];
+      menuInfo = menuInfo.children?.filter((menu) => !menu.hidden)[+index];
     } else {
-      menuInfo = globalStore.menus[+index];
+      menuInfo = globalStore.menus.filter((menu) => !menu.hidden)[+index];
     }
   });
 
