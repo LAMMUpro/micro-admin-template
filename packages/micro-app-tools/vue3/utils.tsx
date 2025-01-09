@@ -7,7 +7,7 @@ import { createRoot } from 'react-dom/client';
 const rootMap = new Map();
 
 /**
- * 渲染react组件到dom节点
+ * vue3渲染react组件到dom节点
  * @return 获取上下文方法
  */
 function reactComponentMountCallback(
