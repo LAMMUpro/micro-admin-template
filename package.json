@@ -36,7 +36,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "antd": "^5.21.6",
-    "vue": "^3.5.1",
+    "vue": "3.5.2",
     "vue-router": "^4.4.3",
     "vue3-lottie": "^3.3.1",
     "frame-less-ui": "1.0.9-alpha.7"
