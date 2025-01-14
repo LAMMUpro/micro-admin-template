@@ -47,6 +47,6 @@
     "micro-app-tools/**/*.vue",
     "micro-app-tools/**/*.ts",
     "micro-app-tools/**/*.tsx",
-    "packages/**/*",
+    "packages/**/*"
   ]
 }
