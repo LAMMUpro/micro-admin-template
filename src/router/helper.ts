@@ -173,7 +173,8 @@ export function findMenuBy(
   _menus?: Array<MenuItemType>
 ): MenuItemType | undefined {
   const globalStore = useGlobalStore();
-  const menus = _menus ? _menus : globalStore.menus;
+  // 过滤掉隐藏的菜单
+  const menus = (_menus ? _menus : globalStore.menus).filter((menu) => !menu.hidden);
   const children: Array<MenuItemType> = [];
   let menu: MenuItemType | undefined;
   for (let i = 0; i < menus.length; i++) {

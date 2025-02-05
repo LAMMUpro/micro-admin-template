@@ -131,6 +131,9 @@ export function initRouteInterceptor(router: Router) {
         currentRouteInfo.value = targetRoute!;
         /** 激活目标页面对应的菜单 */
         menuActiveIndex.value = currentRouteInfo.value._key_;
+      } else {
+        // 无显式菜单页面，取消之前的激活菜单
+        menuActiveIndex.value = '';
       }
     }
 
