@@ -52,6 +52,7 @@ import { copyText, isMobile } from '@/utils';
 import { isPhone } from '@/hooks';
 import Cookies from 'js-cookie';
 
+// 还没有做账号系统，先模拟一个token
 Cookies.set(Config.tokenKey, Date.now().toString());
 
 /**
