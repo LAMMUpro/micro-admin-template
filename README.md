@@ -33,7 +33,7 @@ git clone https://github.com/LAMMUpro/subapp-vue2-vite-template.git
 
 ```sh
 # node版本建议16.18.0
-# 如果没有安装pnpm先全局安装
+# 如果没有安装yarn先全局安装
 npm i yarn -g
 # 安装依赖（忽略版本冲突）主目录下运行, 会安装packages/*下项目的所有依赖
 yarn install --ignore-engines
