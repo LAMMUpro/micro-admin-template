@@ -242,7 +242,13 @@ export function toLoginPage(
   return next({ path: '/login' });
 }
 
-const vueFiles = import.meta.glob<typeof import('*.vue')>('../pages/**/*.vue');
+const vueFiles = import.meta.glob<typeof import('*.vue')>([
+  '../pages/*.vue', // 匹配 views 目录下的 xxx.vue
+  '../pages/*/*.vue', // 匹配 views/下一级目录/xxx.vue
+  '!../pages/components/*.vue', // 不匹配这些文件
+  '../pages/**/*.page.vue', // 匹配 views 下所有 .page.vue 结尾的文件(留个口子给特殊情况)
+]);
+
 /**
  * 获取动态目录文件
  */
