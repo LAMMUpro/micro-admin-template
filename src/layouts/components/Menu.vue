@@ -1,5 +1,5 @@
 <template>
-  <div class="__menu b-r-#dcdfe6 b-r-1 b-r-solid flex flex-col">
+  <div class="__menu b-r-#efefef b-r-1 b-r-solid flex flex-col">
     <div class="hidden lt-md:(block p-x-6 p-t-4 p-b-1)">
       <LinkCardList
         direction="row"

@@ -40,7 +40,7 @@
           </div>
         </el-scrollbar>
         <div
-          class="h-6 font-size-3 shrink-0 c-gray bg-white flex items-center justify-center b-t-#ededed b-t-1 b-t-solid"
+          class="h-6 font-size-3 shrink-0 c-gray bg-white flex items-center justify-center b-t-#efefef b-t-1 b-t-solid"
         >
           <span class="ellipsis">
             <span class="m-r-2.5">2024 © MicroAdmin By Lammu</span>
