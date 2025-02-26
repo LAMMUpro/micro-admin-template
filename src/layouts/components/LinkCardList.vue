@@ -62,7 +62,7 @@ function toIntroducePage() {
 
 /** 打开项目文档 */
 function openDocsLink() {
-  window.open('https://micro-admin-docs.lammu.cn/');
+  window.open('https://micro-admin-template.lammu.cn/docs/');
 }
 
 /** 打开项目源码 */

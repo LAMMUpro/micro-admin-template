@@ -1,6 +1,6 @@
 # 微后台主应用模版
 
-[在线预览](https://micro-admin-template.lammu.cn/micromain/) | [使用文档](https://micro-admin-docs.lammu.cn) | [加入社区](https://micro-admin-docs.lammu.cn/About/discussion.html)
+[在线预览](https://micro-admin-template.lammu.cn/micromain/) | [使用文档](https://micro-admin-template.lammu.cn/docs/) | [加入社区](https://micro-admin-template.lammu.cn/docs/About/discussion.html)
 
 ## 相关仓库
 
