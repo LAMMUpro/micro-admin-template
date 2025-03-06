@@ -1,16 +1,18 @@
 <template>
-  <div class="login">
+  <div class="login h-[var(--screen-height)] relative flex items-center justify-center">
     <LoginCard
-      class="login-card"
+      class="login-card w-100"
       @success="loginSuccess"
     ></LoginCard>
-    <div class="placehoder">
+    <div class="absolute left-8% top-20%">
       <img
-        class="image"
+        class="h-75"
         src="@/assets/images/admin.png"
       />
-      <span class="title">开箱即用的中后台管理系统</span>
-      <span class="sub-title">集成微前端 / 低代码 等多种技术栈.</span>
+      <span class="m-t-7.5 c-white block font-size-10">开箱即用的中后台管理系统</span>
+      <span class="m-t-2.5 c-white block font-size-6"
+        >集成微前端 / 低代码 等多种技术栈.</span
+      >
     </div>
   </div>
 </template>
@@ -40,11 +42,6 @@ function loginSuccess() {
 
 <style lang="scss" scoped>
 .login {
-  height: 100vh;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   &::before {
     position: absolute;
     top: 0;
@@ -59,29 +56,8 @@ function loginSuccess() {
     content: '';
   }
   .login-card {
-    width: 400px;
     box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.08), 0 3px 6px 0 rgba(0, 0, 0, 0.06),
       0 5px 12px 4px rgba(0, 0, 0, 0.04);
-  }
-  .placehoder {
-    position: absolute;
-    left: 8%;
-    top: 20%;
-    .image {
-      height: 300px;
-    }
-    .title {
-      margin-top: 30px;
-      color: white;
-      display: block;
-      font-size: 40px;
-    }
-    .sub-title {
-      margin-top: 10px;
-      color: white;
-      display: block;
-      font-size: 24px;
-    }
   }
 }
 </style>

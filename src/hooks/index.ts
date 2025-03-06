@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 /** 记录弹窗的zIndex，每次会加一 */
 const zIndex = ref(2000);
@@ -10,3 +10,9 @@ const zIndex = ref(2000);
 export function usezIndex() {
   return zIndex.value++;
 }
+
+/** 是否移动端尺寸(小于等于768px) */
+export const isPhone = ref(false);
+
+/** 是否桌面端尺寸(大于768px) */
+export const isDesktop = computed(() => !isPhone.value);

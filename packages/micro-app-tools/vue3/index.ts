@@ -4,7 +4,13 @@
 
 import { SubMicroAppInit, isTopApp } from '../index';
 import { defineAsyncComponent, defineComponent, h, ref } from 'vue';
-import { MicroAppComponentProps, MicroComponentType, BaseObj, GlobalListenerCallbacks, ListenerCallbacks } from '../types';
+import {
+  MicroAppComponentProps,
+  MicroComponentType,
+  BaseObj,
+  GlobalListenerCallbacks,
+  ListenerCallbacks,
+} from '../types';
 import { MicroComponentMap, setElConfigProvider } from '../data';
 
 /**

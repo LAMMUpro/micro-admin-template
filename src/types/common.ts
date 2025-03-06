@@ -1,11 +1,16 @@
 import { RouteRecordRaw } from 'vue-router';
 
 /** 后端菜单配置 */
-export type MenuOriginType = {
-  /** 父级菜单id */
-  parentId: string;
+export type MenuOriginType = MenuOriginTypeWithoutChildren & {
   /** 菜单子路由 */
   children?: Array<MenuOriginType>;
+};
+
+/** 后端菜单配置(不带children，不然Omit<'children'>没法正确推导类型) */
+export type MenuOriginTypeWithoutChildren = {
+  /** 父级菜单id */
+  parentId: string;
+
   /** 菜单名称(中文) */
   name: string;
 
@@ -89,7 +94,7 @@ export type MenuOriginType = {
 );
 
 /** 菜单列表数据类型 */
-export type MenuItemType = MenuOriginType & {
+export type MenuItemType = MenuOriginTypeWithoutChildren & {
   /** 子菜单 */
   children?: Array<MenuItemType>;
   /**
@@ -98,7 +103,7 @@ export type MenuItemType = MenuOriginType & {
    * @example 0-0
    * @example 1-0-1
    */
-  key?: string;
+  _key_?: string;
   /**
    * 额外状态值(不会保存到localStorage)
    */

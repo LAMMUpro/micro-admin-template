@@ -1,0 +1,61 @@
+# 缓存文件
+.cache
+# serveless缓存
+.s
+# 编译产物
+build/*
+# 编译产物
+build_*/*
+# 编译产物
+dist
+target
+# 第三方包
+node_modules
+# yarn版本锁定
+yarn.lock
+# pnpm版本锁定
+pnpm-lock.yaml
+# package版本锁定
+package-lock.json
+# 生成的文档
+swagger.yaml
+# 后端配置文件
+.env
+# 后端配置文件
+.env.*
+#日志文件
+logs
+# 日志文件
+npm-debug.log*
+# 日志文件
+pnpm-debug.log*
+# 日志文件
+yarn-debug.log*
+# 日志文件
+yarn-error.log*
+# mac特有
+.DS_Store
+# storybook日志文件
+storybook.log
+# storybook编译产物
+storybook-static
+
+# 字体图标多余文件
+src/assets/iconfont/*demo*
+src/assets/iconfont/iconfont.js
+src/assets/iconfont/iconfont.json
+
+# element自动导入生成的文件
+auto-imports.d.ts
+components.d.ts
+
+.vite
+.vitepress/*
+!.vitepress/config.mts
+!.vitepress/themeConfig.mts
+
+# obsidian 软件配置
+obsidian/.obsidian
+
+# 忽略idea编译文件
+.idea

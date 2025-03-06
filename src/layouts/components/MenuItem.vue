@@ -9,19 +9,19 @@
         <!-- 外链 -->
         <img
           v-if="isExternal(menuInfo.icon) || menuInfo.icon.startsWith('/')"
-          class="__menu-icon"
+          class="w-4 h-4 m-r-1.25"
           :src="menuInfo.icon"
           alt="icon"
         />
         <!-- svg图标 -->
         <use-svg
           v-else
-          class="__menu-icon"
+          class="w-4 h-4 m-r-1.25"
           :name="menuInfo.icon"
         />
       </template>
 
-      <span class="-m-ellipsis">{{ menuInfo.name }}</span>
+      <span class="ellipsis">{{ menuInfo.name }}</span>
     </template>
     <MenuItem
       v-for="(item, index) in props.menuInfo.children.filter((menu: any) => !menu.hidden)"
@@ -36,7 +36,7 @@
   >
     <!-- //TODO 链接转换为主应用下的 -->
     <a
-      style="color: #303133"
+      class="c-#303133"
       :href="props.menuInfo.path"
       @click="(e) => e.preventDefault()"
       >{{ props.menuInfo.name }}
@@ -70,11 +70,3 @@ const props = defineProps({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.__menu-icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 5px;
-}
-</style>

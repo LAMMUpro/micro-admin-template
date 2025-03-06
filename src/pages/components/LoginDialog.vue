@@ -24,7 +24,3 @@ const emit = defineEmits<{
   (e: 'update:show', val: boolean): void;
 }>();
 </script>
-
-<style lang="scss" scoped>
-/** */
-</style>

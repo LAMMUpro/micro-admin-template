@@ -21,7 +21,7 @@
           <el-tag
             v-for="(item, index) in dataForm.subAppList"
             :key="index"
-            class="pointer"
+            class="cursor-pointer"
             style="margin-right: 6px"
             size="small"
             effect="dark"
@@ -203,8 +203,5 @@ const dataForm = shallowReactive({
       }
     }
   }
-}
-.pointer {
-  cursor: pointer;
 }
 </style>

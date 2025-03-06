@@ -1,6 +1,6 @@
 # 微后台主应用模版
 
-[在线预览](https://micro-admin-template.lammu.cn/micromain/) | [使用文档](https://micro-admin-docs.lammu.cn) | [加入社区](https://micro-admin-docs.lammu.cn/About/discussion.html)
+[在线预览](https://micro-admin-template.lammu.cn/micromain/) | [使用文档](https://micro-admin-template.lammu.cn/docs/) | [加入社区](https://micro-admin-template.lammu.cn/docs/About/discussion.html)
 
 ## 相关仓库
 
@@ -8,6 +8,9 @@
 - [vue2+webpack 子应用模板](https://github.com/LAMMUpro/subapp-vue2-webpack-template.git)
 - [vue2+vite 子应用模板](https://github.com/LAMMUpro/subapp-vue2-vite-template.git)
 - [react18 子应用模板](https://github.com/LAMMUpro/subapp-react18-template.git)
+
+- [nest 后端](https://gitee.com/LAMMUpro/ali-lowcode-nest.git)
+- [低代码](https://gitee.com/LAMMUpro/ali-lowcode-designer.git)
 
 ## 下载项目模板
 
@@ -30,7 +33,7 @@ git clone https://github.com/LAMMUpro/subapp-vue2-vite-template.git
 
 ```sh
 # node版本建议16.18.0
-# 如果没有安装pnpm先全局安装
+# 如果没有安装yarn先全局安装
 npm i yarn -g
 # 安装依赖（忽略版本冲突）主目录下运行, 会安装packages/*下项目的所有依赖
 yarn install --ignore-engines
@@ -65,6 +68,7 @@ yarn dev
 - vue2 子应用 ✔
 - MicroApp 封装 ✔
   - init 显式初始化 ✔
+- UnoCSS ✔
 
 ## micro-app-tools 发包
 
@@ -74,3 +78,10 @@ npm login
 npm publish --access=public
 npm config set registry https://registry.npmmirror.com
 ```
+
+## /public/js/micro-app.xxx_h.js 改造规则
+
+1. 复制 node_modules\@micro-zoe\micro-app\lib\index.esm.js
+2. 全局替换`process.env.NODE_ENV !== 'production'`为`true`
+3. 代码混淆/压缩
+4. [文件内容取 hash](https://www.lddgo.net/encrypt/hash)后四位作为文件部分

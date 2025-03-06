@@ -4,10 +4,10 @@ import { createRoot } from 'react-dom/client';
 /**
  * 存储react root对象
  */
-const weakMap = new WeakMap();
+const rootMap = new Map();
 
 /**
- * 渲染react组件到dom节点
+ * vue3渲染react组件到dom节点
  * @return 获取上下文方法
  */
 function reactComponentMountCallback(
@@ -24,7 +24,7 @@ function reactComponentMountCallback(
   const root = createRoot(dom);
 
   /** root存起来 */
-  weakMap.set(key, root);
+  rootMap.set(key, root);
 
   /** 上下文缓存 */
   let ctxCache: { current: any } = { current: undefined };
@@ -55,8 +55,8 @@ function reactComponentUpdateCallback(
     props: any;
   }
 ) {
-  if (weakMap.has(key)) {
-    const root = weakMap.get(key);
+  if (rootMap.has(key)) {
+    const root = rootMap.get(key);
     root.render(<ReactComp {...options.props}></ReactComp>);
   }
 }
@@ -68,8 +68,8 @@ function reactComponentUnMountCallback(
   /** 组件唯一key */
   key: Symbol
 ) {
-  if (weakMap.has(key)) {
-    weakMap.delete(key);
+  if (rootMap.has(key)) {
+    rootMap.delete(key);
   }
 }
 

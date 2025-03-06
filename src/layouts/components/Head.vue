@@ -1,56 +1,25 @@
 <template>
-  <div class="__head">
-    <div class="__logo-div">
+  <div
+    class="__head h-12.5 bg-white w-full z-2 flex items-center justify-between p-r-5 shadow-[0_1px_4px_rgb(169_169_169/50%)]"
+  >
+    <div class="m-l-2 flex justify-center items-center">
       <img
-        class="__logo"
+        class="w-10 h-10"
         src="/favicon.ico"
         alt="logo"
       />
-      <span class="__name">MicroAdmin</span>
+      <span class="m-l-1.5 font-size-4.75 font-600">MicroAdmin</span>
     </div>
-    <div class="__right">
-      <div
-        class="action-list"
-        :ref="(ref: any) => tourStepsRefs[0] = ref"
-      >
-        <div
-          class="action-item"
-          @click="toIntroducePage()"
-        >
-          <use-svg
-            name="docs-question"
-            size="18px"
-          ></use-svg>
-          <span>介绍页</span>
-        </div>
-        <div
-          class="action-item"
-          @click="openDocsLink()"
-        >
-          <use-svg
-            name="docs-question"
-            size="18px"
-          ></use-svg>
-          <span>项目文档</span>
-        </div>
-        <div
-          class="action-item"
-          @click="openGithubLink()"
-        >
-          <use-svg
-            name="Github"
-            size="18px"
-          ></use-svg>
-          <span>源码</span>
-        </div>
-      </div>
+    <div class="__right flex items-center">
+      <!-- 设备小于xs时隐藏 -->
+      <LinkCardList class="lt-xs:(hidden)"></LinkCardList>
       <img
-        class="__avatar"
+        class="w-7.5 h-7.5 m-r-2.5 b-rd-1/2"
         :src="globalStore.userInfo.avatar"
         alt="avatar"
       />
       <el-dropdown>
-        <div class="__nickname">
+        <div class="__nickname cursor-pointer flex shrink-0 items-center font-size-3.5">
           <span>{{ globalStore.userInfo.name }}</span>
           <use-svg name="arrow-bottom" />
         </div>
@@ -74,8 +43,7 @@ import 'element-plus/es/components/dropdown/style/index';
 import 'element-plus/es/components/dropdown-menu/style/index';
 import 'element-plus/es/components/dropdown-item/style/index';
 import useGlobalStore from '@/store';
-import { tourStepsRefs } from '@/layouts/hook';
-import router from '@/router';
+import LinkCardList from './LinkCardList.vue';
 
 const globalStore = useGlobalStore();
 
@@ -89,87 +57,12 @@ function clearCache() {
 
 /** //TODO: 跳转用户中心页面 */
 function toUserCenterPage() {}
-
-/** 跳到介绍页 */
-function toIntroducePage() {
-  router.push('/introduce');
-}
-
-/** 打开项目文档 */
-function openDocsLink() {
-  window.open('https://micro-admin-docs.lammu.cn/');
-}
-
-/** 打开项目源码 */
-function openGithubLink() {
-  window.open('https://github.com/LAMMUpro/micro-admin-template');
-}
 </script>
 
 <style lang="scss" scoped>
 .__head {
-  height: 50px;
-  background-color: white;
-  width: 100%;
-  box-shadow: 0 1px 4px rgb(169 169 169 / 50%);
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-right: 20px;
-  .__logo-div {
-    width: 180px;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    padding: 0 20px 0 10px;
-    .__logo {
-      width: 40px;
-      height: 40px;
-    }
-    .__name {
-      margin-left: 6px;
-      font-size: 19px;
-      font-weight: 600;
-    }
-  }
   .__right {
-    display: flex;
-    align-items: center;
-    .action-list {
-      display: flex;
-      margin-right: 30px;
-      .action-item {
-        padding-top: 4px;
-        font-size: 10px;
-        margin-left: 12px;
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        color: gray;
-
-        &:hover {
-          transform: scale(1.12);
-          font-weight: bold;
-          color: #2b87ff;
-        }
-      }
-    }
-    .__avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
     .__nickname {
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      .use-svg {
-        margin-top: 2px;
-      }
       &:hover .use-svg {
         transition: all 0.2s;
         transform: rotate(180deg);

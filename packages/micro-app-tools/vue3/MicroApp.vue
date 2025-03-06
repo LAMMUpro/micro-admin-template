@@ -105,7 +105,7 @@ import { watch } from 'vue';
 import { computed, useAttrs } from 'vue';
 import {
   getAppIsInConfig,
-  getSubAppPrefixFromRouteUrl,
+  getSubAppNameFromRouteUrl,
   isSubApp,
   sendDataDown,
 } from '../index';
@@ -122,7 +122,7 @@ onBeforeMount(() => {
     isInited = true;
     microAppInitFunction();
   }
-})
+});
 
 /**
  * micro-app对应的属性
@@ -224,9 +224,7 @@ const subAppSettting = computed(() => {
 const defaultPage = computed(
   () =>
     props._defaultPage ||
-    (subAppSettting.value?.prefix
-      ? `/${subAppSettting.value?.prefix}/#/empty`
-      : '/#/empty')
+    (subAppSettting.value?.name ? `/${subAppSettting.value?.name}/#/empty` : '/#/empty')
 );
 
 /** 实际的path */
@@ -342,7 +340,7 @@ function toSubAppPathSafe() {
    */
   if (
     !props._name ||
-    subAppSettting.value?.prefix !== getSubAppPrefixFromRouteUrl(props._path)
+    subAppSettting.value?.name !== getSubAppNameFromRouteUrl(props._path)
   )
     return;
   if (activePath.value === defaultPage.value) {

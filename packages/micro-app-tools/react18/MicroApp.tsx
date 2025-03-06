@@ -8,7 +8,7 @@ import microApp from '@micro-zoe/micro-app';
 import { MicroAppConfig, dataListener, microAppInitFunction } from '../data';
 import {
   getAppIsInConfig,
-  getSubAppPrefixFromRouteUrl,
+  getSubAppNameFromRouteUrl,
   isSubApp,
   sendDataDown,
 } from '../index';
@@ -80,10 +80,10 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
     _path = '',
     _keepAlive,
     _env,
-    _mounted = () => { },
-    _unmount = () => { },
-    _error = () => { },
-    _reloadApp = () => { },
+    _mounted = () => {},
+    _unmount = () => {},
+    _error = () => {},
+    _reloadApp = () => {},
     ...otherProps
   } = props;
 
@@ -110,7 +110,7 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
   const defaultPage: string = useMemo(() => {
     return (
       _defaultPage ||
-      (subAppSettting?.prefix ? `/${subAppSettting?.prefix}/#/empty` : '/#/empty')
+      (subAppSettting?.name ? `/${subAppSettting?.name}/#/empty` : '/#/empty')
     );
   }, [_path]);
 
@@ -122,7 +122,9 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
   const appStartTimeStamp: MutableRefObject<number> = useRef(Date.now());
 
   /** 子应用状态 */
-  const [subAppStatus, setSubAppStatus] = useState(_name ? 'loading' : 'unMounted');
+  const [subAppStatus, setSubAppStatus] = useState<
+    'unMounted' | 'loading' | 'mounted' | 'error'
+  >(_name ? 'loading' : 'unMounted');
 
   /** 是否隐藏错误提示卡片（应用加载失败时可以点击手动关闭错误提示） */
   const [isHideErrorTip, setIsHideErrorTip] = useState(false);
@@ -217,7 +219,7 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
      * _name为空时不允许跳转
      * 前缀不匹配时时不允许跳转
      */
-    if (!_name || subAppSettting?.prefix !== getSubAppPrefixFromRouteUrl(_path)) return;
+    if (!_name || subAppSettting?.name !== getSubAppNameFromRouteUrl(_path)) return;
     if (activePath.current === defaultPage) {
       /** 如果当前是中转路由，直接替换 */
       timer = setTimeout(() => {
@@ -318,24 +320,35 @@ const MicroApp: React.FC<never> = (props: MicroAppProps) => {
   );
 };
 
-const MicroAppStatus: React.FC<never> = (props: {
+interface MicroAppStatusProps {
   subAppStatus: 'unMounted' | 'loading' | 'mounted' | 'error';
-  subAppSettting: Object;
-  error?: React.FC;
-  loading?: React.FC;
-  config?: React.FC;
+  subAppSettting: Record<string, any> | undefined;
+  errorSlot?: React.FC;
+  loadingSlot?: React.FC;
+  configSlot?: React.FC;
   isHideErrorTip: boolean;
-  _reloadApp: Function;
-  setIsHideErrorTip: Function;
+  _reloadApp?: () => void;
+  setIsHideErrorTip?: () => void;
+}
+
+const MicroAppStatus: React.FC<MicroAppStatusProps> = ({
+  subAppStatus,
+  subAppSettting,
+  errorSlot: Error,
+  loadingSlot: Loading,
+  configSlot: Config,
+  isHideErrorTip,
+  _reloadApp,
+  setIsHideErrorTip,
 }) => {
   if (isSubApp) {
-    if (!props.subAppSettting) {
+    if (!subAppSettting) {
       return (
         // 应用未配置样式
         // @ts-ignore
         <div className="__content">
-          {props.config ? (
-            <props.config></props.config>
+          {Config ? (
+            <Config></Config>
           ) : (
             // @ts-ignore
             <div className="__tip-msg __config">模块未配置</div>
@@ -343,13 +356,13 @@ const MicroAppStatus: React.FC<never> = (props: {
           {/* @ts-ignore */}
         </div>
       );
-    } else if (props.subAppStatus === 'error') {
+    } else if (subAppStatus === 'error') {
       return (
         // 加载失败样式
         // @ts-ignore
         <div className="__content">
-          {!props.isHideErrorTip && props.error ? (
-            <props.error></props.error>
+          {!isHideErrorTip && Error ? (
+            <Error></Error>
           ) : (
             // @ts-ignore
             <div className="__tip-msg __error">
@@ -360,7 +373,7 @@ const MicroAppStatus: React.FC<never> = (props: {
               {/* @ts-ignore */}
               <span
                 className="__reload-btn"
-                onClick={() => props._reloadApp()}
+                onClick={() => _reloadApp?.()}
               >
                 重新加载
                 {/* @ts-ignore */}
@@ -370,7 +383,7 @@ const MicroAppStatus: React.FC<never> = (props: {
               {/* @ts-ignore */}
               <span
                 className="__close-btn"
-                onClick={() => props.setIsHideErrorTip()}
+                onClick={() => setIsHideErrorTip?.()}
               >
                 点击关闭
                 {/* @ts-ignore */}
@@ -381,13 +394,13 @@ const MicroAppStatus: React.FC<never> = (props: {
           {/* @ts-ignore */}
         </div>
       );
-    } else if (props.subAppStatus === 'loading') {
+    } else if (subAppStatus === 'loading') {
       return (
         // 加载中样式
         // @ts-ignore
         <div className="__content">
-          {props.loading ? (
-            <props.loading></props.loading>
+          {Loading ? (
+            <Loading></Loading>
           ) : (
             // @ts-ignore
             <div className="__tip-msg __loading">模块加载中...</div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="Login">
+  <div class="b-rd-1 z-1 p-y-5 p-x-10 bg-[rgba(173,215,230,0.8)]">
     <div>
       <span>账号:</span>
       <input type="text" />
@@ -15,13 +15,3 @@
 <script lang="ts" setup>
 function submit() {}
 </script>
-
-<style lang="scss" scoped>
-/** */
-.Login {
-  border-radius: 4px;
-  z-index: 1;
-  padding: 20px 40px;
-  background-color: rgba(173, 215, 230, 0.8);
-}
-</style>

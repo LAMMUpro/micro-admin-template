@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import CONSTS from './src/utils/CONSTS';
 import { svgBuilder } from './src/components/use-svg/loader';
+import UnoCSS from 'unocss/vite';
 
 export default defineConfig({
   base: `/${CONSTS.PREFIX_URL}/`,
@@ -12,11 +13,17 @@ export default defineConfig({
       template: {
         compilerOptions: {
           // 将micro-app-前缀的标签名都视为自定义元素
-          isCustomElement: (tag) => tag.startsWith('micro-app'),
+          isCustomElement: (tag) =>
+            tag.startsWith('micro-app') ||
+            (tag.startsWith('fl-') &&
+              !tag.endsWith('-v3') &&
+              !tag.endsWith('-v2') &&
+              !tag.endsWith('-react')),
         },
       },
     }),
     react(),
+    UnoCSS(),
     /** svg处理 */
     svgBuilder('./src/assets/svg/'),
   ],
@@ -41,7 +48,8 @@ export default defineConfig({
     proxy: {
       /** request发起的请求都以/nest开头 */
       '/nest': {
-        target: 'http://localhost:9000',
+        // target: 'http://localhost:9000', // 本地后端
+        target: 'https://ali-lowcode.lammu.cn/nest/', // 后端直接连接线上测试环境
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/nest/, ''),
       },
@@ -72,7 +80,7 @@ export default defineConfig({
         paths: {
           vue: `/${CONSTS.PREFIX_URL}/js/vue.cd730000_h.js`,
           'vue-router': `/${CONSTS.PREFIX_URL}/js/vue-router.4bcc0000_h.js`,
-          '@micro-zoe/micro-app': `/${CONSTS.PREFIX_URL}/js/micro-app.4e9a0000_h.js`,
+          '@micro-zoe/micro-app': `/${CONSTS.PREFIX_URL}/js/micro-app.4e9a0001_h.js`,
         },
         /** 分包 */
         manualChunks: {

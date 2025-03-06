@@ -1,14 +1,31 @@
 <template>
-  <div class="__menu">
-    <div class="__search-btn">
+  <div class="__menu b-r-#efefef b-r-1 b-r-solid flex flex-col">
+    <div class="hidden lt-md:(block p-x-6 p-t-4 p-b-1)">
+      <LinkCardList
+        direction="row"
+        size="large"
+      ></LinkCardList>
+    </div>
+    <div
+      class="sticky top-0 bg-white p-y-1.5 p-x-2 z-1 shadow-[0_10px_20px_#9d9d9d1f] lt-md:(flex p-x-6 p-y-4)"
+    >
       <el-input
         clearable
+        :style="isPhone ? { 'font-size': '16px' } : ''"
         v-model="menuKeyWord"
         placeholder="请输入菜单关键词"
-        size="small"
+        :size="isPhone ? 'large' : 'small'"
       ></el-input>
+      <el-button
+        class="hidden lt-md:(flex m-l-2)"
+        type="default"
+        size="large"
+        :disabled="!menuKeyWord"
+        @click="menuKeyWord = ''"
+        >清空</el-button
+      >
     </div>
-    <el-scrollbar>
+    <el-scrollbar class="flex-1">
       <el-menu
         :default-active="menuActiveIndex"
         :default-openeds="defaultOpenMenuList"
@@ -36,20 +53,26 @@ export const menuActiveIndex = ref('');
 
 <script lang="ts" setup>
 import { ref, watch, computed } from 'vue';
-import { ElScrollbar, ElMenu, ElInput, ElMessage } from 'element-plus';
+import { ElScrollbar, ElMenu, ElInput, ElMessage, ElButton } from 'element-plus';
 import 'element-plus/es/components/scrollbar/style/index';
 import 'element-plus/es/components/menu/style/index';
 import 'element-plus/es/components/input/style/index';
+import 'element-plus/es/components/loading/style/index';
+import 'element-plus/es/components/button/style/index';
 import MenuItem from './MenuItem.vue';
 import { MenuItemType } from '@/types/common';
 import { useRoute, useRouter } from 'vue-router';
-import { getSubAppPrefixFromRouteUrl } from '@/router/helper';
+import { getSubAppNameFromRouteUrl } from '@/router/helper';
 import { MicroAppConfig } from 'micro-app-tools/data';
 import { subAppPath } from '@/pages/SubMicroApp.vue';
 import CONSTS from '@/utils/CONSTS';
-import { currentRouteFullName } from './RouteInfoBar.vue';
 import useGlobalStore from '@/store';
 import { tourStepsRefs } from '@/layouts/hook';
+import { ElLoading } from 'element-plus';
+import { nextTick } from 'vue';
+import LinkCardList from './LinkCardList.vue';
+import { isPhone } from '@/hooks';
+import { isShowMenu } from '../index.vue';
 
 const globalStore = useGlobalStore();
 const route = useRoute();
@@ -61,11 +84,31 @@ const menuKeyWord = ref('');
 /** 默认展开的父级菜单 */
 const defaultOpenMenuList = ref(['0', '2']);
 
+/** loading实例, v-loading没生效，不知道怎么手动注册 */
+let loadingInstance: ReturnType<typeof ElLoading.service> | undefined;
+
+watch(
+  () => globalStore.menusLoading,
+  () => {
+    if (globalStore.menusLoading) {
+      nextTick(() => {
+        /** 不加nextTick对应的dom还没渲染 */
+        loadingInstance = ElLoading.service({
+          text: '菜单加载中...',
+          target: '.__menu',
+        });
+      });
+    } else {
+      loadingInstance?.close();
+    }
+  },
+  { immediate: true }
+);
+
 watch(
   () => menuKeyWord.value,
   () => {
     // TODO菜单过滤
-    console.log(menuKeyWord.value);
     if (menuKeyWord.value) {
       ElMessage({
         type: 'success',
@@ -89,7 +132,7 @@ const menus = computed(() => {
 
 /**
  * 菜单切换，路由跳转
- * @param key 菜单唯一标识, 例如: 0-2-1
+ * @param key 菜单唯一标识, 例如: 0-2-1 (注：这里的下标是筛选hidden后的下标)
  */
 function handleMenuChange(key: string) {
   menuActiveIndex.value = key;
@@ -99,9 +142,9 @@ function handleMenuChange(key: string) {
   let menuInfo: MenuItemType | undefined;
   key.split('-').forEach((index) => {
     if (menuInfo) {
-      menuInfo = menuInfo.children?.[+index];
+      menuInfo = menuInfo.children?.filter((menu) => !menu.hidden)[+index];
     } else {
-      menuInfo = globalStore.menus[+index];
+      menuInfo = globalStore.menus.filter((menu) => !menu.hidden)[+index];
     }
   });
 
@@ -113,11 +156,11 @@ function handleMenuChange(key: string) {
     });
   } else if (menuInfo.targetType === 1) {
     /** 子应用前缀(目标) */
-    const subAppPrefix_target = getSubAppPrefixFromRouteUrl(menuInfo.path);
+    const subAppPrefix_target = getSubAppNameFromRouteUrl(menuInfo.path);
 
     /** 子应用名称(目标) */
     const subAppName_target = MicroAppConfig.subAppSettingList.find(
-      (item) => item.prefix === subAppPrefix_target
+      (item) => item.name === subAppPrefix_target
     )?.name;
 
     if (!subAppName_target) return console.error(`未配置${subAppPrefix_target}`);
@@ -153,9 +196,9 @@ function handleMenuChange(key: string) {
     }
   }
 
-  // TODO触发时机改为路由跳转后，兼容首次进入及代码跳转情况
-  if ([0, 1].includes(menuInfo.targetType))
-    currentRouteFullName.value = `${menuInfo.prefixName}/${menuInfo.name}`;
+  if (isPhone && menuInfo.targetType < 2) {
+    isShowMenu.value = false;
+  }
 }
 
 /**
@@ -187,17 +230,8 @@ function filterMenuByKeyWord(menuList: Array<MenuItemType>): Array<MenuItemType>
 
 <style lang="scss" scoped>
 .__menu {
-  border-right: 1px solid #dcdfe6;
   :deep(.main-el-menu) {
     border-right: none;
-  }
-  .__search-btn {
-    position: sticky;
-    top: 0;
-    background-color: white;
-    padding: 6px 8px;
-    box-shadow: 0 10px 20px #9d9d9d1f;
-    z-index: 1;
   }
 }
 </style>

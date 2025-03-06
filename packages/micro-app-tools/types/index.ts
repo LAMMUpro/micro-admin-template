@@ -48,10 +48,8 @@ export type MicroComponentType = Component | (() => Promise<any>);
  * 子应用配置
  */
 export interface SubAppSetting<Envs extends string = string> {
-  /** 唯一应用名 */
+  /** 唯一应用名(也是路由前缀) */
   name: string;
-  /** url前缀, 可以和name不一样 */
-  prefix: string;
   /** 路由模式 */
   routerMode: 'hash' | 'history';
   /**
@@ -104,6 +102,8 @@ export interface ListenerCallbacks {
   micro_component_destroy: (elementId: string) => void;
   /** 派发组件清除属性/插槽缓存(主应用监听) */
   micro_component_clear_props_slots: (elementId: string) => void;
+  /** 媒体查询改变(子应用监听) */
+  mediaChange: (isPhone: boolean) => void;
 }
 
 /**

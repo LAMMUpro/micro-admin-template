@@ -5,8 +5,12 @@ import microApp from '@micro-zoe/micro-app';
 import { isTopApp } from 'micro-app-tools';
 import UseSvg from '@/components/use-svg/index.vue';
 import CONSTS from './utils/CONSTS';
+// frame-less-ui组件全局注册
+import 'frame-less-ui';
 /** 样式 */
 import '@/style/index.scss';
+import 'virtual:uno.css';
+
 import {
   ElConfigProvider,
   ElScrollbar,
@@ -43,26 +47,83 @@ import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { Vue3Lottie } from 'vue3-lottie';
 import ElDialog from '@/components/el-dialog/index.vue';
-import Config from './utils/Config';
-import { copyText, isMobile } from './utils';
+import Config from '@/utils/Config';
+import { copyText, isMobile } from '@/utils';
+import { isPhone } from '@/hooks';
+import Cookies from 'js-cookie';
+
+// 还没有做账号系统，先模拟一个token
+Cookies.set(Config.tokenKey, Date.now().toString());
+
+/**
+ * 移动端禁止放大
+ * 目前还是有bug，点击el-input和弹窗里面的输入框，会自动缩放，居中显示，导致缩放过后无法手动还原
+ */
+(function () {
+  if (true || !isMobile()) return;
+  /**
+   * 阻止双击放大
+   */
+  document.addEventListener('touchstart', function (event) {
+    if (event.touches.length > 1) event.preventDefault();
+  });
+  let lastTouchEnd = 0;
+  document.addEventListener(
+    'touchend',
+    function (event) {
+      const now = new Date().getTime();
+      if (now - lastTouchEnd <= 300) event.preventDefault();
+      lastTouchEnd = now;
+    },
+    false
+  );
+
+  /**
+   * 阻止双指方法
+   */
+  document.addEventListener('gesturestart', function (event) {
+    event.preventDefault();
+  });
+})();
+
+/**
+ * 往注入html元素注入css变量：--screen-height
+ */
+(function insertCSSvar2html() {
+  setTimeout(() => {
+    document.documentElement.setAttribute(
+      'style',
+      `${document.documentElement.getAttribute('style') ?? ''} --screen-height: ${
+        window.innerHeight
+      }px`
+    );
+  });
+})();
 
 /**
  * 移动端提示
  */
 (function checkIsMobile() {
-  if (isMobile()) {
+  // 样式做了兼容, 暂时先不提示了
+  if (false && isMobile()) {
     setTimeout(() => {
-      ElMessageBox.confirm('后台管理系统建议电脑或平板打开?', '设备兼容提示', {
+      ElMessageBox.confirm('后台管理系统建议电脑或平板打开!', '设备兼容提示', {
         confirmButtonText: '复制网站链接',
         cancelButtonText: '我就看看',
         type: 'warning',
         closeOnClickModal: false,
-      }).then(() => {
-        copyText(location.href, () => ElMessage.success('已复制网站链接，请用电脑或平板观看'), () =>  ElMessage.error('复制失败，请手动复制'));
-      }).catch(() => {
-        ElMessage.warning('移动端竖屏观看效果更佳');
       })
-    })
+        .then(() => {
+          copyText(
+            location.href,
+            () => ElMessage.success('已复制网站链接，请用电脑或平板观看'),
+            () => ElMessage.error('复制失败，请手动复制')
+          );
+        })
+        .catch(() => {
+          ElMessage.warning('移动端竖屏观看效果更佳');
+        });
+    });
   }
 })();
 
@@ -70,16 +131,49 @@ import { copyText, isMobile } from './utils';
  * 启动共享Worker来检测版本更新
  */
 function startSharedWorkerForVersionUpdateCheck() {
-  const sharedWorker = new SharedWorker(
-    new URL('./versionUpdateCheck.js', import.meta.url),
-    {
-      type: 'module',
-    }
-  );
-  const port = sharedWorker.port;
+  let port: MessagePort | Worker;
 
-  /** 接收SharedWorker事件 */
-  port.onmessage = function (event) {
+  if (window.SharedWorker) {
+    const sharedWorker = new SharedWorker(
+      new URL('./versionUpdateCheck.js', import.meta.url),
+      {
+        type: 'module',
+      }
+    );
+    port = sharedWorker.port;
+
+    /** 接收SharedWorker事件 */
+    port.onmessage = handlePostMessage;
+
+    /** 当前页面刷新不会触发page-visible事件，需要手动调一次 */
+    port.postMessage({ type: 'page-visible' });
+  } else if (window.Worker) {
+    /** 安卓浏览器不支持SharedWorker */
+    const worker = new Worker(
+      new URL('./versionUpdateCheck_worker.js', import.meta.url),
+      {
+        type: 'module',
+      }
+    );
+
+    /** 接收Worker事件 */
+    worker.onmessage = handlePostMessage;
+
+    /**
+     * 当前页面刷新不会触发page-visible事件，需要手动调一次
+     * 这里需要延迟一点执行！！！
+     */
+    setTimeout(() => {
+      worker.postMessage({ type: 'page-visible' });
+    }, 500);
+
+    port = worker;
+  } else {
+    console.warn('当前环境不支持SharedWorker/Worker');
+  }
+
+  /** 处理onmessage事件 */
+  function handlePostMessage(event: MessageEvent<any>) {
     const eventType: 'version-change' = event.data.type;
     if (eventType === 'version-change') {
       ElMessageBox.confirm('版本有更新，是否立即刷新页面?', '更新提示', {
@@ -95,13 +189,8 @@ function startSharedWorkerForVersionUpdateCheck() {
           ElMessage.info('您已取消更新, 之后请手动刷新该页面');
         });
       document.removeEventListener('visibilitychange', visibilitychangeCallback);
-    } else if (eventType === 'console') {
-      console.log(event.data.msg);
     }
-  };
-
-  /** 当前页面刷新不会触发page-visible事件，需要手动调一次 */
-  port.postMessage({ type: 'page-visible' });
+  }
 
   /**
    * 页面显示、隐藏事件回调函数
@@ -117,19 +206,42 @@ function startSharedWorkerForVersionUpdateCheck() {
   /** 监听页面显示/隐藏 */
   document.addEventListener('visibilitychange', visibilitychangeCallback);
 
-  /** 监听页面显示/隐藏 */
+  /**
+   * 监听页面卸载
+   */
   window.addEventListener('beforeunload', () => {
-    port.postMessage({ type: 'page-unload' });
-    port.close();
+    if (window.SharedWorker) {
+      port.postMessage({ type: 'page-unload' });
+      (port as MessagePort).close?.();
+    } else if (window.Worker) {
+      (port as Worker).terminate?.();
+    }
   });
 }
 
 /**
- * 线上环境启动版本更新检测
+ * 线上环境才启动版本更新检测
  */
 if (!Config.isLocalhost) {
   startSharedWorkerForVersionUpdateCheck();
 }
+
+/**
+ * 监控媒体查询变化, 大于768px(md尺寸)应用pc样式, 否则应用移动端样式
+ */
+function mediaChangeCb(event: MediaQueryListEvent | MediaQueryList) {
+  isPhone.value = event.matches;
+  window._isPhone_ = isPhone.value;
+  microApp.getActiveApps().forEach((name) => {
+    microApp.setData(name, {
+      emitName: 'mediaChange',
+      parameters: [window._isPhone_],
+    });
+  });
+}
+const MM = window.matchMedia('(max-width: 768px)');
+mediaChangeCb(MM);
+MM.addEventListener('change', mediaChangeCb);
 
 /** microApp数据监听回调 */
 const dataListener = generateDataListener({
@@ -178,7 +290,6 @@ const localDevIp = import.meta.env.VITE_local_ipv6 || '127.0.0.1';
 window._subAppSettingList_ = [
   {
     name: 'micromain',
-    prefix: 'micromain',
     routerMode: 'history',
     urlMap: {
       localhost: `http://${localDevIp}:1314/micromain/`,
@@ -192,7 +303,6 @@ window._subAppSettingList_ = [
   },
   {
     name: 'vue3',
-    prefix: 'vue3',
     routerMode: 'hash',
     urlMap: {
       localhost: `http://${localDevIp}:1320/vue3/`,
@@ -206,7 +316,6 @@ window._subAppSettingList_ = [
   },
   {
     name: 'vue2',
-    prefix: 'vue2',
     routerMode: 'hash',
     urlMap: {
       localhost: `http://${localDevIp}:1330/vue2/`,
@@ -220,7 +329,6 @@ window._subAppSettingList_ = [
   },
   {
     name: 'react18',
-    prefix: 'react18',
     routerMode: 'hash',
     urlMap: {
       localhost: `http://${localDevIp}:1340/react18/`,
@@ -234,7 +342,6 @@ window._subAppSettingList_ = [
   },
   {
     name: 'vue2v',
-    prefix: 'vue2v',
     routerMode: 'hash',
     urlMap: {
       localhost: `http://${localDevIp}:1350/vue2v/`,
